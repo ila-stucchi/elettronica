@@ -1,0 +1,1334 @@
+<title>Formulario di Elettronica</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Concetto: quaderno di laboratorio a indice laterale. Ogni argomento ha cinque blocchi colorati per funzione
+   (formule, concetti, validità, procedura, tranelli) che si possono filtrare. Colore = funzione, mai decorazione. */
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --surface-2:#EDF1F6; --ink:#14202C; --muted:#566576; --line:#D5DDE6;
+  --accent:#2B47D6; --accent-ink:#FFFFFF;
+  --f:#1B5CC0; --f-bg:#E7EFFC;
+  --c:#0C7566; --c-bg:#E1F3EF;
+  --v:#8D5F00; --v-bg:#FFF3D6;
+  --p:#6439BD; --p-bg:#EEE8FB;
+  --t:#B0251D; --t-bg:#FCE9E7;
+  --hl:#FFE88A;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --hdr:56px; --side:268px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D131A; --surface:#141C25; --surface-2:#1B2531; --ink:#E5ECF3; --muted:#93A2B3; --line:#263341;
+    --accent:#8EA5FF; --accent-ink:#0D131A;
+    --f:#8DB6FF; --f-bg:#15263F; --c:#5FD1BC; --c-bg:#112B28; --v:#F0C25C; --v-bg:#33270C;
+    --p:#B9A0FF; --p-bg:#24193F; --t:#FF9A92; --t-bg:#3A1714; --hl:#6A5A12; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D131A; --surface:#141C25; --surface-2:#1B2531; --ink:#E5ECF3; --muted:#93A2B3; --line:#263341;
+  --accent:#8EA5FF; --accent-ink:#0D131A;
+  --f:#8DB6FF; --f-bg:#15263F; --c:#5FD1BC; --c-bg:#112B28; --v:#F0C25C; --v-bg:#33270C;
+  --p:#B9A0FF; --p-bg:#24193F; --t:#FF9A92; --t-bg:#3A1714; --hl:#6A5A12; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 12px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+a{color:var(--accent)}
+b,strong{font-weight:600}
+sub,sup{line-height:0;font-size:.75em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+/* ---------- barra superiore ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--hdr);display:flex;align-items:center;gap:12px;
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px))) calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--cond);font-weight:700;font-size:1.15rem;letter-spacing:.01em;white-space:nowrap;margin-right:auto}
+.brand small{font-family:var(--mono);font-weight:500;font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:10px}
+.btn{font:inherit;font-size:.82rem;font-weight:500;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);
+  border-radius:6px;padding:6px 11px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+#navbtn{display:none}
+
+/* ---------- impaginazione ---------- */
+.shell{display:grid;grid-template-columns:var(--side) minmax(0,1fr);gap:32px;max-width:1360px;margin:0 auto;padding-block:24px 64px}
+.side{position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 16px);align-self:start;
+  max-height:calc(100vh - var(--hdr) - 40px);overflow:auto;padding-right:6px;font-size:.88rem}
+.side h4{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.side h4:first-child{margin-top:0}
+.search{width:100%;font:inherit;font-size:.9rem;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.hint{font-size:.76rem;color:var(--muted);margin:6px 0 0;min-height:1.2em}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.toc a{display:flex;gap:9px;align-items:baseline;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none;line-height:1.3}
+.toc a:hover{background:var(--surface-2)}
+.toc a.on{background:var(--surface-2);box-shadow:inset 2px 0 0 var(--accent);font-weight:600}
+.toc .n{font-family:var(--mono);font-size:.68rem;color:var(--muted);min-width:3.4em;flex:none}
+.filters{display:flex;flex-direction:column;gap:5px}
+.filters label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.86rem}
+.filters input{accent-color:var(--accent);margin:0}
+.sw{width:11px;height:11px;border-radius:3px;flex:none}
+main{min-width:0}
+
+/* ---------- hero ---------- */
+.hero{margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(2rem,4.6vw,3rem);line-height:1.05;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.hero p{margin:0 0 14px;color:var(--muted);max-width:70ch}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.legend div{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 11px;font-size:.84rem;line-height:1.35}
+.legend b{display:flex;align-items:center;gap:8px;margin-bottom:2px;font-size:.88rem}
+.legend span{color:var(--muted)}
+
+/* ---------- argomenti ---------- */
+.topic{display:flex;flex-direction:column;gap:16px;margin-bottom:56px}
+.thead{margin-bottom:2px}
+.tnum{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.thead h2{font-family:var(--cond);font-weight:700;font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.12;margin:2px 0 8px;letter-spacing:-.005em;text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:76ch;font-size:.97rem}
+.topic .b-f{order:1}.topic .b-c{order:2}.topic .b-v{order:3}.topic .b-p{order:4}.topic .b-t{order:5}
+.topic .blk.intro{order:0}
+
+.blk{--bk:var(--f);--bkbg:var(--f-bg);background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.b-c{--bk:var(--c);--bkbg:var(--c-bg)}
+.b-v{--bk:var(--v);--bkbg:var(--v-bg)}
+.b-p{--bk:var(--p);--bkbg:var(--p-bg)}
+.b-t{--bk:var(--t);--bkbg:var(--t-bg)}
+.blk>h3{margin:0;padding:11px 16px;background:var(--bkbg);color:var(--bk);font-family:var(--cond);font-weight:600;font-size:1.08rem;
+  display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
+.blk>h3::after{content:"–";margin-left:auto;font-family:var(--mono);opacity:.7}
+.blk.shut>h3::after{content:"+"}
+.blk.shut>:not(h3){display:none}
+.blk>:not(h3){margin-inline:16px}
+.blk>h3+*{margin-top:14px}
+.blk>:last-child{margin-bottom:16px}
+.tag{font-family:var(--mono);font-weight:500;font-size:.72rem;min-width:1.7em;padding:1px 6px;text-align:center;border-radius:4px;background:var(--bk);color:var(--surface)}
+.blk h4{font-family:var(--cond);font-weight:600;font-size:.98rem;margin:20px 16px 8px;padding-bottom:4px;border-bottom:1px dashed var(--line);color:var(--ink)}
+.blk p{margin-top:0;margin-bottom:10px}
+.blk ul{padding-left:1.15rem;margin-top:0;margin-bottom:10px}
+.blk li{margin-bottom:7px}
+.blk li::marker{color:var(--bk)}
+.conv{font-size:.88rem;background:var(--surface-2);border-radius:6px;padding:8px 11px}
+
+.tablewrap{overflow-x:auto;margin-top:6px;margin-bottom:10px;-webkit-overflow-scrolling:touch}
+.ft{border-collapse:collapse;width:100%;font-size:.92rem}
+.ft th{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ft td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ft td:first-child{min-width:15rem}
+.ft tbody tr:last-child td{border-bottom:0}
+.ft tr:hover td{background:var(--surface-2)}
+.ft td.sub{font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--f);background:var(--f-bg);padding:5px 10px}
+.ft.tde td:first-child{min-width:6rem}
+.ft.tde td{font-size:.86rem;min-width:13rem}
+.ft.tde td:first-child{min-width:6.5rem}
+
+.steps{list-style:none;counter-reset:s;padding:0;margin-top:0;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.steps li{counter-increment:s;position:relative;padding-left:2.1rem;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.1rem;width:1.45rem;height:1.45rem;border-radius:50%;background:var(--bk);color:var(--surface);
+  font-family:var(--mono);font-size:.72rem;font-weight:500;display:grid;place-items:center}
+.note,.prac{border-radius:8px;padding:10px 14px;font-size:.92rem;margin-top:8px;margin-bottom:8px}
+.note{background:var(--surface-2);border:1px solid var(--line)}
+.note.warn{background:var(--v-bg);border-color:transparent}
+.prac{background:var(--c-bg);border:1px solid transparent}
+.prac b:first-child{color:var(--c)}
+.trap{background:var(--t-bg);border-radius:8px;padding:10px 14px;font-size:.92rem;margin-top:8px;margin-bottom:8px}
+.trap b:first-child{color:var(--t)}
+mjx-container{max-width:100%}
+mjx-container[display="false"]{margin:0 1px}
+.ft td mjx-container,.fl dd mjx-container{overflow-x:auto;overflow-y:hidden;vertical-align:middle;padding-block:2px}
+
+/* ---------- formulario ---------- */
+.fgrid{columns:2 460px;column-gap:16px}
+.fcard{break-inside:avoid;display:inline-block;width:100%;margin:0 0 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fcard h3{margin:0;padding:9px 14px;font-family:var(--cond);font-weight:600;font-size:1rem;background:var(--f-bg);color:var(--f);border-bottom:1px solid var(--line)}
+.fl{margin:0;padding:4px 14px 8px}
+.fl>div{display:grid;grid-template-columns:minmax(6.5rem,32%) minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.fl>div:last-child{border-bottom:0}
+.fl dt{font-size:.78rem;color:var(--muted);font-weight:500;line-height:1.3}
+.fl dd{margin:0;min-width:0;font-size:.9rem;overflow-x:auto}
+.topic.wide{margin-bottom:40px}
+
+mark.hit{background:var(--hl);color:inherit;border-radius:2px}
+.hide-f .b-f,.hide-c .b-c,.hide-v .b-v,.hide-p .b-p,.hide-t .b-t{display:none}
+.nomatch{display:none!important}
+main.searching .blk.shut>:not(h3){display:block}
+footer{border-top:1px solid var(--line);padding:18px 0 28px;color:var(--muted);font-size:.84rem}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-top:16px}
+  #navbtn{display:inline-block}
+  .side{position:static;max-height:none;display:none;margin-bottom:22px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .side.open{display:block}
+  .brand small{display:none}
+  .fgrid{columns:1}
+}
+@media (max-width:560px){
+  .fl>div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .blk>:not(h3){margin-inline:12px}
+  .blk h4{margin-inline:12px}
+}
+@media print{
+  .top,.side{display:none}.shell{display:block;padding:0}body{padding:0}
+  .blk.shut>:not(h3){display:block}
+  .blk{break-inside:auto}.fcard{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false}};
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+
+<header class="top">
+  <div class="brand">Formulario di Elettronica<small>Fondamenti di elettronica · POLIMI</small></div>
+  <button class="btn" id="navbtn" type="button" aria-expanded="false" aria-controls="side">Indice</button>
+  <button class="btn" id="themebtn" type="button" aria-label="Cambia tema">Tema</button>
+</header>
+
+<div class="shell">
+<aside class="side" id="side" aria-label="Indice e filtri">
+  <h4>Cerca</h4>
+  <input class="search" id="q" type="search" placeholder="es. soglia, Φbi, breakdown" autocomplete="off" aria-label="Cerca nel formulario">
+  <p class="hint" id="qhint"></p>
+  <h4>Mostra</h4>
+  <div class="filters" id="filters">
+    <label><input type="checkbox" data-k="f" checked><span class="sw" style="background:var(--f)"></span>Formule</label>
+    <label><input type="checkbox" data-k="c" checked><span class="sw" style="background:var(--c)"></span>Concetti</label>
+    <label><input type="checkbox" data-k="v" checked><span class="sw" style="background:var(--v)"></span>Validità</label>
+    <label><input type="checkbox" data-k="p" checked><span class="sw" style="background:var(--p)"></span>Procedure</label>
+    <label><input type="checkbox" data-k="t" checked><span class="sw" style="background:var(--t)"></span>Tranelli</label>
+  </div>
+  <h4>Indice</h4>
+  <ol class="toc" id="toc"></ol>
+</aside>
+
+<main id="main">
+<div class="hero">
+  <h1>Formulario e guida concettuale</h1>
+  <p>Costruito dalle 5 dispense (cap. 1–5), 6 esercitazioni e 7 temi d'esame risolti del corso di Fondamenti di elettronica per Ingegneria Fisica (Prof. G. Ferrari, Politecnico di Milano). Per ogni argomento: formule, idea fisica, condizioni di validità, procedura di risoluzione e tranelli dei TdE.</p>
+  <div class="legend">
+    <div><b><span class="sw" style="background:var(--f)"></span>1 · Formule chiave</b><span>con simboli e unità</span></div>
+    <div><b><span class="sw" style="background:var(--c)"></span>2 · Concetti</b><span>perché funziona, a cosa serve</span></div>
+    <div><b><span class="sw" style="background:var(--v)"></span>3 · Validità</b><span>ipotesi e regioni di funzionamento</span></div>
+    <div><b><span class="sw" style="background:var(--p)"></span>4 · Procedura</b><span>l'algoritmo dai TdE</span></div>
+    <div><b><span class="sw" style="background:var(--t)"></span>5 · Tranelli</b><span>errori classici</span></div>
+  </div>
+</div>
+
+<section class="topic" id="t-intro">
+<header class="thead"><span class="tnum">Parte 0</span><h2>Come usare la guida, costanti e strumenti circuitali</h2>
+<p class="lead">Prima di tutto la mappa: com'è fatto un compito del Prof. Ferrari (sulla base dei 7 TdE caricati) e quali numeri tenere sempre a portata di mano.</p></header>
+
+<div class="blk b-c intro"><h3><span class="tag">Mappa</span> Com'è fatto un TdE di Fondamenti di Elettronica</h3>
+<p>In tutti e 7 i temi (gen-feb 2025, gen-feb-giu-lug-set 2026) la struttura è identica: <b>tre esercizi da 3 punti</b>, ognuno su un blocco diverso del corso.</p>
+<div class="tablewrap"><table class="ft">
+<thead><tr><th>Esercizio</th><th>Argomento ricorrente</th><th>Cosa ti chiedono davvero</th><th>Capitolo in questa guida</th></tr></thead>
+<tbody>
+<tr><td><b>A</b></td><td>Fisica dei dispositivi: giunzione pn, fotodiodo, struttura MOS (Vox, Vsi, VT, VFB)</td><td>Φbi, x<sub>d</sub>, E<sub>max</sub>, I<sub>s</sub>, V<sub>D</sub> a data corrente, breakdown, capacità, fotocorrente; nei MOS: V<sub>T</sub>, carica di canale, campi E<sub>ox</sub>/E<sub>Si</sub></td><td>Cap. 2, 3, 4, 5</td></tr>
+<tr><td><b>B</b></td><td>MOSFET in circuito: polarizzazione, porte CMOS, tempi di commutazione, potenza; oppure piccolo segnale (g<sub>m</sub>, poli, zeri)</td><td>Regione di funzionamento, V<sub>out</sub> statica, R<sub>eq</sub>·C·ln(…), P<sub>d</sub>=C·V<sub>AA</sub>²·f, Bode di un amplificatore a source comune</td><td>Cap. 5, 6, 7</td></tr>
+<tr><td><b>C</b></td><td>Operazionale con retroazione e condensatori</td><td>G<sub>id</sub>(s), diagramma di Bode, G<sub>loop</sub>, f*, margine di fase, risposta a gradino, A<sub>0</sub> minimo</td><td>Cap. 8</td></tr>
+</tbody></table></div>
+<div class="note"><b>Come studiare con questa guida.</b> Per ogni argomento leggi in quest'ordine: <i>Concetti</i> (capire cosa succede) → <i>Validità</i> (quando la formula funziona) → <i>Formule</i> → <i>Procedura</i> (come si attacca l'esercizio) → <i>Tranelli</i>. Il formulario rapido in fondo (Parte 9) raccoglie tutto in forma da esame.</div>
+<div class="note warn"><b>Stato dei materiali.</b> Le dispense caricate coprono i capitoli 1–5 (fino al MOSFET). I capitoli 6–8 (CMOS/digitale, piccolo segnale, operazionali, BJT) sono costruiti dai <b>temi d'esame risolti</b> e dalle esercitazioni, perché la dispensa relativa non è ancora caricata: quando la carichi li aggiorno con le definizioni esatte del corso.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Costanti e valori numerici da ricordare (Si, T = 300 K)</h3>
+<div class="tablewrap"><table class="ft">
+<thead><tr><th>Grandezza</th><th>Valore</th><th>Note</th></tr></thead><tbody>
+<tr><td>\(q\)</td><td>\(1.6\cdot10^{-19}\ \mathrm{C}\)</td><td>carica elementare; 1 eV = \(1.6\cdot10^{-19}\) J</td></tr>
+<tr><td>\(V_{th}=kT/q\)</td><td>≈ 25 mV (25.85 mV esatti)</td><td>tensione termica; \(kT\approx25\) meV</td></tr>
+<tr><td>\(n_i\) (Si)</td><td>\(\approx1.4\cdot10^{10}\ \mathrm{cm^{-3}}\)</td><td>\(n_i^2\approx2\cdot10^{20}\ \mathrm{cm^{-6}}\). Usa sempre il valore dato dal testo</td></tr>
+<tr><td>\(E_g\) (Si)</td><td>1.12 eV</td><td>\(E_i\approx\) metà gap (a \(E_g/2=0.56\) eV da \(E_c\) e \(E_v\), scarto ≈ 12 meV)</td></tr>
+<tr><td>\(N_c,\ N_v\)</td><td>\(2.8\cdot10^{19},\ 1.04\cdot10^{19}\ \mathrm{cm^{-3}}\)</td><td>densità efficaci di stati</td></tr>
+<tr><td>\(\epsilon_{Si}\)</td><td>\(\approx10^{-12}\ \mathrm{F/cm}\) (11.7 ε₀)</td><td>\(\epsilon_0=8.85\cdot10^{-14}\) F/cm = \(8.85\cdot10^{-12}\) F/m</td></tr>
+<tr><td>\(\epsilon_{ox}\) (SiO₂)</td><td>≈ \(3\cdot10^{-13}\ \mathrm{F/cm}\) (0.3 pF/cm; esatto 3.9 ε₀ = 3.45·10⁻¹³)</td><td>\(C_{ox}=\epsilon_{ox}/t_{ox}\); nei TdE \(C_{ox}\) è quasi sempre dato (200 o 333 nF/cm²: 15 nm o 9 nm)</td></tr>
+<tr><td>\(\mu_n,\ \mu_p\) (massa, poco drogato)</td><td>1300, 400 cm²/Vs</td><td>scendono col drogaggio (a \(10^{18}\): ≈ 300, 150)</td></tr>
+<tr><td>\(\mu_n,\ \mu_p\) (superficie, canale MOS)</td><td>800, 300 cm²/Vs</td><td>valori di default del corso se il testo non dice altro</td></tr>
+<tr><td>\(D_n,\ D_p\)</td><td>20, 7 cm²/s (con μ=800, 300)</td><td>sempre \(D=\mu V_{th}\) (Einstein)</td></tr>
+<tr><td>\(v_{th}\), \(v_{sat}\)</td><td>\(\approx10^7\) cm/s</td><td>velocità termica e di saturazione della deriva</td></tr>
+<tr><td>\(E_{BD}\) (Si)</td><td>\(\approx4\cdot10^5\ \mathrm{V/cm}\)</td><td>campo di valanga; per l'ossido ≈ decine di MV/cm (vedi testo)</td></tr>
+<tr><td>Atomi di Si</td><td>\(5\cdot10^{22}\ \mathrm{cm^{-3}}\)</td><td>confronto con i drogaggi \(10^{14}\!-\!10^{19}\)</td></tr>
+<tr><td>\(\chi_{Si}\)</td><td>≈ 4.05 eV</td><td>affinità elettronica (usata per la funzione lavoro \(\Psi_M\), TdE 9-6-2026)</td></tr>
+<tr><td>\(m_e\)</td><td>\(9.1\cdot10^{-31}\) kg</td><td>per velocità termica \(v_{th}=\sqrt{3kT/m^*}\)</td></tr>
+</tbody></table></div>
+<div class="trap"><b>Unità, il primo tranello.</b> Il corso lavora in <b>cm</b> (drogaggi in cm⁻³, ε in F/cm, J in A/cm², campi in V/cm). Se mescoli m e cm sbagli di 10⁶. Regola pratica: converti <i>tutto</i> in cm all'inizio (1 µm = 10⁻⁴ cm; 1 nm = 10⁻⁷ cm) e controlla la dimensione fisica del risultato (x<sub>d</sub> di una giunzione è tipicamente 0.1–3 µm).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Circuiti di base (Cap. 1) usati in tutti gli esercizi</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(I=\dfrac{dQ}{dt}=A\,J=A\,q\,v\,n\)</td><td>I [A], Q [C], J [A/cm²], v velocità media [cm/s], n densità [cm⁻³]</td></tr>
+<tr><td>\(V=RI,\quad R=\rho\dfrac{L}{S}\)</td><td>R [Ω], ρ [Ω·cm], L lunghezza, S sezione</td></tr>
+<tr><td>\(Q=CV,\quad I=C\dfrac{dV}{dt},\quad C\simeq\epsilon\dfrac{A}{d}\)</td><td>C [F], ε [F/cm], A area, d distanza armature</td></tr>
+<tr><td>\(P=V\,I\)</td><td>potenza dissipata da un passivo (V e I con convenzione degli utilizzatori)</td></tr>
+<tr><td>\(V_{out}=V_{in}\dfrac{R_2}{R_1+R_2}\)</td><td>partitore di tensione (a vuoto)</td></tr>
+<tr><td>Thévenin: \(V_{th},\ R_{th}\); Norton: \(I_N=V_{th}/R_{th}\)</td><td>rete lineare = generatore + una resistenza</td></tr>
+<tr><td>\(Z_C=\dfrac{1}{sC}=\dfrac{1}{j2\pi fC}\),&nbsp; \(Z_L=sL\)</td><td>impedenza del condensatore: ∞ in continua (aperto), 0 ad alta frequenza (corto)</td></tr>
+<tr><td>\(\tau=R_{eq}C,\qquad f_p=\dfrac{1}{2\pi\tau}\)</td><td>\(R_{eq}\) = resistenza vista ai capi di C <i>con i generatori indipendenti spenti</i></td></tr>
+<tr><td>\(v(t)=v(\infty)+\big[v(0^+)-v(\infty)\big]e^{-t/\tau}\)</td><td>risposta a gradino di un circuito del 1° ordine</td></tr>
+<tr><td>\(t_{50\%}=\tau\ln2\approx0.69\,\tau,\quad t_{10\to90}=\tau\ln9\)</td><td>tempi di salita/discesa</td></tr>
+<tr><td>\(P_{dyn}=C\,V_{AA}^2\,f\)</td><td>potenza dinamica per caricare/scaricare C a frequenza f (vedi Cap. 6)</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li><b>Il condensatore è un serbatoio di carica.</b> Se la tensione è costante non passa corrente (aperto). Per cambiare la tensione serve spostare carica: più corrente hai a disposizione, più veloce cambia. Ecco perché le capacità <i>rallentano</i> i circuiti: tutto il corso (tempi di commutazione, poli, risposta in frequenza) è «quanto velocemente un generatore riesce a caricare una capacità».</li>
+<li><b>Il metodo dei due estremi</b> (usatissimo nei TdE per tracciare un Bode): analizza il circuito a <i>frequenza zero</i> (C = aperto, L = corto) e a <i>frequenza infinita</i> (C = corto). Hai già i due valori asintotici del guadagno; i poli/zeri sono le frequenze 1/(2πτ) dove si passa dall'uno all'altro.</li>
+<li><b>Gradino su un circuito RC:</b> subito dopo il gradino la tensione ai capi di C non può cambiare (C = generatore di tensione); a regime C è un aperto. Tra i due valori l'esponenziale con τ = R<sub>eq</sub>C.</li>
+<li><b>Il generatore ideale impone una grandezza</b> (V o I) e lascia libera l'altra. Un generatore di corrente ai capi di un diodo ti dà direttamente I: ricavi V dal logaritmo.</li>
+<li><b>I segnali digitali</b> hanno una soglia: il rumore piccolo non cambia il simbolo letto. I segnali analogici portano l'informazione nell'ampiezza e sono più sensibili al rumore, ma sono veloci e interfacciano il mondo fisico.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura: transitorio del 1° ordine in 4 passi</h3>
+<ol class="steps">
+<li>Valore iniziale <b>v(0⁺)</b>: il condensatore tiene la sua tensione (era scarico → corto per i salti di ingresso).</li>
+<li>Valore finale <b>v(∞)</b>: condensatore aperto, risolvi la rete in continua.</li>
+<li><b>τ</b>: spegni i generatori, calcola la R vista dal condensatore (combinazioni serie/parallelo), τ = R<sub>eq</sub>C.</li>
+<li>Scrivi l'esponenziale e, se serve, il tempo per arrivare a una soglia: \(t=\tau\ln\dfrac{v(0^+)-v(\infty)}{v(t)-v(\infty)}\).</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Dimenticare di spegnere i generatori quando calcoli R<sub>eq</sub> per τ (un generatore di tensione ideale = corto, di corrente = aperto).</li>
+<li>Usare la τ del circuito <i>senza</i> il generatore che pilota C: in un partitore con C la τ è C·(R₁‖R₂), non C·R₁.</li>
+<li>Confondere il polo f<sub>p</sub> = 1/(2πτ) (in Hz) con 1/τ (rad/s).</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-semi">
+<header class="thead"><span class="tnum">Cap. 2</span><h2>Fisica dei semiconduttori</h2>
+<p class="lead">Quanti portatori ci sono (n, p), dove sta il livello di Fermi e come si muovono (deriva e diffusione). È il vocabolario di tutto il resto del corso.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Bande = livelli permessi.</b> Quando N atomi di Si formano un cristallo, i livelli esterni si allargano in due bande: <b>valenza</b> (quasi piena, 4N elettroni) e <b>conduzione</b> (quasi vuota), separate dal gap E<sub>g</sub> = 1.12 eV. Un elettrone in banda di conduzione è «libero»; un posto vuoto in banda di valenza è una <b>lacuna</b>, che si comporta come una carica +q che si muove al contrario degli elettroni di valenza.</li>
+<li><b>Perché il Si conduce poco ma controllabilmente.</b> A 300 K la sola agitazione termica rompe pochi legami: n<sub>i</sub> ≈ 1.4·10¹⁰ cm⁻³ contro 5·10²² atomi/cm³ (uno su 10¹²). Non puoi «aggiungere» portatori dall'esterno (violeresti la neutralità), ma puoi <b>drogare</b>: sostituire atomi di Si con atomi neutri che regalano un elettrone (donori, V gruppo: P, As) o ne rubano uno creando una lacuna (accettori, III gruppo: B). A temperatura ambiente tutti i droganti sono ionizzati (energie di ionizzazione ≈ 45 meV).</li>
+<li><b>Legge di azione di massa n·p = n<sub>i</sub>².</b> Il drogaggio sposta l'equilibrio: se triplichi gli elettroni, le lacune calano di un fattore 3 (più ricombinazione). Con N<sub>D</sub> = 10¹⁶ le lacune sono solo ≈ 2·10⁴ cm⁻³, 12 ordini di grandezza meno degli elettroni. Eppure questi <i>minoritari</i> comandano la corrente di tutti i diodi e BJT.</li>
+<li><b>Livello di Fermi E<sub>F</sub> = «contatore» di n e p.</b> È l'energia con probabilità 1/2 di occupazione. Più E<sub>F</sub> è vicino a E<sub>c</sub>, più elettroni ci sono (tipo n); più è vicino a E<sub>v</sub>, più lacune (tipo p). Basta una differenza di energia E<sub>F</sub>−E<sub>i</sub> (esponenziale!) per dire quante cariche hai. All'<b>equilibrio E<sub>F</sub> è costante in tutto il dispositivo</b>: è la regola per disegnare ogni diagramma a bande.</li>
+<li><b>Due modi di far scorrere corrente.</b> <i>Deriva</i>: il campo elettrico spinge i portatori con velocità v = μE (urti col reticolo → velocità media costante, mobilità μ). <i>Diffusione</i>: dove la concentrazione non è uniforme i portatori si spargono dal denso al rado per puro moto casuale termico; il flusso è proporzionale al gradiente. Sono legate dalla relazione di Einstein D = μV<sub>th</sub>.</li>
+<li><b>Bande e campo.</b> Nel diagramma a bande la pendenza di E<sub>c</sub> (o E<sub>v</sub>, o E<sub>i</sub>) è il campo elettrico: \(E=\tfrac1q\,dE_c/dx\). Gli elettroni «rotolano» verso il basso, le lacune «galleggiano» verso l'alto.</li>
+<li><b>Generazione/ricombinazione.</b> Fuori equilibrio (np ≠ n<sub>i</sub>²) il materiale cerca di tornare a np = n<sub>i</sub>²: np &gt; n<sub>i</sub>² ⇒ ricombinazione netta, np &lt; n<sub>i</sub>² ⇒ generazione netta. A bassa iniezione conta solo il minoritario in eccesso p′ che decade con costante τ (tempo di vita).</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Il drogaggio fissa la resistività (da ≈ 100 Ω·cm a 10¹⁴ cm⁻³ a ≈ 0.03 Ω·cm a 10¹⁸), quindi progetta resistori integrati, source/drain dei MOSFET e le regioni dei diodi. La forte dipendenza di n<sub>i</sub> da T è alla base dei sensori di temperatura e del limite di funzionamento termico dei chip (oltre ≈ 550 K il Si drogato 10¹⁵ torna «intrinseco» e smette di funzionare come progettato).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n=n_i\,e^{\frac{E_F-E_i}{kT}},\qquad p=n_i\,e^{\frac{E_i-E_F}{kT}}\)</td><td>n, p [cm⁻³]; E<sub>F</sub> livello di Fermi, E<sub>i</sub> livello intrinseco (≈ metà gap) [eV]; kT ≈ 25 meV</td></tr>
+<tr><td>\(n=N_c\,e^{-\frac{E_c-E_F}{kT}},\qquad p=N_v\,e^{-\frac{E_F-E_v}{kT}}\)</td><td>forma equivalente con N<sub>c</sub> = 2.8·10¹⁹, N<sub>v</sub> = 1.04·10¹⁹ cm⁻³</td></tr>
+<tr><td>\(n\,p=n_i^2\), &nbsp;\(n_i=\sqrt{N_cN_v}\,e^{-E_g/2kT}\)</td><td>azione di massa (all'equilibrio, non degenere). n<sub>i</sub> cresce esponenzialmente con T</td></tr>
+<tr><td>\(E_F-E_i=kT\ln\dfrac{n}{n_i}=-kT\ln\dfrac{p}{n_i}\)</td><td>posizione di E<sub>F</sub>; &gt;0 nel tipo n, &lt;0 nel tipo p</td></tr>
+<tr><td>\(\phi_{fn}=V_{th}\ln\dfrac{N_D}{n_i},\quad \phi_{fp}=V_{th}\ln\dfrac{N_A}{n_i}\)</td><td>potenziali di Fermi [V] (distanza E<sub>F</sub>–E<sub>i</sub> divisa per q). Ricorrono in Φ<sub>bi</sub> e in V<sub>T</sub> del MOS</td></tr>
+<tr><td>\(p-n=N_A-N_D\) &nbsp;(neutralità)</td><td>con droganti tutti ionizzati</td></tr>
+<tr><td>\(n=\dfrac{N_D-N_A}{2}+\sqrt{\Big(\dfrac{N_D-N_A}{2}\Big)^2+n_i^2}\)</td><td>formula completa; p si ottiene con N<sub>A</sub>↔N<sub>D</sub> oppure da n·p = n<sub>i</sub>²</td></tr>
+<tr><td>tipo n: \(n\simeq N_D-N_A,\ p\simeq n_i^2/n\)<br>tipo p: \(p\simeq N_A-N_D,\ n\simeq n_i^2/p\)</td><td>approssimazione per |N<sub>A</sub>−N<sub>D</sub>| ≫ n<sub>i</sub> (sempre vera nei dispositivi)</td></tr>
+<tr><td>\(v=\mu E,\qquad J=q\,(n\mu_n+p\mu_p)\,E=\sigma E\)</td><td>v [cm/s], μ [cm²/Vs], E [V/cm], σ [S/cm]</td></tr>
+<tr><td>\(\rho=\dfrac{1}{q(n\mu_n+p\mu_p)}\simeq\dfrac{1}{qN\mu},\qquad R=\rho\dfrac{L}{S}\)</td><td>ρ [Ω·cm]; si usano solo i maggioritari</td></tr>
+<tr><td>\(J_n=q\mu_nnE+qD_n\dfrac{\partial n}{\partial x},\qquad J_p=q\mu_ppE-qD_p\dfrac{\partial p}{\partial x}\)</td><td>equazioni del trasporto (deriva + diffusione), J [A/cm²]</td></tr>
+<tr><td>\(\dfrac{D_n}{\mu_n}=\dfrac{D_p}{\mu_p}=V_{th}=\dfrac{kT}{q}\)</td><td>Einstein; D [cm²/s]</td></tr>
+<tr><td>\(E(x)=\dfrac{1}{q}\dfrac{dE_c}{dx}=-\dfrac{dV}{dx}\)</td><td>la pendenza delle bande è il campo; V(x) è il potenziale elettrostatico</td></tr>
+<tr><td>\(\dfrac{\partial p}{\partial t}=-\dfrac1q\dfrac{\partial J_p}{\partial x}+(G-R),\quad \dfrac{\partial n}{\partial t}=\dfrac1q\dfrac{\partial J_n}{\partial x}+(G-R)\)</td><td>equazioni di continuità</td></tr>
+<tr><td>\(R-G=\dfrac{pn-n_i^2}{(p+n+2n_i)\,\tau}\ \xrightarrow{\text{bassa iniez.}}\ \dfrac{p'}{\tau}\)</td><td>Shockley-Read-Hall; τ tempo di vita dei minoritari (da ns a ms). Eccesso: \(p'(t)=p'(0)\,e^{-t/\tau}\)</td></tr>
+<tr><td>\(L=\sqrt{D\,\tau}\)</td><td>lunghezza di diffusione: distanza media percorsa dal minoritario prima di ricombinare [cm]</td></tr>
+<tr><td>\(v_{th}=\sqrt{3kT/m^*}\approx10^7\) cm/s</td><td>velocità termica (sempre ≫ della velocità di deriva \(\mu E\))</td></tr>
+<tr><td>\(\dfrac{n_i(T)}{n_i(300)}=\Big(\dfrac{T}{300}\Big)^{3/2}\!e^{-\frac{E_g}{2k}\left(\frac1T-\frac1{300}\right)}\)</td><td>dipendenza di n<sub>i</sub> da T (serve per «a che temperatura il Si diventa intrinseco»)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Boltzmann al posto di Fermi-Dirac</b> se E<sub>F</sub> dista almeno ≈ 3kT (≈ 75–100 meV) dai bordi E<sub>c</sub>, E<sub>v</sub>. Oltre ≈ 10¹⁹ cm⁻³ il semiconduttore è <i>degenere</i> (si comporta da metallo) e le formule esponenziali non valgono più.</li>
+<li><b>n·p = n<sub>i</sub>²</b> vale solo <b>all'equilibrio</b> termodinamico (niente tensioni, luce, correnti). Fuori equilibrio si usano i quasi-livelli di Fermi E<sub>qfn</sub>, E<sub>qfp</sub> (uno per portatore).</li>
+<li><b>Droganti tutti ionizzati</b>: vero per T ≳ 100 K e fino a ≈ 550 K per N<sub>D</sub> = 10¹⁵. Sotto ≈ 90 K si «congelano»; sopra, n<sub>i</sub> diventa confrontabile con N<sub>D</sub> e il materiale torna intrinseco.</li>
+<li><b>μ costante</b> (v ∝ E) fino a qualche decina di kV/cm; oltre la velocità <b>satura</b> a ≈ 10⁷ cm/s. La mobilità diminuisce con il drogaggio (&gt; 10¹⁵), con la temperatura e vicino alla superficie (canale MOS: 800/300).</li>
+<li>R−G ≈ p′/τ richiede <b>bassa iniezione</b>: n′, p′ ≪ maggioritari.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure (dalle Esercitazioni 1–2)</h3>
+<ol class="steps">
+<li><b>Tipo e concentrazioni.</b> Calcola N<sub>D</sub>−N<sub>A</sub>. Se positivo → n ≈ N<sub>D</sub>−N<sub>A</sub>, p = n<sub>i</sub>²/n; se negativo → p ≈ N<sub>A</sub>−N<sub>D</sub>, n = n<sub>i</sub>²/p. (Es. 1/Esercitazione 1: Si con B 10¹⁶ e As 6·10¹⁶ nella metà sinistra ⇒ zona n con N<sub>D</sub>−N<sub>A</sub> = 5·10¹⁶; l'altra metà resta p con 10¹⁶.)</li>
+<li><b>Posizione del livello di Fermi.</b> E<sub>F</sub>−E<sub>i</sub> = kT ln(n/n<sub>i</sub>) (tipo n) o E<sub>i</sub>−E<sub>F</sub> = kT ln(p/n<sub>i</sub>) (tipo p). Poi disegna la riga di E<sub>F</sub> e appendi le bande con E<sub>i</sub> a metà gap. (Esempio: 5·10¹⁶ → 376 meV sopra E<sub>i</sub>; 10¹⁶ → 336 meV sotto E<sub>i</sub>.)</li>
+<li><b>«n = 10 p».</b> Da np = n<sub>i</sub>² segue n = √10·n<sub>i</sub> e p = n<sub>i</sub>/√10. Qui <i>non</i> si può usare N<sub>D</sub> ≈ n perché n è dello stesso ordine di n<sub>i</sub>: N<sub>D</sub> = n − p ≈ 2.85·n<sub>i</sub> (≈ 4·10¹⁰ cm⁻³) e E<sub>F</sub>−E<sub>i</sub> = kT ln√10 ≈ 29 meV.</li>
+<li><b>«E<sub>F</sub> al bordo della banda di conduzione».</b> Significa n ≈ N<sub>c</sub> = 2.8·10¹⁹ (o, con la formula n<sub>i</sub>e<sup>E<sub>g</sub>/2kT</sup>, ≈ 7.5·10¹⁹): è già al limite della validità di Boltzmann.</li>
+<li><b>Temperatura a cui il Si intrinseco eguaglia un drogaggio.</b> Imponi n<sub>i</sub>(T) = N<sub>D1</sub> con la formula in T (include il fattore T<sup>3/2</sup>) e risolvi iterando; il risultato è molto più alto di 300 K.</li>
+<li><b>Corrente di deriva in una barretta.</b> J = σE, E = V/L, I = J·S, R = ρL/S. Con n ≫ p usa solo il termine dei maggioritari.</li>
+<li><b>Ritorno all'equilibrio dopo illuminazione.</b> p′(t) = p′(0)e<sup>−t/τ</sup>; la variazione assoluta di n′ e p′ è uguale (coppie), ma in percentuale cambia solo il minoritario.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li><b>Usare n ≈ N<sub>D</sub> quando N<sub>D</sub> è confrontabile con n<sub>i</sub></b> (caso «elettroni 10 volte le lacune»). Vale solo se N<sub>D</sub> ≫ n<sub>i</sub>.</li>
+<li><b>Segno di E<sub>F</sub>−E<sub>i</sub></b>: tipo n sopra E<sub>i</sub>, tipo p sotto. E la distanza <i>da E<sub>v</sub></i> o <i>da E<sub>c</sub></i> la ottieni sommando/sottraendo E<sub>g</sub>/2 = 0.56 eV, non 1.12.</li>
+<li>Drogaggio <b>compensato</b> (N<sub>A</sub> ≈ N<sub>D</sub>): conta la differenza; il materiale si comporta da intrinseco. Aggiungere un tipo di drogante a una zona già drogata dell'altro tipo può invertirne la polarità (è così che si fa la giunzione per impiantazione).</li>
+<li>I <b>minoritari</b> non sono «pochi e irrilevanti»: in una giunzione sono loro il collo di bottiglia della corrente. E sono quelli per cui la ricombinazione decide la lunghezza di diffusione L.</li>
+<li>Il potenziale di Fermi φ<sub>f</sub> <b>non è una caduta di tensione</b> nel dispositivo, è solo la distanza di E<sub>F</sub> da E<sub>i</sub> in volt (la caduta di tensione è Φ<sub>bi</sub>, che ne è la somma lungo la giunzione).</li>
+<li>La velocità di deriva (10⁴–10⁶ cm/s) è molto minore di quella termica (10⁷ cm/s): la deriva è una piccola correzione al moto casuale, ma, con 10¹⁶ portatori per cm³, dà correnti enormi.</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-pn">
+<header class="thead"><span class="tnum">Cap. 3</span><h2>La giunzione pn</h2>
+<p class="lead">Il componente chiave dell'esercizio A: diodo, fotodiodo, drain/source dei MOSFET. Tre domande a cui devi saper rispondere sempre: <b>quanta carica c'è</b> (x<sub>d</sub>, E<sub>max</sub>), <b>quanta corrente passa</b> (I<sub>s</sub>, V<sub>D</sub>), <b>quando si rompe</b> (breakdown).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Come nasce.</b> Metti a contatto una zona p (tante lacune) con una n (tanti elettroni). Per diffusione le lacune vanno in n e gli elettroni in p, lasciando dietro di sé ioni di drogante <i>fissi</i>: negativi (B⁻) in p, positivi (P⁺) in n. Questa carica fissa crea un campo elettrico che spinge i portatori indietro (deriva). All'equilibrio deriva = diffusione e la corrente netta è zero.</li>
+<li><b>Zona svuotata (ZCS).</b> Nella regione attorno alla giunzione metallurgica restano solo gli ioni: per questo si chiama «svuotata» (di portatori liberi) o «di carica spaziale». Fuori ci sono due zone <i>neutre</i> in cui n ≈ N<sub>D</sub> o p ≈ N<sub>A</sub> e il campo è nullo. Poiché la carica positiva e quella negativa si bilanciano, N<sub>A</sub>x<sub>p</sub> = N<sub>D</sub>x<sub>n</sub>: <b>la zona meno drogata si svuota di più</b>.</li>
+<li><b>Campo e potenziale.</b> Con densità di carica costante il campo cresce linearmente, è massimo sulla giunzione metallurgica e nullo ai bordi (profilo triangolare); il potenziale è la sua area (due parabole). L'integrale del campo è la <b>tensione di built-in Φ<sub>bi</sub></b>: la «barriera» che separa i livelli di Fermi delle due zone neutre. Φ<sub>bi</sub> è interna: <i>non</i> la misuri con un voltmetro (i contatti metallo-semiconduttore la compensano esattamente).</li>
+<li><b>Diagramma a bande:</b> disegna E<sub>F</sub> piatto; in ogni zona neutra posiziona E<sub>c</sub>, E<sub>v</sub> secondo il drogaggio; raccordale nella ZCS con due parabole (più strette dove drogaggio maggiore). Il salto totale è qΦ<sub>bi</sub>.</li>
+<li><b>Polarizzazione diretta (V<sub>D</sub> &gt; 0 su p).</b> La tensione esterna cade quasi tutta sulla ZCS (è la zona più resistiva) e <b>abbassa la barriera</b> a q(Φ<sub>bi</sub>−V<sub>D</sub>): la ZCS si restringe e molti più portatori riescono a scavalcare la barriera. Ai bordi della ZCS i minoritari salgono di un fattore e<sup>V<sub>D</sub>/V<sub>th</sub></sup> rispetto all'equilibrio. Ogni 60 mV (≈ 2.3·V<sub>th</sub>) la corrente cresce di 10×.</li>
+<li><b>Chi porta la corrente?</b> Nelle zone neutre i minoritari in eccesso diffondono verso i contatti e (a base lunga) ricombinano; i maggioritari arrivano dal contatto per deriva e sostituiscono quelli persi. La corrente totale è la stessa in ogni sezione, ma cambia chi la porta. La corrente di un portatore è proporzionale al <b>suo</b> gradiente: più ripido il profilo, più corrente.</li>
+<li><b>Base corta vs base lunga.</b> Se la zona neutra è più corta della lunghezza di diffusione (W ≪ L, tempo di transito t<sub>tr</sub> = W²/2D ≪ τ) quasi nessuno ricombina: il profilo dei minoritari è una <b>retta</b> che va da n<sub>i</sub>²/N·e<sup>V/V<sub>th</sub></sup> (bordo ZCS) a n<sub>i</sub>²/N (contatto). Se W ≫ L il profilo è un <b>esponenziale</b> con costante L e il contatto non «vede» più nulla: conta L, non W.</li>
+<li><b>Polarizzazione inversa.</b> La barriera sale, la ZCS si allarga (∝ √(Φ<sub>bi</sub>+V<sub>R</sub>)), i minoritari ai bordi vengono «aspirati» via (quasi 0) e il gradiente è fisso e piccolo: la corrente satura a −I<sub>s</sub>, indipendente dalla tensione (fenomeno di diffusione). In più la ZCS <i>genera</i> coppie (R−G &lt; 0): la corrente di generazione cresce come √V e può superare I<sub>s</sub>.</li>
+<li><b>Capacità di giunzione.</b> Quando varia V la ZCS cambia estensione: carica si sposta ai suoi bordi, come in un condensatore piano le cui armature sono le due zone neutre a distanza x<sub>d</sub>: C<sub>j</sub> = εA/x<sub>d</sub>. Più inversa → x<sub>d</sub> più grande → C<sub>j</sub> più piccola. In diretta domina la corrente: C<sub>j</sub> non è un buon modello.</li>
+<li><b>Breakdown.</b> In inversa E<sub>max</sub> cresce con la tensione. A ≈ 4·10⁵ V/cm un portatore acquista tra due urti un'energia ≈ E<sub>g</sub> e, urtando, rompe un legame creando una coppia; elettroni e lacune ne creano altre: <b>valanga</b>. La corrente sale quasi verticalmente; serve una resistenza esterna che la limiti, altrimenti la giunzione si distrugge per potenza dissipata.</li>
+<li><b>Giunzione con più strati (p-n-n⁺, p-i-n).</b> La ZCS si estende nella zona meno drogata; se questa è più corta di x<sub>d</sub> la ZCS la riempie e raggiunge la zona successiva (completamente svuotata). Nel p-i-n la zona intrinseca ha campo ≈ costante.</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Raddrizzatore (corrente solo in un verso), «valvola» di tensione (V<sub>D</sub> ≈ 0.6–0.7 V quasi fissa in diretta), sensore di temperatura (V<sub>D</sub> a corrente costante ∼ −2 mV/K), varicap (C variabile con V), fotodiodo e cella solare (vedi Cap. 4), isolamento fra regioni di un chip (giunzione in inversa), diodo Zener/valanga come riferimento o protezione.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<p class="conv"><b>Convenzione:</b> V<sub>D</sub> &gt; 0 = positivo sul lato p (diretta); V<sub>D</sub> &lt; 0 = inversa, con V<sub>R</sub> = −V<sub>D</sub>. Nelle formule con (Φ<sub>bi</sub>−V<sub>D</sub>) basta sostituire V<sub>D</sub> = −V<sub>R</sub> (→ Φ<sub>bi</sub>+V<sub>R</sub>).</p>
+<h4>Equilibrio e zona svuotata</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(\Phi_{bi}=V_{th}\ln\dfrac{N_AN_D}{n_i^2}=\phi_{fn}+\phi_{fp}\)</td><td>tensione di built-in [V]; N<sub>A</sub>, N<sub>D</sub> [cm⁻³] drogaggi <i>delle zone neutre</i></td></tr>
+<tr><td>\(N_A\,x_p=N_D\,x_n\)</td><td>neutralità globale; x<sub>p</sub>, x<sub>n</sub> [cm] estensioni della ZCS nelle due zone</td></tr>
+<tr><td>\(x_d=x_p+x_n=\sqrt{\dfrac{2\epsilon_{Si}(\Phi_{bi}-V_D)}{q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)}\)</td><td>estensione totale; ε<sub>Si</sub> ≈ 10⁻¹² F/cm</td></tr>
+<tr><td>\(x_n=x_d\dfrac{N_A}{N_A+N_D},\qquad x_p=x_d\dfrac{N_D}{N_A+N_D}\)</td><td>ripartizione di x<sub>d</sub></td></tr>
+<tr><td>Giunzione asimmetrica (p⁺n): \(x_d\simeq\sqrt{\dfrac{2\epsilon(\Phi_{bi}-V_D)}{qN_{basso}}}\)</td><td>si trascura la zona molto drogata (N<sub>basso</sub> = il drogaggio minore)</td></tr>
+<tr><td>\(|E_{max}|=\dfrac{qN_Ax_p}{\epsilon}=\dfrac{qN_Dx_n}{\epsilon}=\dfrac{2(\Phi_{bi}-V_D)}{x_d}\)</td><td>campo massimo [V/cm], sulla giunzione metallurgica</td></tr>
+<tr><td>\(|E_{max}|=\sqrt{\dfrac{2q}{\epsilon}\dfrac{N_AN_D}{N_A+N_D}(\Phi_{bi}-V_D)}\)</td><td>forma alternativa</td></tr>
+<tr><td>\(\varphi_{zcs,n}=\dfrac{qN_Dx_n^2}{2\epsilon}=\dfrac{|E_{max}|x_n}{2},\quad \varphi_{zcs,p}=\dfrac{qN_Ax_p^2}{2\epsilon}\)</td><td>cadute di potenziale nelle due metà; somma = Φ<sub>bi</sub>−V<sub>D</sub></td></tr>
+<tr><td>\(n(x_b)=n(x_a)\,e^{\frac{q\Delta V_{ba}}{kT}}\)</td><td>concentrazione in un punto interno alla ZCS partendo da uno noto (E<sub>F</sub> costante)</td></tr>
+</tbody></table></div>
+
+<h4>Corrente in polarizzazione diretta/inversa (modello a diffusione, assenza di G-R in ZCS)</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n(-x_p)=\dfrac{n_i^2}{N_A}e^{V_D/V_{th}},\qquad p(x_n)=\dfrac{n_i^2}{N_D}e^{V_D/V_{th}}\)</td><td>minoritari al bordo ZCS (condizioni al contorno); ai contatti restano ai valori di equilibrio</td></tr>
+<tr><td><b>Base corta:</b> \(J_n=qD_n\dfrac{n_i^2}{N_A\,W_p'}\big(e^{V_D/V_{th}}-1\big)\),&nbsp; \(J_p=qD_p\dfrac{n_i^2}{N_D\,W_n'}\big(e^{V_D/V_{th}}-1\big)\)</td><td>W′ = larghezza <i>neutra</i> = W − x<sub>p</sub> (o W − x<sub>n</sub>) ≈ W se x<sub>d</sub> ≪ W; profilo lineare</td></tr>
+<tr><td>\(I=A\,q\,n_i^2\Big(\dfrac{D_n}{N_AW_p}+\dfrac{D_p}{N_DW_n}\Big)\big(e^{V_D/V_{th}}-1\big)\)</td><td>corrente totale base corta [A]; A area [cm²]</td></tr>
+<tr><td><b>Base lunga:</b> \(I=A\,q\,n_i^2\Big(\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\Big)\big(e^{V_D/V_{th}}-1\big)\)</td><td>\(L_n=\sqrt{D_n\tau_n}\) (elettroni minoritari in p), \(L_p=\sqrt{D_p\tau_p}\) (lacune in n)</td></tr>
+<tr><td>\(I=I_s\big(e^{V_D/V_{th}}-1\big)\)</td><td>equazione del diodo; I<sub>s</sub> = corrente inversa di saturazione [A]. In diretta (V<sub>D</sub> ≳ 4V<sub>th</sub>): \(I\approx I_se^{V_D/V_{th}}\)</td></tr>
+<tr><td>\(V_D=V_{th}\ln\!\Big(\dfrac{I}{I_s}+1\Big)\simeq V_{th}\ln\dfrac{I}{I_s}\)</td><td>tensione a corrente imposta</td></tr>
+<tr><td>\(V_{D2}-V_{D1}=V_{th}\ln\dfrac{I_2}{I_1}\),&nbsp; \(\Delta V=60\ \text{mV/decade}\)</td><td>per raddoppiare I: ΔV = V<sub>th</sub> ln2 ≈ 17 mV</td></tr>
+<tr><td>caso generale: \(\dfrac{D_p}{N_DL_p}\coth\dfrac{W_n}{L_p}\)&nbsp;al posto di \(\dfrac{D_p}{N_DL_p}\) (e analogo in p)</td><td>interpolazione base corta (coth→L/W) / lunga (coth→1): dal profilo con sinh</td></tr>
+<tr><td>\(R_{inj}=\dfrac{J_n}{J_p}=\dfrac{N_D}{N_A}\dfrac{D_n}{D_p}\dfrac{L_p}{L_n}\ \Big(=\dfrac{N_D}{N_A}\sqrt{\tfrac{D_n}{D_p}}\ \text{se }\tau_n=\tau_p\Big)\)</td><td>rapporto tra corrente di elettroni e di lacune iniettate (base lunga). Base corta: \(\dfrac{N_D D_n W_n}{N_A D_p W_p}\)</td></tr>
+<tr><td>\(t_{tr}=\dfrac{W^2}{2D}\)</td><td>tempo di transito nella zona neutra; base corta se \(t_{tr}\ll\tau\) (equivale a W ≪ L)</td></tr>
+<tr><td>\(V_{D2}\approx I\,R_p,\ \ R_p=\dfrac{\rho_pW_p}{A}=\dfrac{W_p}{q\mu_pN_AA}\)</td><td>caduta nelle zone quasi-neutre (da confrontare con V<sub>th</sub>); in bassa iniezione è ≪ V<sub>th</sub>·W<sub>p</sub>/W<sub>n</sub></td></tr>
+<tr><td>\(J_{ric}\approx q\,x_d\dfrac{n_i}{2\tau}\,e^{V_D/2V_{th}}\)</td><td>ricombinazione nella ZCS (diretta): pendenza e<sup>V/2V<sub>th</sub></sup>, trascurabile a V alta</td></tr>
+<tr><td>\(J_{gen}=-q\,x_d\dfrac{n_i}{2\tau}\)</td><td>generazione nella ZCS (inversa), ∝ x<sub>d</sub> ∝ √(Φ<sub>bi</sub>+V<sub>R</sub>); si somma a −J<sub>s</sub></td></tr>
+<tr><td>\(I_s\propto n_i^2\propto T^3e^{-E_g/kT}\)</td><td>forte dipendenza da T</td></tr>
+<tr><td>\(\dfrac{dV_D}{dT}\Big|_{I}\approx-\dfrac{E_g/q-V_D}{T}\approx-2\ \text{mV/K}\)</td><td>a corrente costante la V<sub>D</sub> <i>diminuisce</i> con T: I<sub>s</sub> cresce più in fretta di quanto cresca V<sub>th</sub></td></tr>
+</tbody></table></div>
+
+<h4>Inversa: capacità e breakdown</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(C_j=\dfrac{dQ}{dV}=\epsilon_{Si}\dfrac{A}{x_d}\)</td><td>C<sub>j</sub> [F]; per capacità per unità di area: \(C_j/A=\epsilon/x_d\) [F/cm²]</td></tr>
+<tr><td>\(C_j(V_D)=C_j(0)\sqrt{\dfrac{\Phi_{bi}}{\Phi_{bi}-V_D}}\)</td><td>dipendenza dalla tensione per giunzione brusca (x<sub>d</sub> ∝ √(Φ<sub>bi</sub>−V<sub>D</sub>))</td></tr>
+<tr><td>\(\tau=R\,C_j\)</td><td>costante di tempo di un diodo in inversa con resistenza serie R</td></tr>
+<tr><td>\(V_{BD}+\Phi_{bi}=\dfrac{\epsilon_{Si}E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\)</td><td>tensione di breakdown (V<sub>BD</sub> &gt; 0 inversa). E<sub>BD</sub> ≈ 4·10⁵ V/cm. Esempio: N<sub>A</sub> = 10¹⁶, N<sub>D</sub> = 2·10¹⁶ → ≈ 75 V</td></tr>
+<tr><td>\(x_{d,BD}=\dfrac{\epsilon E_{BD}}{qN_{basso}}\)</td><td>estensione della ZCS a breakdown (lato poco drogato)</td></tr>
+<tr><td>\(v_{drift,max}=\mu E_{max}\) (o \(v_{sat}\)); \(\dfrac{v_{drift}}{v_{th}}\)</td><td>confronto con velocità termica (Esercitazione 3, es. 2c)</td></tr>
+</tbody></table></div>
+
+<h4>Strutture con più strati</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Struttura</th><th>Formule</th></tr></thead><tbody>
+<tr><td>p-<b>i</b>-n (TdE 25-1-2025)</td><td>\(E_{max}\simeq\dfrac{\Phi_{bi}+V_R}{x_2-x_1}\) (campo costante nella zona intrinseca, x<sub>1</sub>, x<sub>2</sub> = suoi estremi); \(C\simeq\epsilon_{Si}\dfrac{A}{x_2-x_1}\); verifica a posteriori che le ZCS in n e p siano trascurabili: \(x_{dn}=\dfrac{\epsilon E_{max}}{qN_D}\ll\)</td></tr>
+<tr><td>p-n-n⁺ con zona n sottile (Esercitazioni 3–4)</td><td>1) calcola x<sub>n</sub> in N<sub>D1</sub> con la formula standard: se x<sub>n</sub> &gt; W<sub>N1</sub> la regione N<sub>D1</sub> è <b>completamente svuotata</b> già all'equilibrio e la ZCS entra in N<sub>D2</sub> (il Φ<sub>bi</sub> «giusto» è quello fra p e N<sub>D2</sub>: Es. della dispensa, 0.731 V); se x<sub>n</sub> &lt; W<sub>N1</sub> non lo è (Esercitazione 3–4: Φ<sub>bi</sub> = 730 mV «insufficiente»). 2) tensione di svuotamento completo di N<sub>D1</sub>: \(\Phi_{bi}+V_R=\dfrac{qN_{D1}W_{N1}^2}{2\epsilon}\Big(1+\dfrac{N_{D1}}{N_A}\Big)\) (impone x<sub>n</sub> = W<sub>N1</sub>); per V<sub>R</sub> maggiori la ZCS prosegue in N<sub>D2</sub> con campo che cala a gradino per N<sub>D1</sub>→N<sub>D2</sub> (trapezio + triangolo)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità e regioni di funzionamento</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Regione</th><th>Condizione</th><th>Cosa vale</th></tr></thead><tbody>
+<tr><td><b>Diretta</b></td><td>0 &lt; V<sub>D</sub> &lt; Φ<sub>bi</sub> (praticamente 0.4–0.8 V per le correnti tipiche)</td><td>I ≈ I<sub>s</sub>e<sup>V/V<sub>th</sub></sup>; ZCS ridotta; C<sub>j</sub> non rappresentativa</td></tr>
+<tr><td><b>Equilibrio</b></td><td>V<sub>D</sub> = 0</td><td>I = 0; ZCS di larghezza x<sub>d0</sub>; Φ<sub>bi</sub> interna</td></tr>
+<tr><td><b>Inversa</b></td><td>−V<sub>BD</sub> &lt; V<sub>D</sub> &lt; −3V<sub>th</sub></td><td>I ≈ −(I<sub>s</sub> + I<sub>gen</sub>); modello capacitivo C<sub>j</sub></td></tr>
+<tr><td><b>Breakdown</b></td><td>E<sub>max</sub> = E<sub>BD</sub></td><td>V<sub>D</sub> ≈ −V<sub>BD</sub> a corrente qualsiasi (limitata da R esterna). Una corrente inversa &gt; I<sub>s</sub> è possibile <u>solo</u> in breakdown</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Giunzione brusca</b>: drogaggio uniforme nelle due zone, salto netto in x = 0.</li>
+<li><b>Approssimazione di svuotamento</b>: nella ZCS le cariche mobili sono trascurabili rispetto agli ioni (n, p ≪ N). Vale bene; a metà ZCS si può avere ancora n, p ≈ 10⁷–10¹³ cm⁻³ contro N ≈ 10¹⁶, ma nel Poisson contano gli ioni.</li>
+<li><b>Bassa iniezione</b>: i minoritari iniettati ≪ maggioritari. Allora le cadute nelle zone neutre sono ≪ V<sub>th</sub> e V<sub>ZCS</sub> ≈ V<sub>D</sub>. Se la corrente è altissima (alta iniezione) l'esponenziale si «appiattisce» in un comportamento resistivo.</li>
+<li><b>Base corta</b> se W′ ≪ L; <b>base lunga</b> se W′ ≫ L; altrimenti formula con coth/sinh. Confronta sempre L<sub>n</sub> = √(D<sub>n</sub>τ<sub>n</sub>) e L<sub>p</sub> con le larghezze delle zone neutre <i>prima</i> di scegliere la formula; le due zone possono essere in regimi diversi (una corta, una lunga): somma allora i due termini corrispondenti.</li>
+<li><b>Contatti ohmici ideali</b>: ai contatti i minoritari sono ai valori di equilibrio (eccesso = 0).</li>
+<li><b>Trascurare G-R in ZCS</b> per J<sub>diretta</sub> (V alte, τ lungo); per la corrente inversa a piccola I<sub>s</sub> la generazione nella ZCS può dominare: va valutata quando il testo dà τ (Esercitazione 3, es. 1f).</li>
+<li><b>Dipendenza da T</b>: n<sub>i</sub> (e quindi I<sub>s</sub>) è esponenziale in T; V<sub>th</sub> varia solo linearmente. Quando cambia T ricalcola V<sub>th</sub>, n<sub>i</sub> e (se dato) μ, D.</li>
+</ul>
+</div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo (dai TdE e dalle Esercitazioni)</h3>
+<h4>A) Studio statico di una giunzione all'equilibrio (Esercitazioni 1–2, TdE 11-2-2026 A.1)</h4>
+<ol class="steps">
+<li>Identifica N<sub>A</sub>, N<sub>D</sub> <i>nette</i> delle zone neutre (se ci sono entrambi i droganti, sottrai).</li>
+<li>Φ<sub>bi</sub> = V<sub>th</sub> ln(N<sub>A</sub>N<sub>D</sub>/n<sub>i</sub>²). (Esempi dei TdE: 586 mV, 713.7 mV, 886 mV, 747 mV.)</li>
+<li>x<sub>d</sub> dalla formula; poi x<sub>n</sub>, x<sub>p</sub> dalle frazioni N<sub>A</sub>/(N<sub>A</sub>+N<sub>D</sub>) e N<sub>D</sub>/(N<sub>A</sub>+N<sub>D</sub>). <i>Controllo:</i> N<sub>A</sub>x<sub>p</sub> = N<sub>D</sub>x<sub>n</sub> e x<sub>d</sub> ≪ W<sub>n</sub>, W<sub>p</sub>.</li>
+<li>E<sub>max</sub> = qN<sub>D</sub>x<sub>n</sub>/ε = 2Φ<sub>bi</sub>/x<sub>d</sub> (i due devono coincidere). Disegna E(x): triangolo da −x<sub>p</sub> a x<sub>n</sub>, picco negativo in 0.</li>
+<li>Cadute nelle metà: φ<sub>zcs,n</sub> = E<sub>max</sub>x<sub>n</sub>/2, φ<sub>zcs,p</sub> = Φ<sub>bi</sub> − φ<sub>zcs,n</sub>.</li>
+<li>Diagramma a bande: E<sub>F</sub> costante, E<sub>F</sub>−E<sub>i</sub> in n e E<sub>i</sub>−E<sub>F</sub> in p; salto qΦ<sub>bi</sub>; parabole.</li>
+</ol>
+<h4>B) Corrente in diretta (Esercitazione 2 es. 2, 4 es. 2, TdE 11-2-2026 A.2, 6-7-2026 A.2)</h4>
+<ol class="steps">
+<li>Calcola D = μV<sub>th</sub> e, se c'è τ, L = √(Dτ) per elettroni (in p) e lacune (in n).</li>
+<li><b>Confronta L con W</b> di ciascuna zona neutra (corretta per x<sub>d</sub>): base lunga (W ≫ L), corta (W ≪ L) o intermedia.</li>
+<li>Scrivi I<sub>s</sub> = Aqn<sub>i</sub>²(D<sub>n</sub>/(N<sub>A</sub>·ℓ<sub>n</sub>) + D<sub>p</sub>/(N<sub>D</sub>·ℓ<sub>p</sub>)) con ℓ = W o L (la lunghezza <i>più corta</i> tra le due).</li>
+<li>Poi I = I<sub>s</sub>(e<sup>V<sub>D</sub>/V<sub>th</sub></sup>−1). Se è data I ricava V<sub>D</sub> = V<sub>th</sub> ln(I/I<sub>s</sub>+1). Per il rapporto delle correnti di elettroni/lacune confronta i due termini di I<sub>s</sub>.</li>
+<li>Per raddoppiare I aumenta V<sub>D</sub> di V<sub>th</sub> ln 2 ≈ 17 mV. Per «una decade» servono 60 mV.</li>
+<li>Caduta nelle zone neutre: R = ρW/A, V ≈ I·R; confronta con V<sub>th</sub> per decidere se trascurarla.</li>
+<li>Profili: lineare (base corta) da n<sub>i</sub>²/N·e<sup>V/V<sub>th</sub></sup> al contatto n<sub>i</sub>²/N; esponenziale decrescente con L (base lunga). Nel diagramma delle correnti: J<sub>n</sub> e J<sub>p</sub> di minoritari decadono, la somma è costante.</li>
+</ol>
+<h4>C) Corrente inversa e breakdown (Esercitazione 3 es. 1e–f, TdE 6-7-2026 A.3)</h4>
+<ol class="steps">
+<li>J<sub>s</sub> con le stesse formule (V<sub>D</sub> ≪ −3V<sub>th</sub> ⇒ J = −J<sub>s</sub>).</li>
+<li>Se c'è τ, J<sub>gen</sub> = q·x<sub>d</sub>·n<sub>i</sub>/(2τ) con x<sub>d</sub> calcolata alla V<sub>R</sub> data; confrontala con J<sub>s</sub> (spesso è maggiore di vari ordini di grandezza).</li>
+<li>Per forzare I<sub>inv</sub> &gt; I<sub>s</sub>: la giunzione è in <b>breakdown</b>. Imponi E<sub>max</sub> = E<sub>BD</sub> ⇒ Φ<sub>bi</sub>+V<sub>BD</sub> = εE<sub>BD</sub>²(1/N<sub>A</sub>+1/N<sub>D</sub>)/(2q). Il nodo ha V = −V<sub>BD</sub> fissa, la corrente la decide il circuito.</li>
+</ol>
+<h4>D) Diodi in serie e tensioni sui nodi (TdE 6-7-2026 A.2–A.3)</h4>
+<ol class="steps">
+<li>Il diodo in diretta passa I (tensione ≈ V<sub>th</sub> ln(I/I<sub>s</sub>)); quello in inversa non può passare più di I<sub>s</sub>. La corrente della serie è dunque <b>≈ I<sub>s</sub> del diodo inverso</b>.</li>
+<li>Con due diodi identici, I<sub>s</sub> = I<sub>s</sub>(e<sup>ΔV/V<sub>th</sub></sup>−1) ⇒ ΔV = V<sub>th</sub> ln 2 ≈ 17 mV; l'altro diodo sostiene quasi tutta la tensione (V<sub>x</sub> ≈ 9.983 V su 10 V).</li>
+<li>Se la corrente imposta &gt; I<sub>s</sub>: il diodo inverso va in breakdown (V<sub>x</sub> = V<sub>BD</sub> = 59.3 V) e il diretto ha V ≈ V<sub>th</sub> ln(I/I<sub>s</sub>) (285 mV nel TdE).</li>
+</ol>
+<h4>E) Capacità e RC con diodo in inversa (Esercitazione 3 es. 2d, TdE sulla struttura 3-strati)</h4>
+<ol class="steps">
+<li>Trova x<sub>d</sub> alla tensione data (somma delle ZCS nei vari strati: usa il bilancio di carica N<sub>A</sub>x<sub>dp</sub> = N<sub>D1</sub>x<sub>n1</sub> + N<sub>D2</sub>x<sub>dn2</sub>).</li>
+<li>C<sub>j</sub> = εA/x<sub>d</sub> (per unità di area: ε/x<sub>d</sub>). τ = R·C<sub>j</sub>.</li>
+<li>Se ti danno τ e chiedono V: C<sub>j</sub> = τ/R ⇒ x<sub>d</sub> = εA/C<sub>j</sub> ⇒ da x<sub>d</sub> ricavi E<sub>max</sub> e Φ<sub>bi</sub>+V<sub>inv</sub> = area del campo (triangolo/trapezio).</li>
+</ol>
+<h4>F) Variazione con la temperatura (Esercitazione 4 es. 2)</h4>
+<ol class="steps">
+<li>V<sub>D</sub>(T) = V<sub>th</sub>(T) ln(I/I<sub>s</sub>(T)); ricalcola n<sub>i</sub>(T) e I<sub>s</sub>(T) ∝ n<sub>i</sub>²; per ΔT piccolo usa la derivata ≈ −(E<sub>g</sub>/q − V<sub>D</sub>)/T ≈ −1.7…−2 mV/K ⇒ ΔV ≈ −9 mV per +5 °C.</li>
+<li>Spiegazione: V<sub>th</sub> cresce linearmente (+0.086 mV/K) ma I<sub>s</sub> cresce esponenzialmente (×2 ogni ≈ 5 K); per mantenere la stessa corrente basta una V minore.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Φ<sub>bi</sub> sbagliato per strutture a più strati.</b> Se la zona meno drogata è più corta di x<sub>n</sub> è tutta svuotata: non puoi usare quella N<sub>D</sub> da sola nella formula di x<sub>d</sub>. Verifica sempre x<sub>n</sub> &lt; W<sub>N1</sub> a posteriori. Esempio della dispensa: con N<sub>D1</sub> = 10¹⁴ servirebbero 2.65 µm ma la regione è lunga 0.5 µm ⇒ la ZCS entra in N<sub>D2</sub> e Φ<sub>bi</sub> = 0.731 V.</li>
+<li><b>Dimenticare −1</b> nell'equazione del diodo in inversa (I = −I<sub>s</sub>, non 0) o <b>tenerlo</b> in diretta quando l'esponenziale è enorme (inutile ma innocuo).</li>
+<li><b>Base corta/lunga scelta a occhio.</b> Calcola L = √(Dτ): nell'es. 6 dell'esercitazione W<sub>p</sub> = 3 µm ≪ L<sub>n</sub> = 4 µm è base corta, 120 µm è lunga, 20 µm è intermedia.</li>
+<li><b>Usare W invece di W − x<sub>d</sub></b> (corretto solo se x<sub>d</sub> ≪ W; nelle giunzioni molto stette controlla).</li>
+<li><b>Corrente inversa «maggiore di I<sub>s</sub>»</b>: se il testo (o il generatore di corrente) impone una I inversa &gt; I<sub>s</sub>, sei in breakdown; non esiste soluzione sul tratto piatto.</li>
+<li><b>Segni di V<sub>D</sub></b> in (Φ<sub>bi</sub>−V<sub>D</sub>): in inversa x<sub>d</sub> <i>aumenta</i>, in diretta diminuisce. E la capacità C<sub>j</sub> <i>diminuisce</i> in inversa.</li>
+<li><b>Dimenticare che V<sub>th</sub> dipende da T</b> quando il testo cambia temperatura (25 mV è solo a 300 K).</li>
+<li><b>Trascurare la caduta resistiva</b> senza controllare: è lecito (ΔV ≪ V<sub>th</sub> in bassa iniezione) ma alcuni testi chiedono di <i>stimarla</i> e commentare.</li>
+<li><b>Il campo nella regione intrinseca</b> (p-i-n): è costante e pari a (Φ<sub>bi</sub>+V<sub>R</sub>)/lunghezza; la regione di carica nelle zone doppie è trascurabile (nm). Si ottiene breakdown a tensioni di kV perché il campo è «spalmato» su una zona lunga.</li>
+<li><b>Il potenziale di built-in non si misura</b> con un voltmetro: ai capi di una giunzione all'equilibrio V = 0.</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-app">
+<header class="thead"><span class="tnum">Cap. 4</span><h2>Applicazioni della giunzione pn</h2>
+<p class="lead">Diodo come componente (taglio, raddrizzatore, Zener), sensore di temperatura, fotodiodo (anche p-i-n) e cella fotovoltaica. Il fotodiodo compare in 3 TdE su 7 (25-1-2025, 11-2-2026, e in Esercitazione 5).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Il diodo è una valvola a due stati.</b> Sotto ≈ 0.7 V non passa (quasi) niente, a 0.7 V può passare qualsiasi corrente perché l'esponenziale è così ripido che V<sub>D</sub> si muove di pochi mV (ogni 25 mV la corrente cambia di e ≈ 2.7×; ogni 60 mV di 10×). Per l'analisi a mano si usa il modello <b>a soglia</b>: spento (I = 0, V<sub>D</sub> &lt; 0.7 V) o acceso (V<sub>D</sub> = 0.7 V, I &gt; 0).</li>
+<li><b>Circuito di taglio.</b> Resistenza + diodo verso massa: l'uscita non può scendere sotto −0.7 V (il diodo si accende e blocca la tensione). Serve a proteggere un nodo dalle escursioni. Attenzione a due limiti: il diodo deve sopportare la corrente di picco (P = 0.7 V · I) e la tensione inversa massima (V<sub>BD</sub> &gt; picco del segnale).</li>
+<li><b>Alimentatore stabilizzato.</b> Trasformatore (riduce 325 V di picco a ≈ 15 V) → <b>raddrizzatore a un diodo</b> (taglia la semionda negativa, sottrae 0.7 V) → <b>condensatore di filtro</b> (il condensatore mantiene la tensione di picco; quando il diodo si spegne scarica sul carico con τ = RC) → <b>Zener</b> (a valle, in breakdown, fissa la tensione V<sub>Z</sub> e riduce il ripple di un fattore ≈ r<sub>z</sub>/(r<sub>z</sub>+R)). Più grande C o R, minore l'ondulazione (ripple ≈ V<sub>max</sub> T/RC). Il diodo con C vede in inversa fino a ≈ 2 V<sub>picco</sub>.</li>
+<li><b>Zener.</b> Diodo progettato per lavorare in breakdown a una V<sub>Z</sub> stabile; in quella regione si comporta come un generatore di tensione V<sub>Z</sub> con piccola resistenza serie r<sub>z</sub> (decine di Ω) a patto che I<sub>Z</sub> &gt; I<sub>min</sub> e che V<sub>Z</sub>·I<sub>Z</sub> non superi la potenza dissipabile.</li>
+<li><b>Sensore di temperatura.</b> A corrente costante V<sub>D</sub> scende di ≈ 2 mV/K, ma dipende da I<sub>s</sub> (processo, geometria). Con <b>due diodi uguali e correnti I₁ = N·I₂</b> la differenza ΔV = (kT/q) ln N è <i>proporzionale a T</i> e non dipende da I<sub>s</sub>: sensore lineare e accurato.</li>
+<li><b>Fotone → coppia e-lacuna.</b> Un fotone di energia E<sub>ph</sub> = hc/λ &gt; E<sub>g</sub> (λ &lt; 1.1 µm nel Si) rompe un legame e crea una coppia; l'energia in eccesso va in calore. Il flusso di fotoni decade esponenzialmente (<b>Lambert-Beer</b>): Φ(x) = Φ(0) e<sup>−x/L<sub>A</sub></sup>. Senza campo, la coppia ricombina senza corrente; <b>in presenza di campo</b> elettrone e lacuna sono separati (deriva) e danno corrente.</li>
+<li><b>Fotodiodo (inversa).</b> Dove c'è il campo (la ZCS) ogni fotone assorbito dà <i>esattamente una carica q</i> in corrente (non due: l'elettrone e la lacuna fanno ciascuno solo metà del percorso). I fotoni assorbiti fuori dalla ZCS e a più di una lunghezza di diffusione da essa vanno persi; quelli entro ≈ L<sub>diff</sub> contribuiscono in parte (coefficiente &lt; 1). Si lavora in <b>inversa</b> per: ZCS più larga (più fotoni raccolti), campo alto (risposta veloce), C<sub>j</sub> piccola (RC piccolo), niente corrente diretta spuria.</li>
+<li><b>Fotodiodo p-i-n.</b> Una zona intrinseca lunga W<sub>i</sub> (decine/centinaia di µm) tra p⁺ e n⁺ allunga la regione con campo (costante) dove si assorbe la luce nel vicino infrarosso (L<sub>A</sub> grande), tenendo basse le resistenze delle zone drogate. Svantaggio: serve tensione inversa alta per un campo sufficiente; il tempo di risposta è dominato dal <b>tempo di transito</b> t = W<sub>i</sub>/(μE), non da RC.</li>
+<li><b>Cella solare.</b> Stessa giunzione, ma senza generatore: le cariche fotogenerate si accumulano (p positivo, n negativo) creando una tensione V<sub>D</sub> &gt; 0 che riduce la barriera e fa passare una corrente di diffusione che compensa I<sub>ph</sub>. In circuito aperto I<sub>diff</sub> = I<sub>ph</sub> ⇒ V<sub>oc</sub> = V<sub>th</sub> ln(1+I<sub>ph</sub>/I<sub>s</sub>); in corto-circuito I<sub>sc</sub> = −I<sub>ph</sub>. La curva I-V si trasla verso il basso di I<sub>ph</sub>; nel quarto quadrante il dispositivo <i>eroga</i> potenza. Efficienza massima ≈ 28% per il Si (perdite: fotoni sotto-gap e termalizzazione dell'energia in eccesso).</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td colspan="2" class="sub">Diodo e circuiti</td></tr>
+<tr><td>\(I_D=I_s\big(e^{V_D/V_{th}}-1\big)\)</td><td>I<sub>s</sub> tipicamente 1 fA – 1 nA</td></tr>
+<tr><td>Modello a soglia: spento \(I=0,\ V_D&lt;0.7\ \text{V}\); acceso \(V_D=0.7\ \text{V},\ I&gt;0\)</td><td>tensione di innesco 0.7 V se non diversamente indicato</td></tr>
+<tr><td>Taglio: \(I=\dfrac{V_{out}-V_{in}}{R}=\dfrac{-0.7-V_{in}}{R}\)</td><td>corrente nel diodo quando conduce</td></tr>
+<tr><td>\(V_{rms}=\dfrac{V_p}{\sqrt2},\quad V_p=\sqrt2\cdot230=325\ \text{V}\)</td><td>valore efficace e di picco della rete (50 Hz, T = 20 ms)</td></tr>
+<tr><td>\(V_R(t)=V_{max}\,e^{-(t-t_0)/RC}\),&nbsp; ripple \(\Delta V\simeq V_{max}\dfrac{T}{RC}\)</td><td>scarica di C sul carico R; T = periodo (20 ms a una semionda)</td></tr>
+<tr><td>Zener: \(V\simeq V_Z+r_zI_Z\),&nbsp; ripple a valle \(\simeq\dfrac{r_z}{r_z+R_{DZ}}\Delta V\)</td><td>r<sub>z</sub> resistenza dinamica; R<sub>DZ</sub> resistenza in serie allo Zener</td></tr>
+<tr><td>Sensore: \(V_{out}=V_{D1}-V_{D2}=\dfrac{kT}{q}\ln\dfrac{I_1}{I_2}=\dfrac{kT}{q}\ln N\)</td><td>I₁ = N·I₂; proporzionale a T, indipendente da I<sub>s</sub></td></tr>
+<tr><td colspan="2" class="sub">Luce</td></tr>
+<tr><td>\(E_{ph}=h\nu=\dfrac{hc}{\lambda}\),&nbsp; \(\lambda[\mu m]\simeq\dfrac{1.24}{E_{ph}[eV]}\);&nbsp; assorbimento se \(E_{ph}&gt;E_g\Rightarrow\lambda&lt;1.1\ \mu m\)</td><td>E<sub>ph</sub> [eV o J: 1 eV = 1.6·10⁻¹⁹ J]</td></tr>
+<tr><td>\(\Phi(0)=\dfrac{P_{ott}}{E_{ph}\,A}\) &nbsp;(flusso per unità di area)<br>\(\varphi_{ph}=\dfrac{P_{ott}}{E_{ph}}\) &nbsp;(fotoni/s totali)</td><td>Φ [fotoni/(s·cm²)]; P<sub>ott</sub> [W]; <b>attenzione</b>: φ<sub>ph</sub> già in fotoni/s nell'Esercitazione 5</td></tr>
+<tr><td>\(\Phi(x)=\Phi(0)\,e^{-x/L_A},\quad L_A=1/\alpha\)</td><td>Lambert-Beer; α [cm⁻¹] coefficiente di assorbimento, L<sub>A</sub> lunghezza di assorbimento</td></tr>
+<tr><td>\(I_{ph}=q\,A\big[\Phi(x_1)-\Phi(x_2)\big]=q\,\varphi_{ph}\big(e^{-x_1/L_A}-e^{-x_2/L_A}\big)\)</td><td>fotocorrente dalla regione con campo tra x<sub>1</sub> e x<sub>2</sub> (misurate dalla superficie illuminata, <i>con A solo se Φ per unità di area</i>)</td></tr>
+<tr><td>Stima migliore: \(A_{ass}\approx W\,(x_d+\tfrac{L_n}{2}+\tfrac{L_p}{2})\)</td><td>metà dei portatori generati a ≈ L dalla ZCS vi entra (TdE 11-2-2026)</td></tr>
+<tr><td>Fotodiodo: \(I=-(I_{s}+I_{gen})-I_{ph}\) (inversa), con \(I_{buio}\approx I_s\) se G-R trascurabile</td><td>I<sub>buio</sub> è circa fA, I<sub>ph</sub> μA: rapporto 10⁹</td></tr>
+<tr><td>p-i-n: \(E\simeq\dfrac{\Phi_{bi}+V_R}{W_i}\), &nbsp;\(C=\epsilon_{Si}\dfrac{A}{W_i}\)</td><td>zone di carica nelle regioni drogate trascurabili: verifica con \(x_{dn}=\dfrac{\epsilon E}{qN_D}\)</td></tr>
+<tr><td>p-i-n all'equilibrio: \(\Phi_{bi}=\dfrac{qN\,x}{\epsilon}\,(W_i+x)\) per \(N_A=N_D=N\) e \(x=x_{dn}=x_{dp}\)</td><td>da qui x e la caduta su W<sub>i</sub>: \(V_i=E\,W_i\) (Esercitazione 5 es. 1)</td></tr>
+<tr><td>Tempo di risposta: \(t_{tr}=\dfrac{W_i}{\mu E}=\dfrac{W_i}{v}\), &nbsp;\(\tau_{RC}=R_{tot}C\)</td><td>R<sub>tot</sub> = R delle zone drogate quasi neutre in serie; il più lento limita la banda</td></tr>
+<tr><td>Ottimo di W<sub>i</sub>: \(W_i^{*}=L_A\ln\!\Big(\dfrac{2\tau\,\varphi_{ph}}{L_A\,A\,n_i}\Big)-W_n\)</td><td>massimizza I<sub>ph</sub>−I<sub>buio</sub> con \(I_{buio}\approx\dfrac{qAn_iW_i}{2\tau}\) lineare in W<sub>i</sub> (Esercitazione 5 es. 3; va verificato che sia ≤ W<sub>i</sub> disponibile)</td></tr>
+<tr><td colspan="2" class="sub">Cella fotovoltaica</td></tr>
+<tr><td>\(I_D=I_s\big(e^{V_D/V_{th}}-1\big)-I_{ph}\)</td><td>corrente totale (verso p→n); I<sub>ph</sub> sottrae</td></tr>
+<tr><td>\(V_{oc}=V_{th}\ln\!\Big(1+\dfrac{I_{ph}}{I_s}\Big),\qquad I_{sc}=-I_{ph}\)</td><td>circuito aperto / corto circuito</td></tr>
+<tr><td>\(V_D=V_{th}\ln\!\Big(1+\dfrac{I_D+I_{ph}}{I_s}\Big)\)</td><td>cella con generatore di corrente (Es. 5, punto 4: \(I_D=-I_{gen}\))</td></tr>
+<tr><td>\(P=V_D\cdot I_{gen},\qquad \eta=\dfrac{P}{P_{ott}}=\dfrac{V_D\,I_{gen}}{\varphi_{ph}E_{ph}}\)</td><td>potenza scambiata col generatore e rendimento di conversione</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Modello a soglia (0.7 V)</b>: ok per scegliere lo stato del diodo e per correnti «normali»; non per calcoli di precisione (usa l'esponenziale con I<sub>s</sub>). In inversa l'errore è ≈ R·I<sub>s</sub> (pV).</li>
+<li><b>Fotodiodo semplice</b>: L<sub>diff</sub> ≪ x<sub>d</sub> per trascurare i portatori generati vicino alla ZCS; ricombinazione in ZCS trascurabile; riflessione superficiale trascurata (se il testo non la dà). I fotoni sono assorbiti solo se E<sub>ph</sub> &gt; E<sub>g</sub>.</li>
+<li><b>Lambert-Beer</b>: α uniforme (indipendente da drogaggio e giunzioni); x misurato dalla superficie illuminata. Se illumini dal lato n la ZCS è a distanza W<sub>n</sub>−x<sub>dn</sub> … W<sub>n</sub>+x<sub>dp</sub>.</li>
+<li><b>p-i-n</b>: W<sub>i</sub> ≫ x<sub>dn</sub>, x<sub>dp</sub>; campo costante; V<sub>R</sub> ≫ Φ<sub>bi</sub> per E ≈ V<sub>R</sub>/W<sub>i</sub>; ricombinazione trascurabile ⇒ I<sub>buio</sub> = I<sub>s</sub> di base corta (fA o meno).</li>
+<li><b>Cella solare</b>: bassa iniezione, I<sub>ph</sub> costante rispetto a V<sub>D</sub> (a rigore dipende da x<sub>d</sub>); V<sub>oc</sub> sempre &lt; Φ<sub>bi</sub> (≈ 0.5–0.7 V nel Si).</li>
+<li><b>Zener</b>: I<sub>Z</sub> &gt; I<sub>min</sub> e P &lt; P<sub>max</sub>; V<sub>A</sub> deve rimanere sempre &gt; V<sub>Z</sub>.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure</h3>
+<h4>A) Circuito con diodi (modello a soglia)</h4>
+<ol class="steps">
+<li><b>Ipotizza</b> lo stato di ogni diodo (acceso/spento).</li>
+<li>Acceso → sostituisci con generatore da 0.7 V e calcola la corrente (deve essere &gt; 0). Spento → circuito aperto e calcola V<sub>D</sub> (deve essere &lt; 0.7 V).</li>
+<li>Se l'ipotesi è contraddetta cambia stato. Con più diodi prova prima quello «più acceso» (anodo molto più alto del catodo).</li>
+<li>Controlla corrente di picco e V<sub>inversa</sub> max del diodo (&lt; V<sub>BD</sub>); con C di filtro l'inversa è ≈ 2·V<sub>picco</sub>.</li>
+</ol>
+<h4>B) Fotodiodo semplice (TdE 11-2-2026 A.3)</h4>
+<ol class="steps">
+<li>Calcola φ<sub>ph</sub> = P<sub>ott</sub>/E<sub>ph</sub> (E<sub>ph</sub> in J!) o Φ(0) = Iott/Eph (Iott in W/cm²).</li>
+<li>Posiziona la ZCS: x<sub>1</sub> = profondità del bordo ZCS dalla superficie, x<sub>2</sub> = x<sub>1</sub> + x<sub>d</sub> (con x<sub>d</sub> dalla V applicata). I fotoni assorbiti: Φ(x₁) − Φ(x₂).</li>
+<li>I<sub>ph</sub> = q·A·Φ<sub>ass</sub>. Seconda approssimazione: allarga la zona utile a ± L/2.</li>
+<li>Corrente totale in cella aperta/fotodiodo: I = I<sub>D</sub> − I<sub>ph</sub> (stesso verso). Con V<sub>D</sub> = 150 mV (diretta) il diodo dà I<sub>D</sub> = 4.3 pA e I<sub>ph</sub> = 4.6 pA ⇒ I ≈ −0.3 pA: la fotocorrente è <i>opposta</i> alla corrente di diretta.</li>
+<li>Per la corrente di buio: I<sub>s</sub> (base lunga o corta) con i dati di drogaggio.</li>
+</ol>
+<h4>C) p-i-n (TdE 25-1-2025 A; Esercitazione 5)</h4>
+<ol class="steps">
+<li>Φ<sub>bi</sub> dalle zone esterne (n⁺ e p⁺) con V<sub>th</sub>ln(N<sub>A</sub>N<sub>D</sub>/n<sub>i</sub>²).</li>
+<li>E<sub>max</sub> ≈ (Φ<sub>bi</sub>+V<sub>R</sub>)/(x₂−x₁) (E costante in i). Verifica x<sub>dn</sub> = εE/(qN<sub>D</sub>) ≪ spessori.</li>
+<li>C = εA/(x₂−x₁); R<sub>tot</sub> = Σ x/(qμNA) delle zone n e p; τ = R<sub>tot</sub>C; t<sub>tr</sub> = W<sub>i</sub>/(μ<sub>n</sub>E). Confronta: spesso τ è fs–ps ma t<sub>tr</sub> è ns ⇒ il tempo di transito limita la velocità.</li>
+<li>I<sub>ph</sub> = q φ<sub>ph</sub>(e<sup>−x₁/L<sub>A</sub></sup> − e<sup>−x₂/L<sub>A</sub></sup>); I<sub>buio</sub> = I<sub>s</sub> (fA) ⇒ rapporto enorme.</li>
+<li>Breakdown: E<sub>BD</sub> = (Φ<sub>bi</sub>+V<sub>BD</sub>)/W<sub>i</sub> ⇒ V<sub>BD</sub> ≈ E<sub>BD</sub>W<sub>i</sub> (kV con W<sub>i</sub> = 100 µm).</li>
+</ol>
+<h4>D) Cella solare con generatore di corrente (Esercitazione 5 es. 4)</h4>
+<ol class="steps">
+<li>Al buio: I<sub>D</sub> = −I<sub>gen</sub> con |I<sub>gen</sub>| &gt; I<sub>s</sub> ⇒ giunzione in <b>breakdown</b> (V<sub>D</sub> = −V<sub>BD</sub> ⇒ V da campo critico); ZCS e C<sub>j</sub> = εA/x<sub>d</sub> a quella tensione.</li>
+<li>Illuminata: I<sub>ph</sub> = qφ<sub>ph</sub>·(frazione assorbita utile, incluso L<sub>n</sub> se richiesto). Se I<sub>ph</sub> &gt; I<sub>gen</sub> la giunzione passa in <b>diretta</b> con V<sub>D</sub> = V<sub>th</sub> ln(1 + (I<sub>ph</sub> − I<sub>gen</sub>)/I<sub>s</sub>).</li>
+<li>Potenza P = V<sub>D</sub>·I<sub>gen</sub> (con V<sub>D</sub> &gt; 0 la cella eroga potenza al generatore); η = P/(φ<sub>ph</sub>E<sub>ph</sub>).</li>
+</ol>
+<h4>E) Alimentatore (dispensa 4.2.2)</h4>
+<ol class="steps">
+<li>V<sub>S,picco</sub> = 325/N; V<sub>max</sub> = V<sub>S,picco</sub> − 0.7 V.</li>
+<li>Ripple ΔV = V<sub>max</sub>T/(RC) (per C grande e carico costante); correzione Zener: × r<sub>z</sub>/(r<sub>z</sub>+R<sub>DZ</sub>).</li>
+<li>Diodo: V<sub>BD</sub> &gt; 2V<sub>picco</sub> (con C) e picco di corrente alla ricarica.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Fotoni «per unità di area» vs «totali».</b> Φ(0) = P/(E<sub>ph</sub>A) è per cm²; moltiplica per l'area <i>solo della ZCS efficace</i> o per l'area illuminata. Nell'Esercitazione 5 il testo dà già φ<sub>ph</sub> = 10¹⁶ s⁻¹ (totale): non moltiplicare ancora per A.</li>
+<li><b>E<sub>ph</sub> in eV vs J.</b> Per φ = P/E<sub>ph</sub> converti E<sub>ph</sub> in J (1.6·10⁻¹⁹).</li>
+<li><b>Dimenticare che ogni fotone dà q e non 2q</b>: la corrente di una coppia separata in ZCS è q (le due cariche percorrono tratti complementari del circuito).</li>
+<li><b>Sbagliare l'origine dell'asse x</b>: gli esponenziali partono dalla superficie illuminata; se illumini dal lato n le distanze sono W<sub>n</sub>−x<sub>dn</sub>, W<sub>n</sub>+x<sub>dp</sub>.</li>
+<li><b>Tenere i fotoni assorbiti in zone neutre «lontane»</b>: non contribuiscono (solo ±L dalla ZCS).</li>
+<li><b>Segno della fotocorrente</b>: I<sub>ph</sub> ha verso opposto alla corrente di diretta (n→p dentro la giunzione); nella cella V<sub>D</sub> positiva e I<sub>D</sub> negativa = potenza erogata.</li>
+<li><b>Raddrizzatore + C</b>: il diodo vede in inversa 2V<sub>picco</sub>, non V<sub>picco</sub>; e il ripple va calcolato dalla tensione <i>dopo</i> il diodo (V<sub>max</sub> = V<sub>p</sub>−0.7 V).</li>
+<li><b>Sensore di temperatura</b>: il segno di dV/dT è negativo; non spiegarlo con V<sub>th</sub> (che cresce) ma con I<sub>s</sub> che cresce esponenzialmente.</li>
+<li><b>Zener a polarizzazione inversa</b>: convenzione dei segni opposta (V<sub>Z</sub>, I<sub>Z</sub> positive in inversa).</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-bjt">
+<header class="thead"><span class="tnum">Cap. 4 (§4.5)</span><h2>Transistore bipolare a giunzione (BJT)</h2>
+<p class="lead">Due giunzioni affiancate: una in diretta che <i>inietta</i>, una in inversa che <i>raccoglie</i>. Dalla dispensa 4.5 e dall'Esercitazione 6 (T.E. 17 novembre 2011).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li>Un diodo in inversa ha tanto campo ma pochi portatori: poca corrente. Un diodo in diretta inietta tanti portatori ma senza campo che li trasporti. Il BJT usa la <b>giunzione base-emettitore in diretta</b> per iniettare elettroni nella base e la <b>base-collettore in inversa</b> per «aspirarli» col suo campo. Se la base è più sottile della lunghezza di diffusione, quasi tutti arrivano al collettore.</li>
+<li><b>Zona attiva diretta:</b> V<sub>BE</sub> &gt; 0 (≈ 0.7 V), V<sub>BC</sub> &lt; 0 ⇒ V<sub>CB</sub> &gt; 0, V<sub>CE</sub> &gt; 0. Il BJT è un generatore di corrente I<sub>C</sub> comandato da V<sub>BE</sub>, quasi indipendente da V<sub>CE</sub>.</li>
+<li><b>La corrente di base</b> è il «costo» del processo: sono le lacune iniettate dalla base nell'emettitore (piccole perché N<sub>E</sub> ≫ N<sub>B</sub>) più quelle che servono a compensare la ricombinazione in base. β = I<sub>C</sub>/I<sub>B</sub> ≈ 100–400 si ottiene con emettitore molto drogato e base sottile.</li>
+<li><b>Amplificazione:</b> con una R sul collettore, V<sub>R</sub> = R·β·I<sub>B</sub>; la potenza in uscita R β² I<sub>B</sub>² può superare quella d'ingresso V<sub>BE</sub>I<sub>B</sub>; l'energia viene dal generatore di alimentazione.</li>
+</ul>
+<div class="prac"><b>Nella pratica.</b> Amplificatore di corrente/tensione e interruttore. Nella dispensa il MOSFET sarà usato per gli stessi scopi (stessa idea: un terminale comanda la corrente tra altri due).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n(x_{dp})=\dfrac{n_i^2}{N_B}e^{V_{BE}/V_{th}},\quad n(x_B')\approx0\)</td><td>elettroni in base: al bordo B-E e al bordo B-C (aspirati dal campo). N<sub>B</sub> drogaggio di base</td></tr>
+<tr><td>\(I_C=qAD_n\dfrac{n_i^2}{N_Bx_B}\,e^{V_{BE}/V_{th}}\)</td><td>x<sub>B</sub> = larghezza neutra della base (x<sub>B</sub>′ − x<sub>dp</sub>); D<sub>n</sub> degli elettroni in base; profilo lineare</td></tr>
+<tr><td>\(I_B\simeq qAD_p\dfrac{n_i^2}{N_Ex_E}\big(e^{V_{BE}/V_{th}}-1\big)\)</td><td>lacune base→emettitore; x<sub>E</sub> larghezza neutra emettitore; D<sub>p</sub> delle lacune in emettitore</td></tr>
+<tr><td>\(\beta=\dfrac{I_C}{I_B}\simeq\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{x_E}{x_B}\)</td><td>guadagno di corrente (iniezione). Progetto: \(N_E=\beta\dfrac{D_pN_Bx_B}{D_nx_E}\)</td></tr>
+<tr><td>\(x_E\to L_{p,E}=\sqrt{D_p\tau_E}\) se \(L_{p,E}\ll x_E\)</td><td>emettitore a «base lunga»: β diminuisce (più lacune da fornire) → \(\beta=\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{L_{p,E}}{x_B}\)</td></tr>
+<tr><td>\(t_{tr}=\dfrac{x_B^2}{2D_n},\qquad Q_B=\dfrac12\,qA\,n(0)\,x_B=I_C\,t_{tr}\)</td><td>tempo di transito in base e carica di elettroni accumulati in base</td></tr>
+<tr><td>\(I_{ric}\simeq\dfrac{t_{tr}}{\tau_B}\,I_E=\dfrac{Q_B}{\tau_B}\)</td><td>corrente di ricombinazione in base (fornita dal contatto di base); τ<sub>B</sub> tempo di vita in base</td></tr>
+<tr><td>\(\dfrac1\beta=\dfrac1{\beta_{iniez}}+\dfrac{t_{tr}}{\tau_B}\),&nbsp; cioè \(I_B=I_{B,iniez}+I_{ric}\)</td><td>le due componenti di I<sub>B</sub> si sommano; con probabilità di ricombinazione p<sub>r</sub>: \(1/\beta=1/\beta_{iniez}+p_r\)</td></tr>
+<tr><td>\(\beta_{ric}=\dfrac{1}{\cosh(x_B/L_B)-1}\simeq\dfrac{\tau_B}{t_{tr}}\)</td><td>caso generale con profilo sinh (L<sub>B</sub> = √(D<sub>n</sub>τ<sub>B</sub>)): \(n\propto\sinh\frac{x_B-x}{L_B}\), \(I_C\propto\frac1{\sinh}\), \(I_E\propto\coth\)</td></tr>
+<tr><td>\(I_C=\beta I_B\),&nbsp; \(I_E=(\beta+1)I_B\),&nbsp; \(V_R=R\,I_C=R\beta I_B\)</td><td>relazioni terminali in zona attiva</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Validità e regioni</h3>
+<ul>
+<li><b>Attiva diretta:</b> BE diretta, BC inversa. <b>Saturazione:</b> entrambe dirette (I<sub>C</sub> &lt; βI<sub>B</sub>). <b>Interdizione:</b> entrambe inverse. <b>Attiva inversa:</b> scambio dei ruoli (β bassissimo).</li>
+<li>Profili: <b>base corta</b> in base ed emettitore (x ≪ L), <b>base lunga</b> nel collettore (grande).</li>
+<li>Seconde correzioni: ricombinazione in base (riduce β) e modulazione della larghezza di base con V<sub>BC</sub> (effetto Early: I<sub>C</sub> cresce leggermente con V<sub>CE</sub>); si riduce con collettore poco drogato (ZCS soprattutto nel collettore).</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura (Esercitazione 6, es. 1)</h3>
+<ol class="steps">
+<li><b>Progetto di N<sub>E</sub> per un β dato</b>: \(N_E=\beta D_pN_Bx_B/(D_nx_E)\). Usa D<sub>n</sub> del <i>minoritario in base</i> (elettroni) e D<sub>p</sub> del minoritario in emettitore (lacune).</li>
+<li><b>Carica in base</b> per I<sub>C</sub> dato: \(Q_B=I_C\,x_B^2/(2D_n)\).</li>
+<li><b>Emettitore con τ<sub>e</sub> breve</b> (80 ps): calcola L = √(D<sub>p</sub>τ<sub>e</sub>) e confrontalo con x<sub>E</sub> = 2 µm; se L ≪ x<sub>E</sub> sostituisci x<sub>E</sub> con L nella formula di β.</li>
+<li><b>Ricombinazione in base con probabilità 0.01</b>: le lacune per ricombinare vengono dal contatto di base ⇒ I<sub>B</sub> aumenta di 0.01·I<sub>E</sub>; \(1/\beta=1/\beta_{iniez}+0.01\).</li>
+<li><b>τ<sub>B</sub> con profilo non perturbato</b>: \(t_{tr}/\tau_B=0.01\Rightarrow\tau_B=100\,t_{tr}\), \(t_{tr}=x_B^2/2D_n\).</li>
+<li><b>τ<sub>B</sub> per β = 1</b> (ricombinazione dominante e profilo deformato): \(\cosh(x_B/L_B)-1=1\Rightarrow x_B/L_B=\operatorname{arccosh}2\approx1.317\Rightarrow L_B=x_B/1.317,\ \tau_B=L_B^2/D_n\).</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Scambiare D<sub>n</sub> e D<sub>p</sub> (nel β i diffusivi sono quelli dei <i>minoritari</i> di base ed emettitore).</li>
+<li>Dimenticare che la corrente di ricombinazione in base va sommata a I<sub>B</sub> (β ≠ β<sub>iniez</sub>), o aggiungerla a I<sub>C</sub>.</li>
+<li>Usare x<sub>B</sub> «metallurgico» invece della base <i>neutra</i> (meno le ZCS di EB e BC).</li>
+<li>Scambiare i ruoli delle polarizzazioni: V<sub>BE</sub> &gt; 0, V<sub>BC</sub> &lt; 0 ⇒ V<sub>CE</sub> = V<sub>CB</sub>+V<sub>BE</sub> &gt; 0.</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-mos">
+<header class="thead"><span class="tnum">Cap. 5</span><h2>Condensatore MOS e transistore MOSFET</h2>
+<p class="lead">Compare in tutti i TdE: nell'esercizio A come struttura MOS (V<sub>T</sub>, V<sub>FB</sub>, V<sub>ox</sub>, E<sub>ox</sub>, carica di canale, capacità, breakdown) e nell'esercizio B come interruttore/amplificatore (regioni ohmica/saturazione, k, g<sub>m</sub>).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Un condensatore con un semiconduttore come seconda armatura.</b> Gate (metallo o polisilicio) – ossido isolante – silicio. Una tensione sul gate crea un campo verticale che sposta le cariche nel silicio: non passa corrente, ma cambia <i>quanti portatori ci sono sotto l'ossido</i>. Il MOSFET sfrutta proprio questo: «modulare con un campo (non con una corrente) la conducibilità di uno strato di Si».</li>
+<li><b>Tensione di banda piatta V<sub>FB</sub>.</b> Gate e silicio hanno livelli di Fermi diversi (funzioni lavoro diverse): appena li metti in contatto gli elettroni si spostano e creano un campo. V<sub>FB</sub> è la tensione che bisogna applicare per <i>cancellare</i> questo campo (bande piatte, carica nulla). Con gate n⁺ su Si p è negativa (≈ −0.9 V): senza tensione le bande sono già «piegate». Cariche positive fisse nell'ossido richiamano elettroni e rendono V<sub>FB</sub> ancora più negativa (e abbassano V<sub>T</sub>).</li>
+<li><b>Tre regimi del MOS (p-Si, gate n⁺):</b>
+<br>• <b>Accumulazione</b> (V<sub>G</sub> &lt; V<sub>FB</sub>): il gate è negativo, richiama lacune sotto l'ossido; il MOS è un condensatore C<sub>ox</sub> tra gate e body; tutta l'eccedenza V<sub>G</sub>−V<sub>FB</sub> cade nell'ossido.
+<br>• <b>Svuotamento</b> (V<sub>FB</sub> &lt; V<sub>G</sub> &lt; V<sub>T</sub>): le lacune sono respinte, restano gli ioni B⁻ (zona di carica spaziale di larghezza x<sub>d</sub>); la tensione si ripartisce tra ossido e silicio (equazione di 2° grado).
+<br>• <b>Inversione</b> (V<sub>G</sub> &gt; V<sub>T</sub>): le bande sono piegate di 2φ<sub>fp</sub> e sotto l'ossido gli elettroni uguagliano i vecchi maggioritari (n<sub>s</sub> = N<sub>A</sub>): si forma il <b>canale</b>. Poiché gli elettroni crescono esponenzialmente con φ<sub>S</sub> ma gli ioni solo con √φ<sub>S</sub>, ogni ulteriore volt sul gate va in <b>carica libera</b> (Q<sub>inv</sub> = −C<sub>ox</sub>(V<sub>G</sub>−V<sub>T</sub>)); φ<sub>S</sub> resta ≈ 2φ<sub>fp</sub> e x<sub>d</sub> resta ≈ x<sub>d,T</sub>.</li>
+<li><b>Il MOSFET.</b> Si mettono due isole n⁺ (source, drain) ai lati del MOS. Per V<sub>GS</sub> &lt; V<sub>T</sub> la struttura n⁺-p-n⁺ è due diodi in antiserie: nessuna corrente. Per V<sub>GS</sub> &gt; V<sub>T</sub> si forma un canale di elettroni che collega S e D: se V<sub>DS</sub> &gt; 0 gli elettroni scorrono da S a D (la corrente va da D a S).</li>
+<li><b>Regione ohmica.</b> Il canale è un resistore la cui conduttanza dipende da V<sub>GS</sub>. Se V<sub>DS</sub> è piccola: R<sub>ch</sub> = 1/[μC<sub>ox</sub>(W/L)(V<sub>GS</sub>−V<sub>T</sub>)]. Aumentando V<sub>DS</sub> il potenziale lungo il canale cresce da S a D e la tensione ai capi dell'ossido cala verso D: meno carica vicino al drain, la corrente cresce meno che linearmente.</li>
+<li><b>Saturazione (pinch-off).</b> Quando V<sub>GD</sub> = V<sub>T</sub> (V<sub>DS</sub> = V<sub>GS</sub>−V<sub>T</sub>) il canale si «strozza» al drain; oltre, la tensione in eccesso cade in un brevissimo tratto tra il punto di pinch-off e il drain e la corrente non cresce più (I<sub>D,sat</sub> = k(V<sub>GS</sub>−V<sub>T</sub>)²): il MOSFET è un <b>generatore di corrente pilotato da V<sub>GS</sub></b>. Il pinch-off non ferma la corrente: gli elettroni vengono accelerati dal campo intenso.</li>
+<li><b>Modulazione della lunghezza di canale.</b> Più V<sub>DS</sub>, più il pinch-off arretra verso il source, L effettivo diminuisce, la corrente cresce leggermente (I<sub>D</sub> ∝ 1+ΔL/L).</li>
+<li><b>Effetto body.</b> Se il source è a potenziale maggiore del substrato (V<sub>SB</sub> &gt; 0) la zona svuotata sotto il canale si allarga (la superficie è «agganciata» al source, tutto il V<sub>SB</sub> cade nella ZCS) ⇒ più carica fissa da compensare ⇒ <b>V<sub>T</sub> sale</b>. Per questo si preferisce V<sub>SB</sub> = 0; un nMOS che trasferisce un segnale alto (source che sale) ha V<sub>T</sub> maggiore.</li>
+<li><b>Capacità di gate.</b> In accumulazione e in inversione il gate «vede» un condensatore C<sub>ox</sub>WL, ma verso terminali diversi (body in accumulazione; source/drain in inversione). In svuotamento C<sub>ox</sub> è in serie a C<sub>dep</sub> = ε<sub>Si</sub>/x<sub>d</sub> ⇒ capacità minore. Le capacità sono ciò che rallenta i circuiti (Cap. 6).</li>
+<li><b>nMOS vs pMOS.</b> Lo specchio: substrato n, S/D p, V<sub>T</sub> &lt; 0, canale di lacune. Si usa V<sub>SG</sub>, V<sub>SD</sub> positive e I<sub>D</sub> da S a D. A parità di W/L il pMOS conduce ≈ 2.7× meno (μ<sub>p</sub> ≈ μ<sub>n</sub>/2.7): per un inverter simmetrico si dimensiona W<sub>p</sub> ≈ 2–3 W<sub>n</sub>.</li>
+<li><b>Limiti di tensione.</b> (i) breakdown delle giunzioni S/D–substrato; (ii) rottura dell'ossido: E<sub>ox</sub> &gt; E<sub>BD,ox</sub> ≈ 10⁷ V/cm (V<sub>BD,ox</sub> = t<sub>ox</sub>E<sub>BD,ox</sub>); (iii) DIBL e punch-through: la ZCS del drain si avvicina e poi tocca quella del source.</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Il MOSFET è l'elemento base dei circuiti integrati digitali (inverter, porte, memorie) e analogici (amplificatori, specchi di corrente). Come <b>interruttore</b> (spento/ohmico) o come <b>generatore di corrente</b>/amplificatore (saturazione). Il gate isolato non assorbe corrente statica: consumi bassissimi, per questo ha sostituito il BJT nei circuiti integrati.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<h4>Struttura MOS</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(C_{ox}=\dfrac{\epsilon_{ox}}{t_{ox}},\qquad C_G=C_{ox}\,W\,L\)</td><td>C<sub>ox</sub> [F/cm²]; ε<sub>ox</sub> ≈ 3·10⁻¹³ F/cm; t<sub>ox</sub> [cm]; es. 200 nF/cm² ↔ t<sub>ox</sub> = 15 nm; 333 nF/cm² ↔ 9 nm</td></tr>
+<tr><td>\(V_{FB}=\psi_{gate}-\psi_{Si}\)</td><td>ψ funzione lavoro (in V = qψ in eV). Al: 4.1; poly n⁺: 4.05; poly p⁺: 5.17; Au: 5.1</td></tr>
+<tr><td>\(\psi_{Si}=\chi_{Si}+\dfrac{E_g}{2q}\pm\phi_f\)&nbsp;(+ tipo p con \(\phi_{fp}\); − tipo n con \(\phi_{fn}\))</td><td>χ<sub>Si</sub> = 4.05 eV; funzione lavoro del Si</td></tr>
+<tr><td>poly n⁺ su Si-p: \(V_{FB}=-\Big(\dfrac{E_g}{2q}+\phi_{fp}\Big)\)</td><td>caso tipico (≈ −0.9…−0.95 V). Es.: N<sub>A</sub> = 2·10¹⁶ → −914 mV</td></tr>
+<tr><td>\(V_{FB}=V_{FB0}-\dfrac{Q_{ox}}{C_{ox}}\)</td><td>cariche fisse positive Q<sub>ox</sub> [C/cm²] all'interfaccia (tipiche 1–10 nC/cm²); se sono a distanza dall'interfaccia conta solo la frazione indotta nel Si</td></tr>
+<tr><td>\(V_G-V_{FB}=V_{ox}+\phi_S\)&nbsp;(Eq. 5-1)</td><td>bilancio delle tensioni: V<sub>ox</sub> sull'ossido, φ<sub>S</sub> potenziale di superficie (piegamento delle bande)</td></tr>
+<tr><td><b>Accumulazione</b> \(V_G&lt;V_{FB}\): \(Q_{acc}\simeq-C_{ox}(V_G-V_{FB})\),&nbsp; \(V_{ox}\simeq V_G-V_{FB}\)</td><td>tutta l'eccedenza cade nell'ossido; φ<sub>S</sub> trascurabile</td></tr>
+<tr><td><b>Svuotamento</b>: \(\phi_S=\dfrac{qN_Ax_d^2}{2\epsilon_{Si}}\),&nbsp; \(x_d=\sqrt{\dfrac{2\epsilon_{Si}\phi_S}{qN_A}}\),&nbsp; \(V_{ox}=\dfrac{qN_Ax_d}{C_{ox}}=\dfrac{\sqrt{2q\epsilon_{Si}N_A\phi_S}}{C_{ox}}\)</td><td>ZCS sotto l'ossido, carica \(Q_{dep}=-qN_Ax_d\). Equazione: \(V_G-V_{FB}=\dfrac{\sqrt{2q\epsilon_{Si}N_A\phi_S}}{C_{ox}}+\phi_S\) (2° grado in φ<sub>S</sub> o in x<sub>d</sub>)</td></tr>
+<tr><td>\(V_T=V_{FB}+\dfrac{\sqrt{2q\epsilon_{Si}N_A\,2\phi_{fp}}}{C_{ox}}+2\phi_{fp}\)</td><td>tensione di soglia nMOS; ricava anche V<sub>FB</sub> da V<sub>T</sub> noto (TdE 13-1-2026, 9-6-2026)</td></tr>
+<tr><td>\(x_{d,T}=\sqrt{\dfrac{2\epsilon_{Si}\,2\phi_{fp}}{qN_A}}\);&nbsp; \(V_{ox,T}=\dfrac{qN_Ax_{d,T}}{C_{ox}}\)</td><td>ZCS alla soglia (≈ 100–200 nm); resta circa costante per V<sub>G</sub> &gt; V<sub>T</sub></td></tr>
+<tr><td><b>Inversione</b> \(V_G&gt;V_T\): \(\phi_S\simeq2\phi_{fp}\),&nbsp; \(Q_{inv}=-C_{ox}(V_G-V_T)\)</td><td>carica di canale per unità di area; \(Q_{ch}=A\,C_{ox}(V_{GB}-V_T)\), numero di elettroni \(N=Q_{ch}/q\)</td></tr>
+<tr><td>\(V_{ox}=V_{ox,T}+(V_G-V_T)=V_G-V_{FB}-2\phi_{fp}\),&nbsp; \(E_{ox}=\dfrac{V_{ox}}{t_{ox}}\)</td><td>sopra soglia (φ<sub>S</sub> ≈ 2φ<sub>fp</sub> fisso)</td></tr>
+<tr><td>\(\epsilon_{ox}E_{ox}=\epsilon_{Si}E_{Si}\)&nbsp;→&nbsp;\(E_{Si,max}=E_{ox}\dfrac{\epsilon_{ox}}{\epsilon_{Si}}=\dfrac{qN_Ax_d}{\epsilon_{Si}}\)</td><td>continuità di D all'interfaccia (≈ 3× più campo nell'ossido, se non c'è carica di canale). <b>Sopra soglia</b> c'è anche la carica di canale: il salto è maggiore (TdE 9-6-2026: E<sub>ox</sub> = 1.77 MV/cm, E<sub>Si,max</sub> = 110 kV/cm)</td></tr>
+<tr><td>Concentrazioni alla superficie: \(n_s=\dfrac{n_i^2}{N_A}e^{q\phi_S/kT},\ \ p_s=N_Ae^{-q\phi_S/kT}\)</td><td>a V<sub>T</sub>: n<sub>s</sub> = N<sub>A</sub>. A distanza d dall'ossido: \(\phi_S(d)=\dfrac{qN_A(x_d-d)^2}{2\epsilon_{Si}}\)</td></tr>
+<tr><td>Parametri da misure: \(\sqrt{\dfrac{I_1}{I_2}}=\dfrac{V_{GS1}-V_T}{V_{GS2}-V_T}\);&nbsp; \(k=\tfrac12\mu C_{ox}\dfrac WL,\ C_G=C_{ox}WL\Rightarrow\dfrac{k}{C_G}=\dfrac{\mu}{2L^2}\)</td><td>V<sub>T</sub> e k dalla curva I<sub>D</sub>(V<sub>GS</sub>) in saturazione; L e t<sub>ox</sub> dalla capacità di gate sopra soglia (TdE 13-1-2026)</td></tr>
+</tbody></table></div>
+
+<h4>Corrente e regimi del MOSFET</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th></th><th>nMOS</th><th>pMOS</th></tr></thead><tbody>
+<tr><td>Costante k [A/V²]</td><td>\(k_n=\tfrac12\mu_nC_{ox}\dfrac WL\)</td><td>\(k_p=\tfrac12\mu_pC_{ox}\dfrac WL\)</td></tr>
+<tr><td>Soglia a V<sub>SB</sub> = 0</td><td>\(V_{Tn0}=V_{FB}+\dfrac{\sqrt{2q\epsilon N_A2\phi_{fp}}}{C_{ox}}+2\phi_{fp}&gt;0\)</td><td>\(V_{Tp0}=V_{FB}-\dfrac{\sqrt{2q\epsilon N_D2\phi_{fn}}}{C_{ox}}-2\phi_{fn}&lt;0\)</td></tr>
+<tr><td>Effetto body</td><td>\(V_T=V_{T0}+\gamma\big(\sqrt{2\phi_{fp}+V_{SB}}-\sqrt{2\phi_{fp}}\big)\),&nbsp; \(\gamma=\dfrac{\sqrt{2q\epsilon_{Si}N_A}}{C_{ox}}\)</td><td>\(V_T=V_{T0}-\gamma\big(\sqrt{2\phi_{fn}+V_{BS}}-\sqrt{2\phi_{fn}}\big)\),&nbsp; \(\gamma=\dfrac{\sqrt{2q\epsilon_{Si}N_D}}{C_{ox}}\)</td></tr>
+<tr><td>Interdizione</td><td>\(V_{GS}&lt;V_T\Rightarrow I_D\simeq0\)</td><td>\(V_{SG}&lt;|V_{Tp}|\Rightarrow I_D\simeq0\)</td></tr>
+<tr><td>Ohmica</td><td>\(V_{GS}&gt;V_T,\ V_{DS}&lt;V_{GS}-V_T\):<br>\(I_D=2k_n\Big[(V_{GS}-V_T)V_{DS}-\dfrac{V_{DS}^2}{2}\Big]\)</td><td>\(V_{SG}&gt;|V_{Tp}|,\ V_{SD}&lt;V_{SG}-|V_{Tp}|\):<br>\(I_D=2k_p\Big[(V_{SG}-|V_{Tp}|)V_{SD}-\dfrac{V_{SD}^2}{2}\Big]\)</td></tr>
+<tr><td>Saturazione</td><td>\(V_{GS}&gt;V_T,\ V_{DS}&gt;V_{GS}-V_T\):<br>\(I_D=k_n(V_{GS}-V_T)^2\)</td><td>\(V_{SG}&gt;|V_{Tp}|,\ V_{SD}&gt;V_{SG}-|V_{Tp}|\):<br>\(I_D=k_p(V_{SG}-|V_{Tp}|)^2\)</td></tr>
+<tr><td>Corrente ID</td><td>da D a S</td><td>da S a D</td></tr>
+</tbody></table></div>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(R_{ch}=\dfrac{V_{DS}}{I_D}\simeq\dfrac{1}{\mu C_{ox}\frac WL(V_{GS}-V_T)}=\dfrac1{2k(V_{GS}-V_T)}\)</td><td>resistenza di canale per V<sub>DS</sub> ≪ V<sub>GS</sub>−V<sub>T</sub> [Ω]; <b>massima</b> alla V<sub>in</sub> più alta (V<sub>GS</sub>−V<sub>T</sub> minimo, con effetto body)</td></tr>
+<tr><td>\(V_{DS,sat}=V_{GS}-V_T\)&nbsp;(limite; sul bordo \(I_D=kV_{DS}^2\))</td><td>tensione di saturazione; curva di confine tra ohmica e saturazione</td></tr>
+<tr><td>\(R_{eq}\simeq\dfrac{V_{DS,iniz}}{I_{D,iniz}}\)&nbsp;(ad es. \(\dfrac{V_{AA}}{k(V_{AA}-V_T)^2}\)) </td><td>resistenza equivalente per stime (per eccesso) dei tempi di commutazione (Cap. 6)</td></tr>
+<tr><td>\(I_D=k(V_{GS}-V_T)^2\Big(1+\dfrac{V_{DS}-V_{DS,sat}}{L\,E_{max}}\Big)\)</td><td>modulazione della lunghezza di canale (se non indicato: trascurata)</td></tr>
+<tr><td>\(g_m=\dfrac{\partial I_D}{\partial V_{GS}}=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\dfrac{2I_D}{V_{GS}-V_T}\)</td><td>transconduttanza in saturazione [A/V = S] (Cap. 7)</td></tr>
+<tr><td>\(C_G=C_{ox}WL\)</td><td>in inversione tra gate e S/D (≈ ½ verso source e ½ verso drain); in accumulazione tra gate e body</td></tr>
+<tr><td>\(\dfrac1{C_{gate}}=\dfrac1{C_{ox}}+\dfrac1{C_{dep}},\quad C_{dep}=\dfrac{\epsilon_{Si}}{x_d}\)</td><td>capacità per unità di area in svuotamento (V<sub>FB</sub> &lt; V<sub>G</sub> &lt; V<sub>T</sub>), tra gate e body</td></tr>
+<tr><td>\(C_{j,pn}\simeq\epsilon_{Si}\dfrac{\text{Area}_{3D}}{x_{d,pn}}\)</td><td>capacità delle giunzioni S/D–body: area = fondo + pareti laterali (TdE 8-2-2025: W·L<sub>D</sub> + 2H·L<sub>D</sub> + 2H·W per il drain); sotto canale: \(C_{j,ch}=\epsilon_{Si}WL/x_{d,T}\)</td></tr>
+<tr><td>\(C_T(V_G&gt;V_T)=C_G+C_{j,ch}+C_{j,pn}\);&nbsp; \(C_T(V_G=0)=C_{j,pn}\)</td><td>capacità vista da un terminale di S/D: a V<sub>G</sub>=0 solo giunzioni; con canale si aggiungono gate e ZCS sotto canale (TdE 8-2-2025: 36 fF → 99.6 fF)</td></tr>
+</tbody></table></div>
+
+<h4>Limiti sulle tensioni</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Significato</th></tr></thead><tbody>
+<tr><td>\(V_{BD,ox}=t_{ox}E_{BD,ox},\ E_{BD,ox}\approx10^7\ \text{V/cm}\)</td><td>rottura dell'ossido (20 nm → 20 V; 9 nm → 9 V)</td></tr>
+<tr><td>\(V_{G,min}=V_{FB}-V_{BD,ox}\)</td><td>gate negativo: tutta l'eccedenza oltre V<sub>FB</sub> cade nell'ossido</td></tr>
+<tr><td>\(V_{G,max}=V_{FB}+V_{BD,ox}+2\phi_{fp}\)</td><td>sopra soglia: V<sub>ox</sub> = V<sub>G</sub>−V<sub>FB</sub>−2φ<sub>fp</sub> = V<sub>BD,ox</sub>. <i>Non</i> vale V<sub>ox</sub> = V<sub>G</sub> sotto soglia</td></tr>
+<tr><td>\(V_{D,BD}\): \(\Phi_{bi}+V_{BD}=\dfrac{\epsilon E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\)</td><td>breakdown giunzione drain–substrato (≈ N<sub>A</sub> poco drogato domina): es. 15.8 V per N<sub>A</sub> = 3·10¹⁶, N<sub>D</sub> = 10¹⁹</td></tr>
+<tr><td>punch-through se \(x_{d,D}+x_{d,S}\ge L_G\)</td><td>confronta x<sub>d</sub> a V<sub>BD</sub> con la lunghezza di gate; solitamente non è limitante (servono ≫ 100 V)</td></tr>
+<tr><td>\(L_{min}=2\,x_{d,p}\) (caso peggiore: V<sub>S</sub>=V<sub>D</sub> massimi, V<sub>B</sub> = 0)</td><td>lunghezza minima per non unire le ZCS di S e D (TdE 13-1-2026: 407 nm)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità e regioni di funzionamento</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Condizione</th><th>Regione</th><th>Che modello usare</th></tr></thead><tbody>
+<tr><td>V<sub>GS</sub> &lt; V<sub>T</sub></td><td><b>Interdizione</b></td><td>I<sub>D</sub> = 0; interruttore aperto; capacità di gate verso body (≈ C<sub>ox</sub>WL in accumulazione)</td></tr>
+<tr><td>V<sub>GS</sub> &gt; V<sub>T</sub> e V<sub>GD</sub> &gt; V<sub>T</sub> (V<sub>DS</sub> &lt; V<sub>GS</sub>−V<sub>T</sub>)</td><td><b>Ohmica / triodo</b></td><td>resistore R<sub>ch</sub>; I<sub>D</sub> con la formula completa (parabola)</td></tr>
+<tr><td>V<sub>GS</sub> &gt; V<sub>T</sub> e V<sub>GD</sub> &lt; V<sub>T</sub> (V<sub>DS</sub> &gt; V<sub>GS</sub>−V<sub>T</sub>)</td><td><b>Saturazione</b></td><td>generatore di corrente k(V<sub>GS</sub>−V<sub>T</sub>)²</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Canale lungo</b>: L ≫ 1 µm (modello a mobilità costante, forte inversione). Per L più corti compaiono saturazione di velocità e DIBL (non trattati).</li>
+<li><b>Simmetria source/drain</b>: S e D non sono caratteristiche costruttive, li decidono i potenziali: nMOS → S è il terminale più basso, D il più alto; pMOS → S è il più alto. Per i circuiti di commutazione i ruoli si scambiano durante il transitorio.</li>
+<li>La saturazione richiede V<sub>GD</sub> &lt; V<sub>T</sub> (nMOS). Una buona verifica: se V<sub>GD</sub> = 0 V (gate collegato al drain) il transistore è <i>sicuramente</i> saturo (V<sub>GD</sub> = 0 &lt; V<sub>T</sub>).</li>
+<li><b>Sopra soglia</b>: φ<sub>S</sub> ≈ 2φ<sub>fp</sub>, x<sub>d</sub> ≈ x<sub>d,T</sub>, E<sub>Si</sub> ≈ costante; il campo nell'ossido cresce con V<sub>G</sub>. <b>Sotto soglia</b>: nessuna carica di canale, equazione di 2° grado.</li>
+<li><b>Effetto body</b>: quando V<sub>SB</sub> ≠ 0 ricalcola V<sub>T</sub>; per un pass-transistor che trasmette V<sub>in</sub> verso un carico, V<sub>SB</sub> = V<sub>in</sub> (body a massa).</li>
+<li><b>Approssimazione di svuotamento</b> nel Si sotto l'ossido: ioni ≫ portatori liberi, vera anche a φ<sub>S</sub> ≈ 2φ<sub>fp</sub> (a 10 nm dall'interfaccia gli elettroni sono già 10× meno che in superficie).</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo</h3>
+<h4>A) Parametri di una struttura MOS (TdE 2-9-2026 A.1, 9-6-2026 A.1)</h4>
+<ol class="steps">
+<li>φ<sub>fp</sub> = V<sub>th</sub> ln(N<sub>A</sub>/n<sub>i</sub>) (≈ 0.35–0.40 V).</li>
+<li>V<sub>FB</sub>: gate poly n⁺ + Si-p: −(E<sub>g</sub>/2q + φ<sub>fp</sub>); altro metallo: ψ<sub>M</sub> − (χ + E<sub>g</sub>/2q + φ<sub>fp</sub>). Con carica Q<sub>ox</sub>: − Q<sub>ox</sub>/C<sub>ox</sub>. (Se il TdE dà V<sub>T</sub> e chiede V<sub>FB</sub> o Q<sub>ox</sub>, inverti la formula di V<sub>T</sub>.)</li>
+<li>V<sub>T</sub> = V<sub>FB</sub> + √(2qε N<sub>A</sub> 2φ<sub>fp</sub>)/C<sub>ox</sub> + 2φ<sub>fp</sub> (aggiungi effetto body con V<sub>SB</sub> se serve).</li>
+<li>Se V<sub>GB</sub> &gt; V<sub>T</sub>: Q<sub>ch</sub> = A C<sub>ox</sub> (V<sub>GB</sub> − V<sub>T</sub>); n° elettroni = Q<sub>ch</sub>/q.</li>
+</ol>
+<h4>B) «Dato V<sub>ox</sub> trova V<sub>G</sub>» (TdE 2-9-2026 A.2) — trova il regime</h4>
+<ol class="steps">
+<li><b>Ipotizza sopra soglia</b>: V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + 2φ<sub>fp</sub>. Se esce &lt; V<sub>T</sub> l'ipotesi è <b>falsa</b> ⇒ sei sotto soglia.</li>
+<li><b>Sotto soglia</b>: E<sub>ox</sub> = V<sub>ox</sub>/t<sub>ox</sub>; E<sub>Si,max</sub> = E<sub>ox</sub>ε<sub>ox</sub>/ε<sub>Si</sub>; V<sub>Si</sub> = ε<sub>Si</sub>E<sub>Si,max</sub>²/(2qN<sub>A</sub>); V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + V<sub>Si</sub>. Controlla che sia &lt; V<sub>T</sub> (esempio: V<sub>ox</sub> = 0.5 V → V<sub>Si</sub> = 0.521 V → V<sub>G</sub> = 80 mV &lt; V<sub>T</sub> = 427 mV ✓).</li>
+</ol>
+<h4>C) MOS all'equilibrio (V<sub>G</sub> = 0) (TdE 9-6-2026 A.2)</h4>
+<ol class="steps">
+<li>−V<sub>FB</sub> = V<sub>ox</sub> + V<sub>Si</sub> con V<sub>ox</sub> = qN<sub>A</sub>x<sub>d</sub>/C<sub>ox</sub> e V<sub>Si</sub> = qN<sub>A</sub>x<sub>d</sub>²/(2ε<sub>Si</sub>): equazione di 2° grado in x<sub>d</sub> (soluzione positiva). Esempio: x<sub>d</sub> = 85 nm, V<sub>ox</sub> = 227 mV, V<sub>Si</sub> = 289 mV.</li>
+<li>Diagramma a bande: E<sub>F</sub> costante a sinistra (gate) e nel Si; salto qV<sub>ox</sub> nell'ossido, curvatura qV<sub>Si</sub> nel Si.</li>
+</ol>
+<h4>D) Campi e tensione con V<sub>B</sub> ≠ 0 (TdE 9-6-2026 A.3)</h4>
+<ol class="steps">
+<li>V<sub>B</sub> = 0, sopra soglia: V<sub>Si</sub> ≈ 2φ<sub>fp</sub>; V<sub>ox</sub> = V<sub>G</sub> − V<sub>FB</sub> − V<sub>Si</sub>; E<sub>ox</sub> = V<sub>ox</sub>/t<sub>ox</sub>; x<sub>d</sub> da V<sub>Si</sub>; E<sub>Si,max</sub> = qN<sub>A</sub>x<sub>d</sub>/ε<sub>Si</sub>.</li>
+<li>V<sub>B</sub> = −1 V (con source a 0): V<sub>SB</sub> = 1 V ⇒ V<sub>Si</sub> = 2φ<sub>fp</sub> + V<sub>SB</sub>; x<sub>d</sub> cresce, E<sub>Si,max</sub> cresce; <b>E<sub>ox</sub> quasi invariato</b> (la carica totale nel Si resta quasi uguale: meno elettroni liberi, più ioni).</li>
+</ol>
+<h4>E) Dimensionare un pass-transistor (TdE 8-2-2025 A.1)</h4>
+<ol class="steps">
+<li>R<sub>ch</sub> massima per V<sub>in</sub> massima: calcola V<sub>T</sub> con effetto body (V<sub>SB</sub> = V<sub>in,max</sub>).</li>
+<li>Imponi R<sub>ch</sub> =1/[μC<sub>ox</sub>(W/L)(V<sub>G</sub> − V<sub>in,max</sub> − V<sub>T</sub>)] &lt; R<sub>max</sub> ⇒ W<sub>min</sub>. Ex.: V<sub>T</sub> sale da 0.253 V a 0.762 V con V<sub>SB</sub> = 3 V ⇒ W &gt; 9.1 µm per 500 Ω.</li>
+</ol>
+<h4>F) Capacità viste a un terminale (TdE 8-2-2025 A.2)</h4>
+<ol class="steps">
+<li>Per V<sub>G</sub> = 0 (spento): carica solo ai bordi delle giunzioni; C = ε<sub>Si</sub>·Area<sub>eff</sub>/x<sub>d,pn</sub> (x<sub>d</sub> all'equilibrio); area effettiva = fondo + pareti (formula 3D).</li>
+<li>Per V<sub>G</sub> &gt; V<sub>T</sub>: aggiungi C<sub>G</sub> = C<sub>ox</sub>WL e C<sub>j,ch</sub> = ε<sub>Si</sub>WL/x<sub>d,T</sub>.</li>
+</ol>
+<h4>G) Intervallo di tensioni ammissibili (TdE 8-2-2025 A.3; dispensa 5.5)</h4>
+<ol class="steps">
+<li>Evita polarizzazione diretta di S/D–body: V<sub>S/D</sub> ≥ V<sub>B</sub>.</li>
+<li>Breakdown giunzione: V<sub>BD,pn</sub> da E<sub>max</sub> = E<sub>BD</sub> (formula Φ<sub>bi</sub>+V<sub>BD</sub> = …).</li>
+<li>Breakdown ossido: V<sub>ox</sub> &lt; t<sub>ox</sub>E<sub>BD,ox</sub> (attenzione al ramo gate-drain: nel n⁺ il piegamento è trascurabile, V<sub>ox</sub> ≈ V<sub>GD</sub>).</li>
+<li>Punch-through: confronta x<sub>d,BD</sub> con L<sub>G</sub> (qui 312 nm &lt; L<sub>G</sub> ⇒ non limitante).</li>
+</ol>
+<h4>H) Parametri da grafico (TdE 13-1-2026 A.2)</h4>
+<ol class="steps">
+<li>Da due punti di I<sub>D</sub>(V<sub>GS</sub>) in saturazione: √(I₁/I₂) = (V₁−V<sub>T</sub>)/(V₂−V<sub>T</sub>) ⇒ V<sub>T</sub> (es.: 2 mA e 0.5 mA a 1.5 V e 1 V ⇒ V<sub>T</sub> = 0.5 V, k = 2 mA/V²).</li>
+<li>Da C<sub>G</sub> ≈ C<sub>ox</sub>WL (misurata sopra soglia) e k ⇒ L e t<sub>ox</sub>.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>«V<sub>ox</sub> = V<sub>G</sub>».</b> Sbagliato: <b>V<sub>G</sub> − V<sub>FB</sub> = V<sub>ox</sub> + φ<sub>S</sub></b>. V<sub>FB</sub> sposta lo zero; φ<sub>S</sub> = 2φ<sub>fp</sub> sopra soglia.</li>
+<li><b>Usare V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + 2φ<sub>fp</sub> senza verificare V<sub>G</sub> &gt; V<sub>T</sub></b> (TdE 2-9-2026 A.2: l'ipotesi era falsa).</li>
+<li><b>Segno di V<sub>FB</sub> e del contributo di Q<sub>ox</sub></b>: cariche positive ⇒ V<sub>FB</sub> più negativa (σ<sub>ox</sub> = +25.8 nC/cm² nel TdE 13-1-2026). Per gate poly-p⁺ su Si-p V<sub>FB</sub> ≈ +0.18 V e V<sub>T</sub> ≈ 1.5 V (poco pratico); su Si-n il segno cambia.</li>
+<li><b>Gate collegato a drain ⇒ saturazione</b> (V<sub>GD</sub> = 0). Ma attenzione a V<sub>GD</sub> vs V<sub>GS</sub>: la regione si decide con V<sub>GD</sub> (nMOS: sat se V<sub>GD</sub> &lt; V<sub>T</sub>), non con V<sub>GS</sub>.</li>
+<li><b>Transistore con resistenza sul source</b> (TdE 2-9-2026 B.2): V<sub>S</sub> = R·I<sub>D</sub> e V<sub>GS</sub> = V<sub>G</sub> − V<sub>S</sub> ⇒ I<sub>D</sub> = k(V<sub>G</sub>−RI<sub>D</sub>−V<sub>T</sub>)²: equazione di 2° grado, scegli la radice con V<sub>GS</sub> &gt; V<sub>T</sub> (l'altra è non fisica).</li>
+<li><b>Dimenticare l'effetto body</b> in un circuito con source a potenziale ≠ body (pass-transistor, nMOS in serie/NAND).</li>
+<li><b>Mobilità</b>: nel canale μ<sub>n</sub> ≈ 800, μ<sub>p</sub> ≈ 300 cm²/Vs (non 1300/400).</li>
+<li><b>ox vs Si</b>: E<sub>ox</sub> ≈ 3 E<sub>Si</sub> all'interfaccia; ε<sub>ox</sub> = 3·10⁻¹³, ε<sub>Si</sub> = 10⁻¹² F/cm.</li>
+<li><b>Capacità sotto soglia/sopra soglia</b>: la stessa C<sub>ox</sub>WL ha significati diversi (gate–body vs gate–S/D); in svuotamento è minore (serie con C<sub>dep</sub>).</li>
+<li><b>Ricordare che V<sub>GS</sub>−V<sub>T</sub> è la «tensione di overdrive»</b>: serve a tutto (R<sub>ch</sub>, V<sub>DS,sat</sub>, g<sub>m</sub>, I<sub>D</sub>). Controllalo sempre &gt; 0.</li>
+<li><b>nMOS «0 bene, 1 male»</b>: come interruttore tira bene a massa; trasferendo un livello alto il source sale e il canale si spegne a V<sub>out</sub> = V<sub>G</sub> − V<sub>T</sub> (con effetto body). Il pMOS è l'opposto.</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-cmos">
+<header class="thead"><span class="tnum">Cap. 6 · da TdE</span><h2>Circuiti digitali CMOS: porte, tempi e potenza</h2>
+<p class="lead">Esercizio B di 5 TdE su 7: inverter e porte NAND/NOR/XOR, soglia logica, tempi di commutazione, potenza dinamica, latch. La dispensa corrispondente non è ancora caricata: qui trovi la teoria usata nelle soluzioni.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea circuitale</h3>
+<ul>
+<li><b>Livelli logici.</b> 0 logico = 0 V, 1 logico = V<sub>AA</sub> (es. 1.8 V, 1.35 V, 5 V). L'informazione è «sopra o sotto la soglia».</li>
+<li><b>Inverter CMOS.</b> Un pMOS verso V<sub>AA</sub> (pull-up) e un nMOS verso massa (pull-down), con gate comuni all'ingresso. Ingresso alto → nMOS acceso, pMOS spento → uscita 0 V. Ingresso basso → il contrario → uscita V<sub>AA</sub>. In regime statico <b>non c'è mai un cammino diretto V<sub>AA</sub>–massa</b>: potenza statica nulla (a parte perdite). L'uscita è sempre «forzata» da un lato: l'inverter dà tensioni piene e impedenza bassa.</li>
+<li><b>Porte complesse come reti di interruttori.</b> Trattando i MOS come interruttori ideali: nMOS conduce se il gate è alto, pMOS se è basso. <b>nMOS in serie = AND</b> (conduce solo se tutti alti), <b>nMOS in parallelo = OR</b>. La rete di pull-up pMOS è la <i>duale</i> (serie ↔ parallelo). L'uscita è bassa se esiste un cammino nMOS attivo, alta se esiste un cammino pMOS attivo. Esempi dei TdE: NOR (nMOS paralleli, pMOS in serie): <i>OUT = \(\overline{A+B}\)</i>; XOR/XNOR; \(Y=\overline{A+B}\), \(O=A\overline B+\overline AB\).</li>
+<li><b>Soglia logica V<sub>TH</sub>.</b> Tensione d'ingresso per cui V<sub>out</sub> = V<sub>in</sub>: in quel punto entrambi i transistori sono in <b>saturazione</b> (V<sub>GD</sub> = 0). Se i due transistori sono simmetrici (k<sub>n</sub> = k<sub>p</sub>) V<sub>TH</sub> ≈ V<sub>AA</sub>/2. Un secondo inverter con tutte le k scalate dello stesso fattore ha la <i>stessa</i> V<sub>TH</sub> (ma più corrente e più capacità).</li>
+<li><b>Perché le commutazioni richiedono tempo.</b> Il carico è una capacità C<sub>L</sub> (soprattutto le capacità di gate C<sub>ox</sub>WL delle porte pilotate). Il transistore la carica/scarica con la sua corrente: poiché è non lineare lo si approssima con una <b>resistenza equivalente</b> R<sub>eq</sub> = V<sub>AA</sub>/I<sub>D,sat</sub> (stima «per eccesso», perché la corrente reale cala poco a poco) e la tensione evolve come un RC.</li>
+<li><b>Il pMOS è più lento dell'nMOS</b> (mobilità minore); più transistori in <b>serie</b> sommano le resistenze (k<sub>eq</sub> = k/n). Nelle porte la transizione più lenta è quella attraverso i pMOS in serie (NOR) o gli nMOS in serie (NAND).</li>
+<li><b>Potenza.</b> Statica ≈ 0; dinamica: ogni volta che una capacità C si carica da 0 a V<sub>AA</sub> la sorgente eroga l'energia C V<sub>AA</sub>² (metà immagazzinata nella capacità, metà dissipata nel pMOS; la scarica dissipa l'energia immagazzinata nell'nMOS). Ripetuta f volte al secondo ⇒ P<sub>d</sub> = C V<sub>AA</sub>² f. Se i tempi di commutazione sono ≪ periodo, la potenza di «cross-conduction» (entrambi accesi durante la transizione) si trascura.</li>
+<li><b>Impulsi più corti del tempo di commutazione</b> non fanno commutare l'uscita: la capacità si carica solo parzialmente a corrente costante I<sub>sat</sub>: ΔV = I<sub>sat</sub>·Δt/C<sub>L</sub> (TdE 8-2-2025 B.3: 219 mV; TdE 11-2-2026 B.3: 405 mV).</li>
+<li><b>Latch e memoria.</b> Due porte NOR/NAND incrociate ricordano il valore precedente quando S = R = 0. Tipicamente appaiono nMOS «pass-transistor»: ricorda che S e D sono simmetrici (si decidono dai potenziali).</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> È come si costruisce ogni processore e memoria: miliardi di porte CMOS. Le grandezze che decidono un progetto sono <b>velocità</b> (R<sub>eq</sub>C<sub>L</sub>) e <b>consumo</b> (C V<sub>AA</sub>² f): ridurre V<sub>AA</sub> riduce il consumo col quadrato.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(k_n(V_{TH}-V_{Tn})^2=k_p(V_{AA}-V_{TH}-|V_{Tp}|)^2\)<br>\(V_{TH}=\dfrac{V_{Tn}+\sqrt{k_p/k_n}\,(V_{AA}-|V_{Tp}|)}{1+\sqrt{k_p/k_n}}\)</td><td>soglia logica dell'inverter (entrambi saturi). Se \(k_n=k_p\): \(V_{TH}=\dfrac{V_{AA}+V_{Tn}-|V_{Tp}|}{2}\) (es. 0.85 V per V<sub>AA</sub> = 1.8 V)</td></tr>
+<tr><td>\(R_{eq}=\dfrac{V_{DS,iniz}}{I_{D,iniz}}\); \(R_{eq,n}=\dfrac{V_{AA}}{I_{Dn,sat}}=\dfrac{V_{AA}}{k_n(V_{AA}-V_T)^2}\)</td><td>stima per eccesso (corrente iniziale massima). Se parte a cavallo ohmico/saturazione: \(R_{eq}=\dfrac{V_{AA}-V_T}{k(V_{AA}-V_T)^2}=\dfrac1{k(V_{AA}-V_T)}\)</td></tr>
+<tr><td>Serie di n transistori uguali: \(k_{eq}=\dfrac{k}{n}\), \(R_{eq}\to n\,R_{eq}\)</td><td>es. due nMOS in serie: \(k_{eq}=k/2\)</td></tr>
+<tr><td>\(\tau=R_{eq}C_L\)</td><td>costante di tempo di commutazione</td></tr>
+<tr><td>Scarica da V<sub>AA</sub> a V: \(V(t)=V_{AA}e^{-t/\tau}\Rightarrow t=\tau\ln\dfrac{V_{AA}}{V}\)</td><td>commutazione definita alla soglia: \(t_{c}=R_{eq,n}C_L\ln\dfrac{V_{AA}}{V_{TH}}\) (nMOS)</td></tr>
+<tr><td>Carica verso V<sub>AA</sub>: \(t_c=R_{eq,p}C_L\ln\dfrac{V_{AA}}{V_{AA}-V_{TH}}\) (pMOS);&nbsp; al 50%: \(t_{50}=\tau\ln2\)</td><td>tempo per portare l'uscita a V<sub>TH</sub> partendo da 0</td></tr>
+<tr><td>\(t_{tot}=t_{c1}+t_{c2}\)</td><td>ritardo di due stadi in cascata</td></tr>
+<tr><td>\(C_L=C_{ox}\sum(W_n+W_p)L\)</td><td>carico di un inverter = capacità di gate dei transistori pilotati (es. 55 fF)</td></tr>
+<tr><td>\(P_d=C_L\,V_{AA}^2\,f\)</td><td>potenza dinamica per un nodo con una commutazione completa V<sub>AA</sub>→0→V<sub>AA</sub> a frequenza f [W]</td></tr>
+<tr><td>\(P_d=\sum_i C_i\,V_{AA}\,\Delta V_i\,f_i\)</td><td>caso generale (escursione ΔV<sub>i</sub> ≠ V<sub>AA</sub>, es. 1.35 V su V<sub>AA</sub> = 1.8 V); conta ogni <i>carica</i> del nodo: tensione di alimentazione × carica spostata</td></tr>
+<tr><td>\(P_{AA}\simeq(C_{Gn}+C_{Gp})fV_{AA}^2+C_LfV_{AA}^2\)</td><td>un inverter: carica le capacità di gate (ingresso) e di carico (uscita)</td></tr>
+<tr><td>\(\Delta V=\dfrac{I_{sat}\,\Delta t}{C_L}\)</td><td>impulso breve: carica parziale a corrente costante (verifica che ΔV &lt; |V<sub>T</sub>| per l'ipotesi di saturo)</td></tr>
+<tr><td>\(P_{stat}=V_{AA}\,I_{DD}\)</td><td>nei casi in cui due transistori sono accesi insieme (es. 8.8 mW per V<sub>AA</sub> = 5 V e I = 1.76 mA)</td></tr>
+<tr><td>Ritardo di spegnimento per gate RC: \(\Delta t=RC\ln\dfrac{V_{x,0}}{V_T}\)</td><td>il nMOS resta spento finché V<sub>x</sub> (che scarica con RC) &gt; V<sub>T</sub> (TdE 11-2-2026 B.2: 1.7 µs)</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Interruttori ideali</b> solo per capire la funzione logica; per correnti/tensioni vere serve il modello a regioni.</li>
+<li><b>R<sub>eq</sub> = V<sub>AA</sub>/I<sub>sat</sub></b> sovrastima il tempo (è un limite superiore) perché la corrente reale decresce man mano che V<sub>DS</sub> scende. Va usata dove l'esame dice «stima per eccesso».</li>
+<li><b>Potenza dinamica</b>: tempi di commutazione ≪ periodo del segnale, rapporto tra periodo e tempo di commutazione grande; nessuna cross-conduction.</li>
+<li><b>Impulso breve</b>: corrente costante ⇒ transistore saturo per tutto l'intervallo (V<sub>out</sub> &lt; |V<sub>T</sub>|).</li>
+<li>Stati statici: ogni transistore è <b>spento</b> (V<sub>GS</sub> &lt; V<sub>T</sub>), <b>ohmico</b> o <b>saturo</b>; se due transistori in serie sono accesi, uno è ohmico e l'altro saturo (quello meno conduttivo è saturo: tipicamente il pMOS). Verifica sempre l'ipotesi a posteriori.</li>
+<li>Un nodo con tutti i transistori spenti è in <b>alta impedenza</b>: mantiene la tensione storica (memoria capacitiva) e non è definito.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo (dai TdE)</h3>
+<h4>A) Funzione logica di una rete CMOS (TdE 13-1-2026 B.1; 2-9-2026 B.1; 25-1-2025 B.1)</h4>
+<ol class="steps">
+<li>Pull-down (nMOS): scrivi quando esiste un cammino da OUT a massa (serie = AND, parallelo = OR). OUT = 0 se quel cammino conduce.</li>
+<li>Verifica che il pull-up sia il duale (se lo è, OUT = NOT della funzione del pull-down).</li>
+<li>Costruisci la tabella di verità; nelle porte a latch segnala gli stati «memoria» (nodo flottante).</li>
+</ol>
+<h4>B) Soglia logica e tempo di commutazione (TdE 8-2-2025 B.1–B.2)</h4>
+<ol class="steps">
+<li>V<sub>TH</sub> imponendo l'uguaglianza delle correnti di saturazione; con k<sub>n</sub> = k<sub>p</sub> ⇒ V<sub>TH</sub> = (V<sub>AA</sub>+V<sub>Tn</sub>−|V<sub>Tp</sub>|)/2.</li>
+<li>C<sub>L</sub> = C<sub>ox</sub>(W<sub>n2</sub>+W<sub>p2</sub>)L (capacità d'ingresso dello stadio seguente).</li>
+<li>R<sub>eq,n</sub> = V<sub>AA</sub>/I<sub>Dn,sat</sub> e R<sub>eq,p</sub> = V<sub>AA</sub>/I<sub>Dp,sat</sub> con I<sub>sat</sub> = k(V<sub>AA</sub>−V<sub>T</sub>)².</li>
+<li>t<sub>c</sub> = R<sub>eq</sub>C<sub>L</sub>·ln(·) come sopra; il tempo complessivo è la somma dei due stadi (qui 79 ps + 5.7 ns ≈ 5.8 ns).</li>
+<li>Confronto con la durata dell'impulso: se t<sub>c</sub> &lt; durata l'uscita commuta completamente; se no, ΔV = I<sub>sat</sub>Δt/C<sub>L</sub>.</li>
+<li>Corrente massima dall'alimentazione = corrente di saturazione dei transistori che conducono (il più grande tra quelli coinvolti).</li>
+</ol>
+<h4>C) Analisi statica di una cella (TdE 11-2-2026 B.1; 2-9-2026 B.2)</h4>
+<ol class="steps">
+<li>Per ogni combinazione di ingressi, stato di ciascun transistore: confronta V<sub>GS</sub> (o V<sub>SG</sub>) con la soglia.</li>
+<li>Se è acceso un solo transistore: V<sub>out</sub> è V<sub>AA</sub> o 0 (o alta impedenza se tutti spenti). Se sono accesi nMOS e pMOS: <b>assumi nMOS ohmico, pMOS saturo</b>; I<sub>Dp,sat</sub> = k<sub>p</sub>(V<sub>SG</sub>−|V<sub>Tp</sub>|)², R<sub>ch,n</sub> = 1/[2k<sub>n</sub>(V<sub>GS</sub>−V<sub>T</sub>)]; V<sub>out</sub> = I<sub>Dp,sat</sub>R<sub>ch,n</sub>; verifica V<sub>out</sub> &lt; V<sub>GS</sub>−V<sub>T</sub>. Potenza P = V<sub>AA</sub>I.</li>
+<li>Con R in serie al source (TdE 2-9-2026 B.2, AB = 00→10): V<sub>s</sub> = R·I<sub>d</sub> e I<sub>d</sub> = k(V<sub>AA</sub>−V<sub>s</sub>−V<sub>T</sub>)² ⇒ equazione di 2° grado per V<sub>s</sub> (radice con V<sub>GS</sub> &gt; V<sub>T</sub>), transistore saturo perché V<sub>GD</sub> = 0. Se invece il drain è più basso del gate di meno di V<sub>T</sub> ipotizza saturo e verifica con V<sub>D</sub> = V<sub>AA</sub>−I<sub>d</sub>R.</li>
+</ol>
+<h4>D) Transitorio con gate RC (TdE 11-2-2026 B.2)</h4>
+<ol class="steps">
+<li>Cosa succede subito dopo il fronte: V<sub>x</sub> salta (se pilotata da un transistore) e poi scarica con RC.</li>
+<li>Δt di spegnimento dell'nMOS = RC ln(V<sub>x,0</sub>/V<sub>T</sub>); nel frattempo l'uscita si carica con τ ≈ R<sub>eq,p</sub>C<sub>L</sub>; dopo Δt l'nMOS riporta l'uscita al livello basso con τ₂ = (R<sub>eq,n</sub>‖R<sub>ch,p</sub>)C.</li>
+</ol>
+<h4>E) Potenza media su forme d'onda (TdE 25-1-2025 B.3; 13-1-2026 B.3; 2-9-2026 B.3)</h4>
+<ol class="steps">
+<li>Disegna le forme d'onda su un periodo e conta, per ogni nodo, quante <i>cariche complete</i> (0→V<sub>AA</sub>) avvengono (es.: S due volte in 120 µs con escursione 1.35 V, R una volta, Q una volta con 1.8 V).</li>
+<li>P<sub>d</sub> = Σ V<sub>AA</sub>·C<sub>i</sub>·ΔV<sub>i</sub>/T. Con una sola scarica/carica per periodo e commutazione completa: C<sub>L</sub>f<sub>out</sub>V<sub>AA</sub>².</li>
+<li>Trascura cross-conduzione se i tempi di commutazione sono ≪ T (verificalo con R<sub>eq</sub>C).</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Usare ln 2 al posto di ln(V<sub>AA</sub>/V<sub>TH</sub>)</b> (e viceversa): dipende da dove definisci la «commutazione». Se il testo dice «a metà» o V<sub>AA</sub>/2 usa quello; se «fino alla soglia logica» usa V<sub>TH</sub>.</li>
+<li><b>Dimenticare la differenza di escursione</b> (1.35 V vs 1.8 V) nel calcolo della potenza dinamica: l'energia è V<sub>AA</sub>·C·ΔV, non C V<sub>AA</sub>².</li>
+<li><b>Scordare di sommare le capacità di gate dell'ingresso</b> (C<sub>Gn</sub>+C<sub>Gp</sub>) alla potenza dell'inverter, o di includerle nel carico del driver precedente.</li>
+<li><b>Serie di transistori</b>: la R equivalente si somma (n·R); parallelo: la corrente si somma.</li>
+<li><b>Transitorio dominato dal pMOS</b>: il pMOS è circa 2–3× più lento dell'nMOS per le mobilità; nel TdE la R<sub>eq,p</sub> = 444 kΩ contro 1.9 kΩ dell'altro stadio (k molto diverse): la commutazione lenta decide il ritardo e se l'impulso passa.</li>
+<li><b>Dimenticare che un nodo flottante tiene il valore</b> («stato di memoria»): in tabella di verità non scrivere 0 o 1.</li>
+<li><b>Ipotesi di saturazione senza verifica</b>: controlla V<sub>GD</sub> &lt; V<sub>T</sub> (nMOS) o V<sub>DG</sub> &lt; |V<sub>T</sub>| (pMOS). Per V<sub>out,max</sub> = I<sub>sat</sub>Δt/C<sub>L</sub> verifica V<sub>out</sub> &lt; |V<sub>Tp</sub>| (nel TdE 219 mV &lt; |V<sub>Tp</sub>| ✓).</li>
+<li><b>Leggere male quale transistore commuta</b> (TdE 25-1-2025 B.2: commuta solo S, attraverso un nMOS; la transizione 1.35 V → 0 V parte da V<sub>DS</sub> = V<sub>AA</sub>−V<sub>T</sub>, a cavallo ohmico/saturazione).</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-ss">
+<header class="thead"><span class="tnum">Cap. 7 · da TdE</span><h2>MOSFET come amplificatore: polarizzazione, piccolo segnale e Bode</h2>
+<p class="lead">Esercizio B di 2 TdE (9-6-2026, 6-7-2026): polarizzare il transistore, calcolare g<sub>m</sub>, trovare guadagno a bassa e alta frequenza, poli e zeri. La dispensa corrispondente non è ancora caricata.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li><b>Due livelli di analisi.</b> (1) <b>Punto di lavoro (DC)</b>: tutti i condensatori sono aperti, il MOSFET è ipotizzato saturo, si trovano V<sub>GS</sub>, I<sub>D</sub>, V<sub>D</sub>. (2) <b>Piccolo segnale (AC)</b>: una piccola variazione v<sub>gs</sub> sul gate produce una variazione di corrente i<sub>d</sub> = g<sub>m</sub>v<sub>gs</sub>. Il MOSFET diventa un <b>generatore di corrente pilotato</b> (gate aperto, nessuna corrente di ingresso). I generatori di alimentazione e continui diventano zero (massa).</li>
+<li><b>g<sub>m</sub>: «quanta corrente in più per ogni mV di gate»</b> = 2k(V<sub>GS</sub>−V<sub>T</sub>) = 2I<sub>D</sub>/(V<sub>GS</sub>−V<sub>T</sub>). Dipende dal punto di lavoro: se cambia I<sub>D</sub> cambia g<sub>m</sub>.</li>
+<li><b>I condensatori fissano la banda.</b> I condensatori di <b>accoppiamento</b> (in serie) bloccano la continua: producono <b>zeri nell'origine</b> e un polo a bassa frequenza (passa-alto). Un condensatore di <b>bypass</b> (dal source a massa) è un aperto in DC ma, ad alta frequenza, un corto: porta il guadagno al valore massimo −g<sub>m</sub>R<sub>D</sub>. Alle alte frequenze (qui: «infinito») tutti i condensatori sono dei corti.</li>
+<li><b>Resistenza vista dal source: 1/g<sub>m</sub>.</b> Tra source e massa un transistore saturo si comporta come una resistenza 1/g<sub>m</sub> (gate fissato). Ecco perché il polo di un condensatore sul source è \(f=\dfrac{g_m}{2\pi C}\) e un <b>inseguitore di source</b> (uscita sul source) ha guadagno \(\dfrac{R}{R+1/g_m}&lt;1\).</li>
+<li><b>Source comune</b> (uscita sul drain): inverte e amplifica, A<sub>v</sub> = −g<sub>m</sub>(R<sub>D</sub>‖R<sub>L</sub>). <b>Source follower</b> (uscita sul source): non inverte, guadagno ≈ 1, bassa impedenza d'uscita.</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(V_{GS}=V_T+\sqrt{I_0/k}\)&nbsp; (se nota la corrente I<sub>0</sub> del transistore in saturazione)</td><td>da \(I_D=k(V_{GS}-V_T)^2\)</td></tr>
+<tr><td>\(g_m=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\dfrac{2I_D}{V_{GS}-V_T}\)</td><td>g<sub>m</sub> [S = A/V]. Es.: g<sub>m</sub> = 300 µA/V (TdE 9-6-2026), 2 mA/V (TdE 6-7-2026)</td></tr>
+<tr><td>Modello a piccolo segnale: \(i_d=g_m\,v_{gs}\) (+ \(v_{ds}/r_o\) se CLM)</td><td>gate aperto, DC → 0</td></tr>
+<tr><td>Source comune: \(A_v=-g_m\,(R_D\|R_L)\);&nbsp; con R<sub>S</sub> non bypassata: \(A_v=\dfrac{-g_mR_D}{1+g_mR_S}\)</td><td>guadagno a centro banda</td></tr>
+<tr><td>Source follower: \(A_v=\dfrac{g_mR_S}{1+g_mR_S}=\dfrac{R_S}{R_S+1/g_m}\)</td><td>uscita sul source; con carico: R<sub>S</sub> → R<sub>S</sub>‖R<sub>L</sub> (o R<sub>3</sub>‖R<sub>4</sub> nel TdE)</td></tr>
+<tr><td>\(G(0)\) e \(G(\infty)\)</td><td>guadagno con tutti i condensatori aperti / chiusi: i due livelli asintotici del Bode</td></tr>
+<tr><td>\(\tau=C\,R_{eq}\),&nbsp; \(f_p=\dfrac{1}{2\pi\tau}\)</td><td>R<sub>eq</sub> vista dal condensatore con gli <b>altri condensatori in corto</b> (alta frequenza rispetto a quello) o aperti, a seconda della frequenza di interesse</td></tr>
+<tr><td>Bypass di source: \(f_{p1}=\dfrac{g_m}{2\pi C_1}\) (160 Hz nel TdE 9-6-2026)</td><td>R<sub>eq</sub> = 1/g<sub>m</sub></td></tr>
+<tr><td>Accoppiamento d'uscita: \(f_{p2}=\dfrac{1}{2\pi C_2(R_{drain}+R_{carico})}\)</td><td>es. C<sub>2</sub>(R<sub>1</sub>+R<sub>2</sub>), con R<sub>1</sub> sul drain e R<sub>2</sub> di carico</td></tr>
+<tr><td>Accoppiamento d'ingresso: \(\tau_{p1}=C_1\,(R_1\|R_2)\)</td><td>R<sub>1</sub>, R<sub>2</sub> = partitore di polarizzazione del gate (18 ms nel TdE 6-7-2026)</td></tr>
+<tr><td>Source follower con C d'uscita: \(\tau_{p2}=C_2\big(R_4+R_3\|\tfrac{1}{g_m}\big)\)</td><td>TdE 6-7-2026: 1.04 ms</td></tr>
+<tr><td>Bode: \(\operatorname{pendenza}=20\,\mathrm{dB/dec}\times(\#\text{zeri}-\#\text{poli})\)</td><td>zeri nell'origine ⇒ salita a +20 dB/dec per zero a bassa f; ogni polo −20, ogni zero (non nell'origine) +20</td></tr>
+<tr><td>Fase: ogni polo −90° (transizione tra \(f_p/10\) e \(10f_p\)), ogni zero LHP +90°; guadagno negativo ⇒ ∓180°</td><td>due zeri nell'origine: +180° a bassa frequenza</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Saturazione</b>: V<sub>DS</sub> ≥ V<sub>GS</sub>−V<sub>T</sub> (V<sub>GD</sub> ≤ V<sub>T</sub>) <i>nel punto di lavoro</i>. Verificalo sempre dopo aver calcolato V<sub>D</sub> = V<sub>DD</sub> − R<sub>D</sub>I<sub>D</sub>: serve V<sub>GD</sub> = V<sub>G</sub> − V<sub>D</sub> &lt; V<sub>T</sub> (TdE 9-6-2026: V<sub>G</sub> = 0 V, V<sub>D</sub> = 0.375 V ⇒ V<sub>GD</sub> &lt; 0 ⇒ saturo ✓).</li>
+<li><b>Piccolo segnale</b>: ampiezza del segnale ≪ V<sub>GS</sub>−V<sub>T</sub>, in modo che la parabola sia linearizzabile.</li>
+<li>Il metodo «G(0) e G(∞)» + poli da R<sub>eq</sub>C vale se i poli sono ben separati (≥ una decade). Se due poli sono vicini la fase e il modulo reale si discostano dalle asintotiche.</li>
+<li>Con corrente di gate nulla e condensatori aperti in DC il partitore di polarizzazione non è caricato.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura (TdE 9-6-2026 B; 6-7-2026 B)</h3>
+<ol class="steps">
+<li><b>DC</b>: apri i condensatori. Ipotizza saturo. Se il source è a V<sub>S</sub> e il gate a V<sub>G</sub>: V<sub>GS</sub> = V<sub>G</sub> − V<sub>S</sub>; da I<sub>D</sub> = k(V<sub>GS</sub>−V<sub>T</sub>)² trova I<sub>D</sub> (o V<sub>GS</sub> se è nota I<sub>D</sub>, come con un generatore di corrente sul source). Poi V<sub>D</sub> = V<sub>DD</sub> − R<sub>D</sub>I<sub>D</sub> e verifica V<sub>DS</sub> ≥ V<sub>GS</sub>−V<sub>T</sub>.</li>
+<li>Se c'è un partitore di gate: V<sub>G</sub> = V<sub>DD</sub>R<sub>2</sub>/(R<sub>1</sub>+R<sub>2</sub>) (nessuna corrente nel gate); da V<sub>G</sub> = 2 V, V<sub>GS</sub> = 3 V, I = 2 mA ⇒ R<sub>1</sub> = 70 kΩ nel TdE 6-7-2026.</li>
+<li><b>g<sub>m</sub></b> = 2k(V<sub>GS</sub>−V<sub>T</sub>) (es. 0.3 mA/V; 2 mA/V).</li>
+<li><b>Piccolo segnale</b>: spegni V<sub>DD</sub> (massa) e i generatori DC; sostituisci il MOS con i = g<sub>m</sub>v<sub>gs</sub>.</li>
+<li><b>G(0)</b>: tutti i condensatori aperti. Se un condensatore blocca il percorso del segnale, G(0) = 0 (es. TdE 9-6-2026: nessuna corrente in R<sub>2</sub> ⇒ G(0) = 0).</li>
+<li><b>G(∞)</b>: condensatori in corto. Es.: source a massa ⇒ i<sub>d</sub> = g<sub>m</sub>v<sub>in</sub> in R<sub>1</sub>‖R<sub>2</sub> ⇒ G(∞) = −g<sub>m</sub>R<sub>1</sub>‖R<sub>2</sub> = −3.46; oppure inseguitore: G(∞) = R<sub>3</sub>‖R<sub>4</sub>/(R<sub>3</sub>‖R<sub>4</sub> + 1/g<sub>m</sub>) = 0.77.</li>
+<li><b>Poli</b>: per ciascun condensatore τ = C·R<sub>eq</sub> con R<sub>eq</sub> vista ai suoi capi (spegni i generatori; usa 1/g<sub>m</sub> per il source). <b>Zeri</b>: nell'origine se un condensatore in serie (o un ramo con C a massa) annulla G a DC; altrimenti valuta le frequenze in cui il trasferimento si annulla. <i>Controllo</i>: n° poli − n° zeri deve spiegare la pendenza finale.</li>
+<li>Disegna modulo (rette) e fase; riporta frequenze, 20 dB/dec, livelli asintotici.</li>
+<li>Se il TdE dà il test «uscita nulla quando…»: l'uscita è nulla quando non circola corrente nel ramo di uscita (C aperto) o quando è nulla la corrente del MOS (C d'ingresso aperto) ⇒ a f = 0, quindi due zeri nell'origine.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Usare V<sub>DD</sub> come generatore a piccolo segnale: va <b>spento</b> (cortocircuitato a massa).</li>
+<li>Confondere la resistenza vista dal condensatore: nel polo con il source conta 1/g<sub>m</sub>, non una resistenza di polarizzazione.</li>
+<li>Trascurare il carico di R<sub>2</sub> a G(∞): è in parallelo a R<sub>1</sub> per il piccolo segnale.</li>
+<li>Pendenza finale del Bode sbagliata: conta correttamente poli e zeri (due zeri nell'origine + due poli ⇒ guadagno finale costante).</li>
+<li>Fase: un guadagno negativo (inversione) aggiunge ±180° rispetto a un guadagno positivo.</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-opamp">
+<header class="thead"><span class="tnum">Cap. 8 · da TdE</span><h2>Operazionali, retroazione, guadagno d'anello e stabilità</h2>
+<p class="lead">Esercizio C di <b>tutti e 7</b> i TdE. Si ripete sempre lo stesso schema: guadagno ideale G<sub>id</sub> → Bode ideale → guadagno d'anello G<sub>loop</sub> → frequenza f* e margine di fase → guadagno reale. La dispensa relativa non è ancora caricata: questa sezione è ricostruita dalle soluzioni.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea circuitale</h3>
+<ul>
+<li><b>Operazionale ideale.</b> Guadagno differenziale infinito, correnti d'ingresso nulle. Con retroazione negativa l'uscita si porta dove serve per rendere <b>V⁺ = V⁻</b> (cortocircuito virtuale). Questo permette di calcolare il guadagno ideale G<sub>id</sub> usando solo le impedenze della rete di retroazione.</li>
+<li><b>Operazionale reale.</b> Guadagno finito A(s) = A₀/(1+s/ω₀): polo dominante f₀ (decine–centinaia di Hz), A₀ ≈ 10⁵, prodotto guadagno-banda GBW = A₀f₀ (es. 16 MHz).</li>
+<li><b>Guadagno d'anello G<sub>loop</sub> = «quanto vale il segnale dopo aver fatto il giro dell'anello».</b> Si apre l'anello, si applica un test all'uscita dell'operazionale e si guarda cosa torna all'ingresso invertente (con il segno). È (meno) A(s) per il trasferimento β(s) della rete di retroazione: G<sub>loop</sub>(0) ≈ −A₀β(0) negativo con retroazione negativa. Più è grande in modulo, più il circuito si comporta come l'ideale: \(G_{reale}=G_{id}\dfrac{-G_{loop}}{1-G_{loop}}=G_{id}\dfrac{T}{1+T}\) con T = −G<sub>loop</sub> = Aβ.</li>
+<li><b>Dove G<sub>reale</sub> ≈ G<sub>id</sub>:</b> finché |G<sub>loop</sub>| ≫ 1. Alla frequenza f* in cui |G<sub>loop</sub>| = 1 la retroazione «finisce»: il guadagno reale si separa dall'ideale, e oltre f* compare un polo aggiuntivo. Per questo f* è la <b>banda a anello chiuso</b>.</li>
+<li><b>Margine di fase φ<sub>m</sub></b> = 180° − (ritardo di fase aggiuntivo di G<sub>loop</sub> a f*). Se φ<sub>m</sub> &gt; 0 il circuito è stabile; &gt; 60° ben smorzato; piccolo (es. 9°) = stabile ma con forte picco in risposta e rischio di instabilità per poli trascurati o tolleranze. Se φ<sub>m</sub> &lt; 0 oscilla.</li>
+<li><b>Come i condensatori entrano:</b> a f = 0 sono aperti, a f → ∞ sono corti. G<sub>id</sub> mostra zeri/poli della rete di retroazione: <i>poli di G<sub>id</sub> = zeri di β</i>, <i>zeri di G<sub>id</sub> = poli di β</i> (per il non invertente G<sub>id</sub> = 1/β).</li>
+<li><b>Circuito non retroazionato</b> (TdE 2-9-2026 C.1): l'uscita dell'operazionale è A·V<sub>in</sub> (saturerebbe!) seguito da un RC: esponenziale verso A·V<sub>in</sub>. Non confondere con il circuito retroazionato del punto C.2, che risponde con τ* ≈ τ/|G<sub>loop</sub>(0)| molto più breve.</li>
+<li><b>Corrente erogata dall'operazionale</b> = corrente nella rete di retroazione/carico; confrontala con il massimo (es. 20 mA nel TdE 25-1-2025).</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td colspan="2" class="sub">Guadagno ideale</td></tr>
+<tr><td>Non invertente: \(G_{id}=1+\dfrac{Z_2}{Z_1}\);&nbsp; invertente: \(G_{id}=-\dfrac{Z_2}{Z_1}\)</td><td>Z<sub>1</sub> verso massa/ingresso, Z<sub>2</sub> di retroazione; \(Z_C=1/sC\)</td></tr>
+<tr><td>\(G_{id}(s)=1+\dfrac{R_2}{R_1+\frac1{sC}}=\dfrac{1+sC(R_1+R_2)}{1+sCR_1}\)</td><td>TdE 6-7-2026: G<sub>id</sub>(0) = 1, G<sub>id</sub>(∞) = 1+R<sub>2</sub>/R<sub>1</sub> = 21; zero a \(\tfrac{1}{2\pi C(R_1+R_2)}=758\) Hz, polo a \(\tfrac1{2\pi CR_1}=15.9\) kHz</td></tr>
+<tr><td>\(G_{id}=\dfrac{sC_1}{1+sC_1R_1}\) (passa-alto non invertente a ingresso su C)</td><td>zero nell'origine e polo a 1/(2πR₁C₁) = 1.6 kHz; guadagno 1 ad alta f</td></tr>
+<tr><td>Trans-impedenza (ingresso in corrente): \(V_{out}=-Z_{fb}I_{in}\) / \(R_2I_{in}\) ad alta f</td><td>DC: tutta in R<sub>1</sub> se C aperto; AC alta f: in R<sub>2</sub>. TdE 13-1-2026: \(V_{out}\simeq2.5\,V+R_2\,I_{in}\)</td></tr>
+<tr><td>\(G_{id}(0)=-\dfrac{R_2}{R_1},\ \ G_{id}(\infty)=-\dfrac{R_2\|R_3}{R_1}\)</td><td>esempio con C in serie a R<sub>3</sub>: \(f_p=\tfrac1{2\pi C(R_2+R_3)}\), \(f_z=\tfrac1{2\pi CR_3}\) (TdE 8-2-2025 C)</td></tr>
+<tr><td>Sovrapposizione: \(V_{out}=V_2\dfrac{R_4}{R_3+R_4}\Big(1+\dfrac{R_2}{R_1}\Big)-V_1\dfrac{R_2}{R_1}\)</td><td>differenziale (TdE 9-6-2026 C); sostituire gli estremi di tolleranza per V<sub>out,max/min</sub></td></tr>
+<tr><td colspan="2" class="sub">Guadagno d'anello e guadagno reale</td></tr>
+<tr><td>\(A(s)=\dfrac{A_0}{1+s/\omega_0},\quad f_0=\dfrac{\omega_0}{2\pi},\quad GBW=A_0f_0\)</td><td>modello dell'operazionale a un polo</td></tr>
+<tr><td>\(G_{loop}(s)=-A(s)\,\beta(s)\),&nbsp; \(\beta=\dfrac{V_{fb}}{V_{out}}\)</td><td>β(s): trasferimento da uscita OA a ingresso invertente (altri generatori spenti). Non invertente \(\beta=Z_1/(Z_1+Z_2)\)</td></tr>
+<tr><td>\(G_{loop}(0)=-A_0\dfrac{R_1}{R_1+R_2}\)</td><td>con rete resistiva di retroazione (R<sub>1</sub> a massa)</td></tr>
+<tr><td>\(G_{reale}=G_{id}\cdot\dfrac{-G_{loop}}{1-G_{loop}}\)</td><td>fattore di correzione \(\dfrac{|G_{loop}|}{1+|G_{loop}|}\)</td></tr>
+<tr><td>Errore relativo: \(\Big|\dfrac{G_{id}-G_{reale}}{G_{id}}\Big|=\dfrac1{|1-G_{loop}|}\approx\dfrac1{1+|G_{loop}(0)|}\)</td><td>Per errore &lt; ε: \(A_0>\Big(\dfrac1\varepsilon-1\Big)\dfrac{R_1+R_2}{R_1}\) (≈ 99 (R<sub>1</sub>+R<sub>2</sub>)/R<sub>1</sub> per 1%)</td></tr>
+<tr><td>Offset: \(V_{out}\simeq(\ldots)\pm V_{OS}\cdot G_{id}^{(V^+)}\)</td><td>l'offset costante è riportato in uscita con il guadagno non invertente in continua (C aperto ⇒ spesso ×1; TdE 13-1-2026)</td></tr>
+<tr><td colspan="2" class="sub">Frequenza f* e margine di fase</td></tr>
+<tr><td>\(|G_{loop}(f^*)|=1\)</td><td>definizione di f*</td></tr>
+<tr><td>Pendenza −20 dB/dec in f*: \(f^*\simeq|G_{loop}(0)|\,f_0\)&nbsp;(= GBW·β(∞) se la rete è piatta)</td><td>es. 1 MHz = 10⁵·R₁/(R₁+R₂)·f₀</td></tr>
+<tr><td>Due poli prima di f* (−40 dB/dec): \(f^*\simeq\sqrt{|G_{loop}(0)|\,f_0\,f_p}\)</td><td>es. 893 kHz (TdE 9-6-2026 C.3)</td></tr>
+<tr><td>\(\varphi_m=180^\circ-\sum\arctan\!\dfrac{f^*}{f_{p,i}}+\sum\arctan\!\dfrac{f^*}{f_{z,i}}\)</td><td>poli (anche f₀) tolgono fase, zeri LHP la aggiungono. Es.: \(180^\circ-\operatorname{atan}\tfrac{f^*}{f_0}-\operatorname{atan}\tfrac{f^*}{f_p}\)</td></tr>
+<tr><td>\(\varphi_m\approx90^\circ\) se a f* conta solo il polo dominante;&nbsp; \(\varphi_m=9.4^\circ\) (TdE 2-9-2026), \(28^\circ\) (TdE 9-6-2026), \(99^\circ\) e \(90^\circ\) (TdE 8-2-2025, 13-1-2026)</td><td>stabile se φ<sub>m</sub> &gt; 0°</td></tr>
+<tr><td colspan="2" class="sub">Risposta temporale (retroazione)</td></tr>
+<tr><td>Salto di ingresso ΔV: \(V_{out}(0^+)=V_{out}(0^-)+G_{id}(\infty)\Delta V\); \(V_{out}(\infty)=V_{out}(0^-)+G_{id}(0)\Delta V\); \(\tau=\)costante del polo</td><td>TdE 6-7-2026 C.2: V<sub>out</sub>(0⁺) = 1 + 21·0.5 = 11.5 V, V<sub>out</sub>(∞) = 1.5 V, τ = CR₁ = 10 µs</td></tr>
+<tr><td>Polo ad anello chiuso: \(\tau^*\simeq\dfrac1{2\pi f^*}\simeq\dfrac{\tau}{|G_{loop}(0)|}\)</td><td>TdE 2-9-2026 C.2: τ = R<sub>u</sub>C = 4 µs → τ* = 4 ns</td></tr>
+<tr><td>Senza retroazione: \(V_{out}(t)=A\,V_{in}\big(1-e^{-t/R_uC}\big)\)</td><td>RC d'uscita dell'OA (TdE 2-9-2026 C.1: 10 V, τ = 4 µs)</td></tr>
+<tr><td>\(I_{OA}=\dfrac{V_{out}}{Z_{fb}}=\dfrac{V_{out}}{R_2+\frac1{sC_2}}\simeq\dfrac{V_{in}}{R_2}\) (ad alta f)</td><td>corrente massima erogata dall'operazionale</td></tr>
+<tr><td>Corrente di ingresso con retroazione: \(I=\dfrac{V_{diff}}{R_d}=\dfrac{V_{out}/A_0}{R_d}\)</td><td>TdE 11-2-2026 C.3: 0.989 mV/R<sub>d</sub> = 98.9 nA</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Operazionale ideale (cortocircuito virtuale)</b> solo con retroazione <i>negativa</i> e |G<sub>loop</sub>| ≫ 1. Deve esistere l'anello (collegamento uscita → ingresso invertente, non al non-invertente).</li>
+<li><b>G<sub>reale</sub> = G<sub>id</sub>·[−G<sub>loop</sub>/(1−G<sub>loop</sub>)]</b> vale in tutto il range di frequenza purché si usi il G<sub>loop</sub> corretto (con tutti i poli e gli zeri). A frequenze molto maggiori di f* il guadagno reale è molto diverso da G<sub>id</sub>.</li>
+<li><b>f* ≈ |G<sub>loop</sub>(0)|f₀</b> solo se a f* il Bode di G<sub>loop</sub> ha pendenza −20 dB/dec e tutte le singolarità di β sono già «intervenute» (o ancora non intervenute). Con altre pendenze usa la relazione corretta (√).</li>
+<li><b>Stabilità</b> richiede φ<sub>m</sub> &gt; 0; calcola la fase <i>a f*</i> usando gli atan, non asintoticamente, quando le frequenze sono vicine (es. f* = 253 kHz con poli a 1.6 kHz e 40 kHz).</li>
+<li><b>Condensatori:</b> aperti in DC, corti a f → ∞; analisi DC (offset, componenti continue) separata dall'analisi a frequenza (sinusoidi, gradini): sovrapposizione degli effetti.</li>
+<li><b>Saturazione dell'uscita e slew-rate</b> non sono modellati: un gradino grande può non essere seguito come previsto.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura-tipo dell'esercizio C (valida per tutti e 7 i TdE)</h3>
+<ol class="steps">
+<li><b>G<sub>id</sub>(s) e Bode ideale.</b> Cortocircuito virtuale V⁺ = V⁻; scrivi G<sub>id</sub> con le impedenze. Valuta G<sub>id</sub>(0) (C aperti) e G<sub>id</sub>(∞) (C corti). Frequenze di polo/zero da τ = RC con le R viste ai capi del condensatore. Disegna le rette con pendenze ±20 dB/dec. Poli e zeri cancellati (stessa frequenza) spariscono.</li>
+<li><b>Calcolo diretto (se serve).</b> Sinusoide ad alta frequenza → C = corto o impedenza trascurabile; componenti continue → C = aperto. Risposta a gradino → V(0⁺) con G(∞), V(∞) con G(0), τ del polo.</li>
+<li><b>Guadagno d'anello.</b> Interrompi tra uscita OA e ingresso invertente; spegni gli altri generatori; calcola β(s) = V⁻/V<sub>out</sub> (nel non invertente con R<sub>1</sub> a massa e R<sub>2</sub>: β = R<sub>1</sub>/(R<sub>1</sub>+R<sub>2</sub>)); G<sub>loop</sub> = −A(s)β(s). Ricava G<sub>loop</sub>(0) e i poli/zeri di β (R<sub>eq</sub>C come sopra: es. C(R<sub>3</sub>+R<sub>1</sub>‖R<sub>2</sub>) → 2.9 MHz) e <b>aggiungi il polo dell'operazionale f₀</b>.</li>
+<li><b>Bode di G<sub>loop</sub></b>: livello a bassa f (|G<sub>loop</sub>(0)|), poi tutti i poli/zeri in ordine crescente di frequenza, compreso f₀. Trova f* dove la retta incontra 0 dB (|G|=1).</li>
+<li><b>Margine di fase.</b> φ<sub>m</sub> = 180° − Σatan(f*/f<sub>p</sub>) + Σatan(f*/f<sub>z</sub>). Commenta: stabile se &gt; 0°, ben smorzato oltre 60°; qui quante «decine di gradi» e che cosa comporta (picco, rischio da poli trascurati).</li>
+<li><b>G<sub>reale</sub>.</b> Stesso andamento di G<sub>id</sub> fino a f*, poi un polo aggiuntivo a f* (se pendenza −20 dB/dec). Se β cambia (es. condensatore che porta β a un valore minore), la banda reale si riduce di conseguenza.</li>
+<li><b>Requisiti di accuratezza:</b> |G<sub>id</sub>(0)−G<sub>reale</sub>(0)|/|G<sub>id</sub>(0)| &lt; ε ⇒ A₀ &gt; (1/ε − 1)(R<sub>1</sub>+R<sub>2</sub>)/R<sub>1</sub> (es. A₀ &gt; 10⁵). «Comportamento ideale fino a f<sub>max</sub>»: imponi |G<sub>loop</sub>(f<sub>max</sub>)| ≥ 1, con C in corto: A₀f₀R₁/((R₁+R₂)f<sub>max</sub>) ≥ 1 (es. A₀ ≥ 2.1·10⁵ a 1 MHz).</li>
+<li><b>Effetto delle tolleranze.</b> A₀ compare solo in G<sub>loop</sub> (effetto minuscolo: 50.00 mV contro 49.9985 mV); le resistenze che compaiono in G<sub>id</sub> (R₃ ±1%) spostano l'uscita molto di più.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Dimenticare il polo dell'operazionale</b> nel diagramma di G<sub>loop</sub> (e quindi sbagliare f* e φ<sub>m</sub>).</li>
+<li><b>Confondere G<sub>id</sub> e G<sub>loop</sub>.</b> G<sub>id</sub> descrive la funzione del circuito (ingresso→uscita); G<sub>loop</sub> descrive la retroazione e decide la stabilità e dove G<sub>reale</sub> diverge da G<sub>id</sub>. A<sub>0</sub> compare <i>solo</i> in G<sub>loop</sub>.</li>
+<li><b>Segno di G<sub>loop</sub>(0):</b> è negativo (retroazione negativa); −G<sub>loop</sub>/(1−G<sub>loop</sub>) è &lt; 1. Con la convenzione T = −G<sub>loop</sub> la correzione è T/(1+T).</li>
+<li><b>f* con pendenza sbagliata:</b> se prima di f* ci sono due poli (−40 dB/dec) non usare |G<sub>loop</sub>(0)|f₀ ma la radice. Verifica graficamente che f* sia davvero dove |G|=1.</li>
+<li><b>Condensatore a f* già corto o aperto?</b> Per il calcolo di G<sub>loop</sub>(1 MHz) il condensatore è un corto se tutte le singolarità sono già intervenute (TdE 6-7-2026): G<sub>loop</sub> ≈ A₀f₀/f · R₁/(R₁+R₂).</li>
+<li><b>Modulo di G<sub>reale</sub> tra i due poli</b>: nel trans-impedenza è ≈ R₂ (100 kΩ) fra 1.6 kHz e 1 MHz.</li>
+<li><b>Gradino: scegliere il valore iniziale sbagliato.</b> Subito dopo il salto la tensione ai capi di C non cambia ⇒ usi G(∞); poi evolve verso G(0).</li>
+<li><b>Operazionale non retroazionato</b> (stadio senza anello): <i>non</i> si applica G<sub>id</sub>; l'uscita è A·V<sub>in</sub> (qui satura ma il testo ne usa il valore ideale).</li>
+<li><b>Fase:</b> a f* la fase di G<sub>loop</sub> va riferita a −180° di partenza: φ<sub>m</sub> = 180° meno i ritardi aggiuntivi, non la fase assoluta.</li>
+<li><b>Correnti dell'OA:</b> con C₂ in serie a R₂ a 10 MHz l'impedenza di C₂ è trascurabile ⇒ corrente = V/R₂ (e non V/(R₂+1/sC₂) in continua).</li>
+</ul></div>
+</section>
+
+<section class="topic wide" id="t-form">
+<header class="thead"><span class="tnum">Parte 9</span><h2>Formulario completo pronto per l'esame</h2>
+<p class="lead">Tutte le formule usate negli esercizi dei TdE e delle esercitazioni, in forma compatta. Simboli: <b>V<sub>th</sub></b> = kT/q ≈ 25 mV; tutte le lunghezze in cm quando c'è ε o un drogaggio.</p></header>
+
+<div class="fgrid">
+
+<div class="fcard"><h3>Semiconduttori all'equilibrio</h3>
+<dl class="fl">
+<div><dt>Azione di massa</dt><dd>\(np=n_i^2\), \(n_i\approx1.4\cdot10^{10}\,\mathrm{cm^{-3}}\)</dd></div>
+<div><dt>Fermi</dt><dd>\(n=n_ie^{(E_F-E_i)/kT}\); \(p=n_ie^{(E_i-E_F)/kT}\)</dd></div>
+<div><dt>Drogato (tipo n / p)</dt><dd>\(n\simeq N_D-N_A,\ p=\dfrac{n_i^2}{n}\);&nbsp; \(p\simeq N_A-N_D,\ n=\dfrac{n_i^2}{p}\)</dd></div>
+<div><dt>Completa</dt><dd>\(n=\dfrac{N_D-N_A}2+\sqrt{\big(\tfrac{N_D-N_A}2\big)^2+n_i^2}\)</dd></div>
+<div><dt>Potenziali di Fermi</dt><dd>\(\phi_{fn,p}=V_{th}\ln\dfrac{N_{D,A}}{n_i}\)</dd></div>
+<div><dt>Deriva / conducibilità</dt><dd>\(J=q(n\mu_n+p\mu_p)E,\ \ \rho=\dfrac1{qN\mu},\ \ R=\rho\dfrac LS\)</dd></div>
+<div><dt>Diffusione, Einstein</dt><dd>\(J_n=qD_n\dfrac{dn}{dx},\ J_p=-qD_p\dfrac{dp}{dx},\ D=\mu V_{th}\)</dd></div>
+<div><dt>Ricombinazione</dt><dd>\(R-G=\dfrac{pn-n_i^2}{(p+n+2n_i)\tau}\to\dfrac{p'}\tau;\ \ L=\sqrt{D\tau}\)</dd></div>
+<div><dt>Bande ↔ campo</dt><dd>\(E=\tfrac1q\dfrac{dE_c}{dx}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Giunzione pn (V<sub>D</sub> &gt; 0 diretta)</h3>
+<dl class="fl">
+<div><dt>Built-in</dt><dd>\(\Phi_{bi}=V_{th}\ln\dfrac{N_AN_D}{n_i^2}\)</dd></div>
+<div><dt>ZCS</dt><dd>\(x_d=\sqrt{\dfrac{2\epsilon(\Phi_{bi}-V_D)}{q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)}\); \(N_Ax_p=N_Dx_n\); \(x_n=x_d\dfrac{N_A}{N_A+N_D}\)</dd></div>
+<div><dt>Campo massimo</dt><dd>\(|E_{max}|=\dfrac{qN_Dx_n}{\epsilon}=\dfrac{2(\Phi_{bi}-V_D)}{x_d}\)</dd></div>
+<div><dt>Cadute nella ZCS</dt><dd>\(\varphi_n=\tfrac{qN_Dx_n^2}{2\epsilon}\), \(\varphi_p=\tfrac{qN_Ax_p^2}{2\epsilon}\)</dd></div>
+<div><dt>Minoritari ai bordi</dt><dd>\(n(-x_p)=\tfrac{n_i^2}{N_A}e^{V_D/V_{th}}\)</dd></div>
+<div><dt>Diodo</dt><dd>\(I=I_s(e^{V_D/V_{th}}-1)\)</dd></div>
+<div><dt>I<sub>s</sub> base corta</dt><dd>\(Aqn_i^2\Big(\dfrac{D_n}{N_AW_p}+\dfrac{D_p}{N_DW_n}\Big)\)</dd></div>
+<div><dt>I<sub>s</sub> base lunga</dt><dd>\(Aqn_i^2\Big(\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\Big)\)</dd></div>
+<div><dt>Scelta base</dt><dd>\(W\ll L\) corta; \(W\gg L\) lunga; \(t_{tr}=\dfrac{W^2}{2D}\ll\tau\)</dd></div>
+<div><dt>V a data I</dt><dd>\(V_D=V_{th}\ln\!\big(\tfrac{I}{I_s}+1\big)\); ×2 in I: +17 mV; ×10: +60 mV</dd></div>
+<div><dt>Rapporto iniettate</dt><dd>\(\dfrac{J_n}{J_p}=\dfrac{N_D}{N_A}\dfrac{D_n}{D_p}\dfrac{L_p}{L_n}\)</dd></div>
+<div><dt>G-R in ZCS</dt><dd>\(J_{ric}=\tfrac{qx_dn_i}{2\tau}e^{V/2V_{th}}\); \(J_{gen}=\tfrac{qx_dn_i}{2\tau}\)</dd></div>
+<div><dt>Capacità</dt><dd>\(C_j=\epsilon\dfrac{A}{x_d}\), \(C_j\propto(\Phi_{bi}-V_D)^{-1/2}\)</dd></div>
+<div><dt>Breakdown</dt><dd>\(\Phi_{bi}+V_{BD}=\dfrac{\epsilon E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\), \(E_{BD}=4\cdot10^5\) V/cm</dd></div>
+<div><dt>Temperatura</dt><dd>\(\dfrac{dV_D}{dT}\approx-2\,\mathrm{mV/K}\) (I = cost); \(I_s\propto n_i^2\)</dd></div>
+<div><dt>Sensore T</dt><dd>\(V_{D1}-V_{D2}=\tfrac{kT}q\ln N\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Luce, fotodiodo, cella solare, p-i-n</h3>
+<dl class="fl">
+<div><dt>Fotone</dt><dd>\(E_{ph}=\dfrac{hc}\lambda,\ \lambda[\mu m]=\dfrac{1.24}{E[eV]}\); assorb. se \(E_{ph}>E_g\)</dd></div>
+<div><dt>Flusso</dt><dd>\(\varphi_{ph}=\dfrac{P_{ott}}{E_{ph}}\) [fot/s]; \(\Phi(0)=\dfrac{\varphi_{ph}}A\)</dd></div>
+<div><dt>Lambert-Beer</dt><dd>\(\Phi(x)=\Phi(0)e^{-x/L_A}\)</dd></div>
+<div><dt>Fotocorrente</dt><dd>\(I_{ph}=q\varphi_{ph}\big(e^{-x_1/L_A}-e^{-x_2/L_A}\big)\) (x<sub>1</sub>..x<sub>2</sub>: zona con campo)</dd></div>
+<div><dt>Buio</dt><dd>\(I_{buio}\approx I_s\ (+I_{gen})\)</dd></div>
+<div><dt>p-i-n</dt><dd>\(E\simeq\dfrac{\Phi_{bi}+V_R}{W_i}\), \(C=\epsilon\dfrac{A}{W_i}\), \(t_{tr}=\dfrac{W_i}{\mu E}\), \(\tau=R_{tot}C\)</dd></div>
+<div><dt>Cella (V<sub>oc</sub>, I<sub>sc</sub>)</dt><dd>\(V_{oc}=V_{th}\ln\!\big(1+\tfrac{I_{ph}}{I_s}\big)\), \(I_{sc}=-I_{ph}\)</dd></div>
+<div><dt>Con generatore I</dt><dd>\(V_D=V_{th}\ln\!\big(1+\tfrac{I_D+I_{ph}}{I_s}\big)\); \(\eta=\tfrac{V_DI_{gen}}{\varphi_{ph}E_{ph}}\)</dd></div>
+<div><dt>Ripple alimentatore</dt><dd>\(\Delta V\simeq V_{max}\dfrac T{RC}\); \(V_{rms}=V_p/\sqrt2\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>BJT (attiva diretta)</h3>
+<dl class="fl">
+<div><dt>Collettore</dt><dd>\(I_C=qAD_n\dfrac{n_i^2}{N_Bx_B}e^{V_{BE}/V_{th}}\)</dd></div>
+<div><dt>Base</dt><dd>\(I_B=qAD_p\dfrac{n_i^2}{N_Ex_E}e^{V_{BE}/V_{th}}\)</dd></div>
+<div><dt>Guadagno</dt><dd>\(\beta=\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{x_E}{x_B}\) (\(x_E\to L_E\) se corto)</dd></div>
+<div><dt>Transito, carica</dt><dd>\(t_{tr}=\dfrac{x_B^2}{2D_n}\), \(Q_B=I_Ct_{tr}\)</dd></div>
+<div><dt>Ricombinazione</dt><dd>\(I_{ric}=\dfrac{t_{tr}}{\tau_B}I_E\), \(\dfrac1\beta=\dfrac1{\beta_{iniez}}+\dfrac{t_{tr}}{\tau_B}\)</dd></div>
+<div><dt>Caso generale</dt><dd>\(\beta_{ric}=\dfrac1{\cosh(x_B/L_B)-1}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Struttura MOS</h3>
+<dl class="fl">
+<div><dt>Ossido</dt><dd>\(C_{ox}=\dfrac{\epsilon_{ox}}{t_{ox}}\), \(C_G=C_{ox}WL\), \(\epsilon_{ox}\approx3\cdot10^{-13}\) F/cm</dd></div>
+<div><dt>Banda piatta (n⁺/p)</dt><dd>\(V_{FB}=-\Big(\dfrac{E_g}{2q}+\phi_{fp}\Big)\); in generale \(\psi_{gate}-\psi_{Si}\)</dd></div>
+<div><dt>Con Q<sub>ox</sub></dt><dd>\(V_{FB}=V_{FB0}-\dfrac{Q_{ox}}{C_{ox}}\)</dd></div>
+<div><dt>Bilancio</dt><dd>\(V_G-V_{FB}=V_{ox}+\phi_S\)</dd></div>
+<div><dt>Svuotamento</dt><dd>\(\phi_S=\dfrac{qN_Ax_d^2}{2\epsilon_{Si}}\), \(V_{ox}=\dfrac{qN_Ax_d}{C_{ox}}\)</dd></div>
+<div><dt>Soglia</dt><dd>\(V_T=V_{FB}+\dfrac{\sqrt{2q\epsilon_{Si}N_A\,2\phi_{fp}}}{C_{ox}}+2\phi_{fp}\)</dd></div>
+<div><dt>Inversione</dt><dd>\(\phi_S=2\phi_{fp}\), \(x_{d,T}=\sqrt{\tfrac{2\epsilon\,2\phi_{fp}}{qN_A}}\), \(Q_{inv}=-C_{ox}(V_G-V_T)\)</dd></div>
+<div><dt>Campi</dt><dd>\(E_{ox}=\tfrac{V_{ox}}{t_{ox}}\), \(E_{Si,max}=\tfrac{qN_Ax_d}{\epsilon_{Si}}\), \(\epsilon_{ox}E_{ox}=\epsilon_{Si}E_{Si}\) (senza canale)</dd></div>
+<div><dt>Body effect</dt><dd>\(V_T=V_{T0}+\gamma(\sqrt{2\phi_{fp}+V_{SB}}-\sqrt{2\phi_{fp}})\), \(\gamma=\tfrac{\sqrt{2q\epsilon N_A}}{C_{ox}}\)</dd></div>
+<div><dt>Limiti</dt><dd>\(V_{BD,ox}=t_{ox}E_{BD,ox}\); \(V_{G,min}=V_{FB}-V_{BD,ox}\); \(V_{G,max}=V_{FB}+V_{BD,ox}+2\phi_{fp}\)</dd></div>
+<div><dt>Capacità</dt><dd>acc./inv.: \(C_{ox}WL\); svuot.: \(\tfrac1C=\tfrac1{C_{ox}}+\tfrac{x_d}{\epsilon_{Si}}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>MOSFET (nMOS; pMOS con V<sub>SG</sub>, V<sub>SD</sub>, |V<sub>Tp</sub>|, μ<sub>p</sub>)</h3>
+<dl class="fl">
+<div><dt>Costante k</dt><dd>\(k=\tfrac12\mu C_{ox}\dfrac WL\) [A/V²]; \(\mu_n=800,\ \mu_p=300\) cm²/Vs</dd></div>
+<div><dt>Spento</dt><dd>\(V_{GS}&lt;V_T\Rightarrow I_D=0\)</dd></div>
+<div><dt>Ohmico</dt><dd>\(V_{GD}>V_T\):&nbsp; \(I_D=2k\big[(V_{GS}-V_T)V_{DS}-\tfrac{V_{DS}^2}2\big]\)</dd></div>
+<div><dt>Saturo</dt><dd>\(V_{GD}&lt;V_T\):&nbsp; \(I_D=k(V_{GS}-V_T)^2\); \(V_{DS,sat}=V_{GS}-V_T\)</dd></div>
+<div><dt>R<sub>ch</sub> (V<sub>DS</sub> piccola)</dt><dd>\(R_{ch}=\dfrac{1}{2k(V_{GS}-V_T)}\)</dd></div>
+<div><dt>CLM</dt><dd>\(I_D=k(V_{GS}-V_T)^2\big(1+\tfrac{V_{DS}-V_{DS,sat}}{LE_{max}}\big)\)</dd></div>
+<div><dt>g<sub>m</sub></dt><dd>\(g_m=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\tfrac{2I_D}{V_{GS}-V_T}\)</dd></div>
+<div><dt>V<sub>GS</sub> da I</dt><dd>\(V_{GS}=V_T+\sqrt{I_D/k}\)</dd></div>
+<div><dt>Con R sul source</dt><dd>\(I_D=k(V_G-RI_D-V_T)^2\) (2° grado)</dd></div>
+<div><dt>Giunzioni S/D</dt><dd>\(C_j=\epsilon_{Si}\dfrac{\text{Area}}{x_d}\); \(C_{j,ch}=\dfrac{\epsilon_{Si}WL}{x_{d,T}}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>CMOS digitale</h3>
+<dl class="fl">
+<div><dt>Soglia logica</dt><dd>\(V_{TH}=\dfrac{V_{Tn}+\sqrt{k_p/k_n}(V_{AA}-|V_{Tp}|)}{1+\sqrt{k_p/k_n}}\)</dd></div>
+<div><dt>Resistenza equiv.</dt><dd>\(R_{eq}=\dfrac{V_{AA}}{k(V_{AA}-V_T)^2}\); serie di n: \(k_{eq}=k/n\)</dd></div>
+<div><dt>Tempo</dt><dd>\(t=R_{eq}C_L\ln\dfrac{V_{AA}}{V_{TH}}\) (scarica); \(R_{eq,p}C_L\ln\tfrac{V_{AA}}{V_{AA}-V_{TH}}\) (carica); \(t_{50}=\tau\ln2\)</dd></div>
+<div><dt>Carico</dt><dd>\(C_L=C_{ox}(W_n+W_p)L\)</dd></div>
+<div><dt>Potenza dinamica</dt><dd>\(P_d=C_LV_{AA}^2f\); in generale \(\sum C_iV_{AA}\Delta V_if_i\)</dd></div>
+<div><dt>Impulso breve</dt><dd>\(\Delta V=I_{sat}\Delta t/C_L\)</dd></div>
+<div><dt>Porte</dt><dd>nMOS serie = AND, parallelo = OR; pMOS duale; OUT=NOT(funzione pull-down)</dd></div>
+<div><dt>Statico n+p accesi</dt><dd>nMOS ohmico + pMOS saturo: \(V_{out}=I_{Dp,sat}R_{ch,n}\), \(P=V_{AA}I\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Amplificatore a MOSFET (piccolo segnale)</h3>
+<dl class="fl">
+<div><dt>Modello</dt><dd>\(i_d=g_mv_{gs}\); DC e V<sub>DD</sub> → massa</dd></div>
+<div><dt>Source comune</dt><dd>\(A_v=-g_m(R_D\|R_L)\); con R<sub>S</sub>: \(\tfrac{-g_mR_D}{1+g_mR_S}\)</dd></div>
+<div><dt>Follower</dt><dd>\(A_v=\dfrac{R}{R+1/g_m}\)</dd></div>
+<div><dt>R vista dal source</dt><dd>\(1/g_m\)</dd></div>
+<div><dt>Poli</dt><dd>\(f_p=\dfrac{1}{2\pi R_{eq}C}\): \(\tfrac{g_m}{2\pi C}\) (source), \(\tfrac1{2\pi C(R_1\|R_2)}\) (ingresso), \(\tfrac1{2\pi C(R_D+R_L)}\) (uscita)</dd></div>
+<div><dt>Bode</dt><dd>pendenza = 20 dB/dec × (zeri − poli); G(0), G(∞) da C aperti/chiusi</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Operazionale e retroazione</h3>
+<dl class="fl">
+<div><dt>Ideale</dt><dd>\(V^+=V^-\); non inv. \(G_{id}=1+Z_2/Z_1\); inv. \(-Z_2/Z_1\)</dd></div>
+<div><dt>OA reale</dt><dd>\(A=\dfrac{A_0}{1+s/\omega_0}\), \(GBW=A_0f_0\)</dd></div>
+<div><dt>Anello</dt><dd>\(G_{loop}=-A\beta\); \(G_{loop}(0)=-A_0\dfrac{R_1}{R_1+R_2}\)</dd></div>
+<div><dt>Reale</dt><dd>\(G=G_{id}\dfrac{-G_{loop}}{1-G_{loop}}\); errore \(\simeq\dfrac1{1+|G_{loop}(0)|}\)</dd></div>
+<div><dt>Frequenza f*</dt><dd>\(|G_{loop}(f^*)|=1\); \(f^*\simeq|G_{loop}(0)|f_0\) (−20) o \(\sqrt{|G_{loop}(0)|f_0f_p}\) (−40)</dd></div>
+<div><dt>Margine di fase</dt><dd>\(\varphi_m=180^\circ-\sum\mathrm{atan}\tfrac{f^*}{f_p}+\sum\mathrm{atan}\tfrac{f^*}{f_z}\); stabile se &gt; 0°</dd></div>
+<div><dt>Gradino</dt><dd>\(V(0^+)\) con \(G_{id}(\infty)\), \(V(\infty)\) con \(G_{id}(0)\), \(\tau=RC\)</dd></div>
+<div><dt>A<sub>0</sub> minimo</dt><dd>\(A_0>(\tfrac1\varepsilon-1)\dfrac{R_1+R_2}{R_1}\)</dd></div>
+<div><dt>Ordine di grandezza di τ*</dt><dd>\(\tau^*\simeq\dfrac{1}{2\pi f^*}\simeq\dfrac{\tau}{|G_{loop}(0)|}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Circuiti RC e Bode</h3>
+<dl class="fl">
+<div><dt>Costante di tempo</dt><dd>\(\tau=R_{eq}C\), \(f_p=\tfrac1{2\pi\tau}\)</dd></div>
+<div><dt>Gradino</dt><dd>\(v=v_\infty+(v_{0^+}-v_\infty)e^{-t/\tau}\); \(t_{50}=0.69\tau\)</dd></div>
+<div><dt>C in DC / HF</dt><dd>aperto / corto</dd></div>
+<div><dt>Fase</dt><dd>polo: −90° (±1 decade); zero LHP: +90°</dd></div>
+</dl></div>
+
+</div>
+</section>
+
+<section class="topic" id="t-tde">
+<header class="thead"><span class="tnum">Parte 10</span><h2>Mappa dei TdE: cosa è uscito e dove si studia</h2>
+<p class="lead">Per ogni TdE caricato, il contenuto dei tre esercizi e alcuni risultati numerici da usare come verifica quando rifai il tema. (Il file «260211» contiene nell'intestazione la data 13-1-2026, ma il testo è diverso dal «260113».)</p></header>
+<div class="tablewrap"><table class="ft tde"><thead><tr><th>TdE</th><th>A (dispositivi)</th><th>B (MOSFET/CMOS)</th><th>C (operazionali)</th></tr></thead><tbody>
+<tr><td><b>25-1-2025</b></td><td>Fotodiodo p-i-n: Φ<sub>bi</sub> = 886.4 mV; E costante in i; C ≈ 10 fF; I<sub>ph</sub> = 5.3 µA; I<sub>buio</sub> = 0.64 fA</td><td>Latch NOR con pass-MOS (S,R,Q); R<sub>eq</sub> = 494 Ω, τ = 494 ps, t = 200 ps; P<sub>d</sub> = 330.75 nW</td><td>Passa-alto non inv. con cancellazione polo-zero, f<sub>p1</sub> = 1.6 kHz; I<sub>OA,max</sub> = 20 mA; f* = 0.25·GBW = 4 MHz</td></tr>
+<tr><td><b>8-2-2025</b></td><td>Pass-transistor: V<sub>T</sub> = 0.762 V (body), W &gt; 9.1 µm; capacità 36 fF (V<sub>G</sub>=0) e 99.6 fF (V<sub>G</sub>=5 V); V<sub>2</sub> ∈ [0, 5.5 V]</td><td>Due inverter: V<sub>TH</sub> = 0.85 V; t = 79 ps + 5.7 ns; V<sub>out,max</sub> = 219 mV; P<sub>d</sub> = 80.8 µW</td><td>G<sub>id</sub>(0) = −1000, f<sub>p</sub> = 3.18 kHz, f<sub>z</sub> = 31.8 MHz; A<sub>0</sub> &gt; 10⁵; φ<sub>m</sub> = 99°</td></tr>
+<tr><td><b>13-1-2026</b></td><td>L<sub>min</sub> = 407 nm; V<sub>T</sub> = 0.5 V, k = 2 mA/V², L = 2 µm, t<sub>ox</sub> = 15 nm; V<sub>FB</sub> = −1.083 V ⇒ σ<sub>ox</sub> = +25.8 nC/cm²</td><td>Rete XOR; t<sub>01→11</sub> = 2.5 ns; P<sub>AA</sub> = 4.31 µW</td><td>Trans-impedenza: V<sub>out</sub> = 2.5 V + 1 V·sin; G<sub>loop</sub>(0) = −10⁵; φ<sub>m</sub> ≈ 90°; |G| ≈ 100 kΩ</td></tr>
+<tr><td><b>11-2-2026</b></td><td>Φ<sub>bi</sub> = 586 mV, x<sub>d</sub> = 852 nm, E<sub>max</sub> = 10.2 kV/cm; base lunga: I<sub>s</sub> = 10.8 fA, V<sub>D</sub> = 401 mV; fotodiodo I<sub>ph</sub> = 4.6 pA</td><td>nMOS + pMOS con RC sul gate: V<sub>out</sub> = 98 mV, P = 8.8 mW; ΔV = 405 mV; P<sub>din</sub> = 20.2 µW</td><td>Poli 15.9 kHz e 106.1 kHz; G<sub>loop</sub>(0) = −90.9; f* = 10 MHz; I<sub>in</sub> = 98.9 nA</td></tr>
+<tr><td><b>9-6-2026</b></td><td>MOS: V<sub>FB</sub> = −0.52 V, Ψ<sub>M</sub> = 4.48 V; x<sub>d</sub> = 85 nm; E<sub>ox</sub> = 1.77 MV/cm, E<sub>Si,max</sub> = 110 → 167 kV/cm con V<sub>B</sub> = −1 V</td><td>Source comune: g<sub>m</sub> = 300 µA/V; G(0) = 0; G(∞) = −3.46; f<sub>p1</sub> = 160 Hz, f<sub>p2</sub> = 24.5 kHz</td><td>Differenziale con tolleranze; G<sub>loop</sub>(0) = −A₀R₁/(R₁+R₂); f* = 893 kHz, φ<sub>m</sub> = 28°</td></tr>
+<tr><td><b>6-7-2026</b></td><td>Diretta: x<sub>d</sub> = 179 nm, E<sub>max</sub> = 23.9 kV/cm; due diodi in serie: V<sub>x</sub> = 9.983 V; in breakdown V<sub>x</sub> = 59.3 V, V<sub>A</sub> = 59.585 V</td><td>Inseguitore di source: R<sub>1</sub> = 70 kΩ, g<sub>m</sub> = 2 mA/V; τ<sub>p1</sub> = 18 ms, τ<sub>p2</sub> = 1.04 ms; G(∞) = 0.77</td><td>G<sub>id</sub> = (1+sC(R<sub>1</sub>+R<sub>2</sub>))/(1+sCR<sub>1</sub>); gradino 0.5 V → 11.5 V → 1.5 V; A<sub>0</sub> ≥ 2.1·10⁵</td></tr>
+<tr><td><b>2-9-2026</b></td><td>MOS: V<sub>T</sub> = 0.427 V, Q<sub>ch</sub> = 1.03 pC (6.44·10⁶ e⁻); V<sub>ox</sub> = 0.5 V ⇒ sottosoglia, V<sub>GB</sub> = 80 mV; gate p⁺: V<sub>FB</sub> = +0.178 V, V<sub>T</sub> = 1.547 V</td><td>NOR: I<sub>d</sub> = 5.83 mA; V<sub>S</sub> = 241.7 mV, I<sub>d</sub> = 4.83 mA; f<sub>out</sub> = 250 kHz, P<sub>d</sub> = 0.136 mW</td><td>Senza retroazione: 10 V, τ = 4 µs; con retroazione 10 mV, τ* = 4 ns; f* = 253 kHz, φ<sub>m</sub> = 9.4°</td></tr>
+</tbody></table></div>
+<div class="note"><b>Cosa significa per lo studio.</b> A è sempre «fisica del dispositivo con numeri»: la procedura è meccanica e ripetibile; B richiede di <i>riconoscere la regione di funzionamento</i> e di non confondere ohmico e saturazione; C è sempre lo stesso schema (G<sub>id</sub> → G<sub>loop</sub> → f* → φ<sub>m</sub>): un esercizio in cui si prendono quasi tutti i punti se si ha la procedura.</div>
+
+<div class="blk b-t"><h3>Dieci errori che ricorrono nei temi</h3>
+<ol class="steps">
+<li>Unità: cm vs m (drogaggi in cm⁻³, ε in F/cm).</li>
+<li>Φ<sub>bi</sub>, x<sub>d</sub>: usare il drogaggio sbagliato o il V<sub>D</sub> col segno sbagliato.</li>
+<li>Base corta/lunga scelta senza confrontare W con L = √(Dτ).</li>
+<li>Corrente inversa «&gt; I<sub>s</sub>» ⇒ breakdown (non esiste altra possibilità).</li>
+<li>Fotoni: Φ(0) per area o totale, E<sub>ph</sub> in eV o J, x misurato dalla superficie giusta, q (non 2q).</li>
+<li>MOS: V<sub>ox</sub> ≠ V<sub>G</sub>; V<sub>G</sub>−V<sub>FB</sub> = V<sub>ox</sub> + φ<sub>S</sub>; verificare soglia dopo l'ipotesi.</li>
+<li>MOSFET: regione decisa con V<sub>GD</sub> vs V<sub>T</sub>; verificare l'ipotesi a posteriori; effetto body con V<sub>SB</sub>.</li>
+<li>Tempi di commutazione: R<sub>eq</sub> = V<sub>AA</sub>/I<sub>sat</sub> (per eccesso) e ln(·) giusto; serie = R sommate.</li>
+<li>Operazionale: dimenticare il polo f₀ in G<sub>loop</sub>; confondere G<sub>id</sub> e G<sub>loop</sub>; f* con la pendenza sbagliata.</li>
+<li>C aperto in DC, corto in HF; spegnere V<sub>DD</sub> e i DC nel piccolo segnale.</li>
+</ol></div>
+</section>
+
+<footer>
+  Le formule sono scritte in LaTeX e vengono rese da MathJax: serve una connessione internet. Valori numerici e convenzioni seguono le dispense e le soluzioni dei TdE; se il testo del tuo esame dà costanti diverse (n<sub>i</sub>, ε, μ, V<sub>th</sub>), usa sempre quelle. I capitoli su CMOS digitale, piccolo segnale e operazionali sono ricostruiti dai TdE finché non è caricata la dispensa corrispondente.
+</footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  var main=$('#main'), side=$('#side'), root=document.documentElement;
+
+  /* indice */
+  var toc=$('#toc'), secs=$$('section.topic'), links={};
+  secs.forEach(function(s){
+    var h=$('h2',s), n=$('.tnum',s), li=document.createElement('li'), a=document.createElement('a');
+    a.href='#'+s.id;
+    a.innerHTML='<span class="n"></span><span></span>';
+    a.firstChild.textContent=n?n.textContent:'';
+    a.lastChild.textContent=h.textContent;
+    a.addEventListener('click',function(){side.classList.remove('open');$('#navbtn').setAttribute('aria-expanded','false')});
+    li.appendChild(a); toc.appendChild(li); links[s.id]=a;
+  });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ $$('.toc a.on').forEach(function(x){x.classList.remove('on')}); links[e.target.id].classList.add('on'); } });
+    },{rootMargin:'-15% 0px -75% 0px'});
+    secs.forEach(function(s){io.observe(s)});
+  }
+  $('#navbtn').addEventListener('click',function(){
+    var o=side.classList.toggle('open'); this.setAttribute('aria-expanded',o?'true':'false');
+  });
+
+  /* blocchi comprimibili */
+  $$('.blk > h3').forEach(function(h){
+    h.tabIndex=0; h.setAttribute('role','button');
+    function t(){var b=h.parentNode; var s=b.classList.toggle('shut'); h.setAttribute('aria-expanded',s?'false':'true');}
+    h.setAttribute('aria-expanded','true');
+    h.addEventListener('click',t);
+    h.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});
+  });
+
+  /* filtri per tipo di blocco */
+  var saved={}; try{saved=JSON.parse(store.get('fe-filters')||'{}')}catch(e){saved={}}
+  $$('#filters input').forEach(function(c){
+    var k=c.getAttribute('data-k');
+    if(saved[k]===false){c.checked=false;}
+    main.classList.toggle('hide-'+k,!c.checked);
+    c.addEventListener('change',function(){
+      main.classList.toggle('hide-'+k,!c.checked);
+      saved[k]=c.checked; store.set('fe-filters',JSON.stringify(saved));
+    });
+  });
+
+  /* ricerca */
+  var q=$('#q'), hint=$('#qhint'), timer=null;
+  function run(){
+    var v=q.value.trim().toLowerCase();
+    var items=$$('.ft tbody tr, .fl > div, .blk li, .blk > p, .note, .trap, .prac');
+    var all=$$('.nomatch'); all.forEach(function(x){x.classList.remove('nomatch')});
+    main.classList.toggle('searching',!!v);
+    if(!v){hint.textContent='';return;}
+    var hits=0;
+    items.forEach(function(el){
+      if(el.querySelector('td.sub')) return;
+      var ok=el.textContent.toLowerCase().indexOf(v)>-1;
+      if(ok) hits++; else el.classList.add('nomatch');
+    });
+    $$('.blk').forEach(function(b){
+      var any=$$('.ft tbody tr, .fl > div, .blk li, .blk > p, .note, .trap, .prac',b).some(function(el){return !el.classList.contains('nomatch') && !el.querySelector('td.sub')});
+      if(!any) b.classList.add('nomatch');
+    });
+    $$('.fcard').forEach(function(b){
+      if(!$$('.fl > div',b).some(function(el){return !el.classList.contains('nomatch')})) b.classList.add('nomatch');
+    });
+    secs.forEach(function(s){
+      if(!$$('.blk, .fcard',s).some(function(el){return !el.classList.contains('nomatch')})) s.classList.add('nomatch');
+    });
+    hint.textContent=hits?hits+' risultati':'Nessun risultato';
+  }
+  q.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(run,160)});
+
+  /* tema: sistema → chiaro → scuro */
+  var tb=$('#themebtn'), modes=['auto','light','dark'], names={auto:'Tema: sistema',light:'Tema: chiaro',dark:'Tema: scuro'};
+  var mode=store.get('fe-theme'); if(modes.indexOf(mode)<0) mode='auto';
+  function apply(){ if(mode==='auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',mode); tb.textContent=names[mode]; }
+  tb.addEventListener('click',function(){mode=modes[(modes.indexOf(mode)+1)%3];store.set('fe-theme',mode);apply()});
+  apply();
+})();
+</script>
+
