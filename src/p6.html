@@ -1,0 +1,60 @@
+<section class="topic" id="t-ss">
+<header class="thead"><span class="tnum">Cap. 7 · da TdE</span><h2>MOSFET come amplificatore: polarizzazione, piccolo segnale e Bode</h2>
+<p class="lead">Esercizio B di 2 TdE (9-6-2026, 6-7-2026): polarizzare il transistore, calcolare g<sub>m</sub>, trovare guadagno a bassa e alta frequenza, poli e zeri. La dispensa corrispondente non è ancora caricata.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li><b>Due livelli di analisi.</b> (1) <b>Punto di lavoro (DC)</b>: tutti i condensatori sono aperti, il MOSFET è ipotizzato saturo, si trovano V<sub>GS</sub>, I<sub>D</sub>, V<sub>D</sub>. (2) <b>Piccolo segnale (AC)</b>: una piccola variazione v<sub>gs</sub> sul gate produce una variazione di corrente i<sub>d</sub> = g<sub>m</sub>v<sub>gs</sub>. Il MOSFET diventa un <b>generatore di corrente pilotato</b> (gate aperto, nessuna corrente di ingresso). I generatori di alimentazione e continui diventano zero (massa).</li>
+<li><b>g<sub>m</sub>: «quanta corrente in più per ogni mV di gate»</b> = 2k(V<sub>GS</sub>−V<sub>T</sub>) = 2I<sub>D</sub>/(V<sub>GS</sub>−V<sub>T</sub>). Dipende dal punto di lavoro: se cambia I<sub>D</sub> cambia g<sub>m</sub>.</li>
+<li><b>I condensatori fissano la banda.</b> I condensatori di <b>accoppiamento</b> (in serie) bloccano la continua: producono <b>zeri nell'origine</b> e un polo a bassa frequenza (passa-alto). Un condensatore di <b>bypass</b> (dal source a massa) è un aperto in DC ma, ad alta frequenza, un corto: porta il guadagno al valore massimo −g<sub>m</sub>R<sub>D</sub>. Alle alte frequenze (qui: «infinito») tutti i condensatori sono dei corti.</li>
+<li><b>Resistenza vista dal source: 1/g<sub>m</sub>.</b> Tra source e massa un transistore saturo si comporta come una resistenza 1/g<sub>m</sub> (gate fissato). Ecco perché il polo di un condensatore sul source è \(f=\dfrac{g_m}{2\pi C}\) e un <b>inseguitore di source</b> (uscita sul source) ha guadagno \(\dfrac{R}{R+1/g_m}&lt;1\).</li>
+<li><b>Source comune</b> (uscita sul drain): inverte e amplifica, A<sub>v</sub> = −g<sub>m</sub>(R<sub>D</sub>‖R<sub>L</sub>). <b>Source follower</b> (uscita sul source): non inverte, guadagno ≈ 1, bassa impedenza d'uscita.</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(V_{GS}=V_T+\sqrt{I_0/k}\)&nbsp; (se nota la corrente I<sub>0</sub> del transistore in saturazione)</td><td>da \(I_D=k(V_{GS}-V_T)^2\)</td></tr>
+<tr><td>\(g_m=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\dfrac{2I_D}{V_{GS}-V_T}\)</td><td>g<sub>m</sub> [S = A/V]. Es.: g<sub>m</sub> = 300 µA/V (TdE 9-6-2026), 2 mA/V (TdE 6-7-2026)</td></tr>
+<tr><td>Modello a piccolo segnale: \(i_d=g_m\,v_{gs}\) (+ \(v_{ds}/r_o\) se CLM)</td><td>gate aperto, DC → 0</td></tr>
+<tr><td>Source comune: \(A_v=-g_m\,(R_D\|R_L)\);&nbsp; con R<sub>S</sub> non bypassata: \(A_v=\dfrac{-g_mR_D}{1+g_mR_S}\)</td><td>guadagno a centro banda</td></tr>
+<tr><td>Source follower: \(A_v=\dfrac{g_mR_S}{1+g_mR_S}=\dfrac{R_S}{R_S+1/g_m}\)</td><td>uscita sul source; con carico: R<sub>S</sub> → R<sub>S</sub>‖R<sub>L</sub> (o R<sub>3</sub>‖R<sub>4</sub> nel TdE)</td></tr>
+<tr><td>\(G(0)\) e \(G(\infty)\)</td><td>guadagno con tutti i condensatori aperti / chiusi: i due livelli asintotici del Bode</td></tr>
+<tr><td>\(\tau=C\,R_{eq}\),&nbsp; \(f_p=\dfrac{1}{2\pi\tau}\)</td><td>R<sub>eq</sub> vista dal condensatore con gli <b>altri condensatori in corto</b> (alta frequenza rispetto a quello) o aperti, a seconda della frequenza di interesse</td></tr>
+<tr><td>Bypass di source: \(f_{p1}=\dfrac{g_m}{2\pi C_1}\) (160 Hz nel TdE 9-6-2026)</td><td>R<sub>eq</sub> = 1/g<sub>m</sub></td></tr>
+<tr><td>Accoppiamento d'uscita: \(f_{p2}=\dfrac{1}{2\pi C_2(R_{drain}+R_{carico})}\)</td><td>es. C<sub>2</sub>(R<sub>1</sub>+R<sub>2</sub>), con R<sub>1</sub> sul drain e R<sub>2</sub> di carico</td></tr>
+<tr><td>Accoppiamento d'ingresso: \(\tau_{p1}=C_1\,(R_1\|R_2)\)</td><td>R<sub>1</sub>, R<sub>2</sub> = partitore di polarizzazione del gate (18 ms nel TdE 6-7-2026)</td></tr>
+<tr><td>Source follower con C d'uscita: \(\tau_{p2}=C_2\big(R_4+R_3\|\tfrac{1}{g_m}\big)\)</td><td>TdE 6-7-2026: 1.04 ms</td></tr>
+<tr><td>Bode: \(\operatorname{pendenza}=20\,\mathrm{dB/dec}\times(\#\text{zeri}-\#\text{poli})\)</td><td>zeri nell'origine ⇒ salita a +20 dB/dec per zero a bassa f; ogni polo −20, ogni zero (non nell'origine) +20</td></tr>
+<tr><td>Fase: ogni polo −90° (transizione tra \(f_p/10\) e \(10f_p\)), ogni zero LHP +90°; guadagno negativo ⇒ ∓180°</td><td>due zeri nell'origine: +180° a bassa frequenza</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Saturazione</b>: V<sub>DS</sub> ≥ V<sub>GS</sub>−V<sub>T</sub> (V<sub>GD</sub> ≤ V<sub>T</sub>) <i>nel punto di lavoro</i>. Verificalo sempre dopo aver calcolato V<sub>D</sub> = V<sub>DD</sub> − R<sub>D</sub>I<sub>D</sub>: serve V<sub>GD</sub> = V<sub>G</sub> − V<sub>D</sub> &lt; V<sub>T</sub> (TdE 9-6-2026: V<sub>G</sub> = 0 V, V<sub>D</sub> = 0.375 V ⇒ V<sub>GD</sub> &lt; 0 ⇒ saturo ✓).</li>
+<li><b>Piccolo segnale</b>: ampiezza del segnale ≪ V<sub>GS</sub>−V<sub>T</sub>, in modo che la parabola sia linearizzabile.</li>
+<li>Il metodo «G(0) e G(∞)» + poli da R<sub>eq</sub>C vale se i poli sono ben separati (≥ una decade). Se due poli sono vicini la fase e il modulo reale si discostano dalle asintotiche.</li>
+<li>Con corrente di gate nulla e condensatori aperti in DC il partitore di polarizzazione non è caricato.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura (TdE 9-6-2026 B; 6-7-2026 B)</h3>
+<ol class="steps">
+<li><b>DC</b>: apri i condensatori. Ipotizza saturo. Se il source è a V<sub>S</sub> e il gate a V<sub>G</sub>: V<sub>GS</sub> = V<sub>G</sub> − V<sub>S</sub>; da I<sub>D</sub> = k(V<sub>GS</sub>−V<sub>T</sub>)² trova I<sub>D</sub> (o V<sub>GS</sub> se è nota I<sub>D</sub>, come con un generatore di corrente sul source). Poi V<sub>D</sub> = V<sub>DD</sub> − R<sub>D</sub>I<sub>D</sub> e verifica V<sub>DS</sub> ≥ V<sub>GS</sub>−V<sub>T</sub>.</li>
+<li>Se c'è un partitore di gate: V<sub>G</sub> = V<sub>DD</sub>R<sub>2</sub>/(R<sub>1</sub>+R<sub>2</sub>) (nessuna corrente nel gate); da V<sub>G</sub> = 2 V, V<sub>GS</sub> = 3 V, I = 2 mA ⇒ R<sub>1</sub> = 70 kΩ nel TdE 6-7-2026.</li>
+<li><b>g<sub>m</sub></b> = 2k(V<sub>GS</sub>−V<sub>T</sub>) (es. 0.3 mA/V; 2 mA/V).</li>
+<li><b>Piccolo segnale</b>: spegni V<sub>DD</sub> (massa) e i generatori DC; sostituisci il MOS con i = g<sub>m</sub>v<sub>gs</sub>.</li>
+<li><b>G(0)</b>: tutti i condensatori aperti. Se un condensatore blocca il percorso del segnale, G(0) = 0 (es. TdE 9-6-2026: nessuna corrente in R<sub>2</sub> ⇒ G(0) = 0).</li>
+<li><b>G(∞)</b>: condensatori in corto. Es.: source a massa ⇒ i<sub>d</sub> = g<sub>m</sub>v<sub>in</sub> in R<sub>1</sub>‖R<sub>2</sub> ⇒ G(∞) = −g<sub>m</sub>R<sub>1</sub>‖R<sub>2</sub> = −3.46; oppure inseguitore: G(∞) = R<sub>3</sub>‖R<sub>4</sub>/(R<sub>3</sub>‖R<sub>4</sub> + 1/g<sub>m</sub>) = 0.77.</li>
+<li><b>Poli</b>: per ciascun condensatore τ = C·R<sub>eq</sub> con R<sub>eq</sub> vista ai suoi capi (spegni i generatori; usa 1/g<sub>m</sub> per il source). <b>Zeri</b>: nell'origine se un condensatore in serie (o un ramo con C a massa) annulla G a DC; altrimenti valuta le frequenze in cui il trasferimento si annulla. <i>Controllo</i>: n° poli − n° zeri deve spiegare la pendenza finale.</li>
+<li>Disegna modulo (rette) e fase; riporta frequenze, 20 dB/dec, livelli asintotici.</li>
+<li>Se il TdE dà il test «uscita nulla quando…»: l'uscita è nulla quando non circola corrente nel ramo di uscita (C aperto) o quando è nulla la corrente del MOS (C d'ingresso aperto) ⇒ a f = 0, quindi due zeri nell'origine.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Usare V<sub>DD</sub> come generatore a piccolo segnale: va <b>spento</b> (cortocircuitato a massa).</li>
+<li>Confondere la resistenza vista dal condensatore: nel polo con il source conta 1/g<sub>m</sub>, non una resistenza di polarizzazione.</li>
+<li>Trascurare il carico di R<sub>2</sub> a G(∞): è in parallelo a R<sub>1</sub> per il piccolo segnale.</li>
+<li>Pendenza finale del Bode sbagliata: conta correttamente poli e zeri (due zeri nell'origine + due poli ⇒ guadagno finale costante).</li>
+<li>Fase: un guadagno negativo (inversione) aggiunge ±180° rispetto a un guadagno positivo.</li>
+</ul></div>
+</section>

@@ -1,0 +1,78 @@
+<section class="topic" id="t-intro">
+<header class="thead"><span class="tnum">Parte 0</span><h2>Come usare la guida, costanti e strumenti circuitali</h2>
+<p class="lead">Prima di tutto la mappa: com'è fatto un compito del Prof. Ferrari (sulla base dei 7 TdE caricati) e quali numeri tenere sempre a portata di mano.</p></header>
+
+<div class="blk b-c intro"><h3><span class="tag">Mappa</span> Com'è fatto un TdE di Fondamenti di Elettronica</h3>
+<p>In tutti e 7 i temi (gen-feb 2025, gen-feb-giu-lug-set 2026) la struttura è identica: <b>tre esercizi da 3 punti</b>, ognuno su un blocco diverso del corso.</p>
+<div class="tablewrap"><table class="ft">
+<thead><tr><th>Esercizio</th><th>Argomento ricorrente</th><th>Cosa ti chiedono davvero</th><th>Capitolo in questa guida</th></tr></thead>
+<tbody>
+<tr><td><b>A</b></td><td>Fisica dei dispositivi: giunzione pn, fotodiodo, struttura MOS (Vox, Vsi, VT, VFB)</td><td>Φbi, x<sub>d</sub>, E<sub>max</sub>, I<sub>s</sub>, V<sub>D</sub> a data corrente, breakdown, capacità, fotocorrente; nei MOS: V<sub>T</sub>, carica di canale, campi E<sub>ox</sub>/E<sub>Si</sub></td><td>Cap. 2, 3, 4, 5</td></tr>
+<tr><td><b>B</b></td><td>MOSFET in circuito: polarizzazione, porte CMOS, tempi di commutazione, potenza; oppure piccolo segnale (g<sub>m</sub>, poli, zeri)</td><td>Regione di funzionamento, V<sub>out</sub> statica, R<sub>eq</sub>·C·ln(…), P<sub>d</sub>=C·V<sub>AA</sub>²·f, Bode di un amplificatore a source comune</td><td>Cap. 5, 6, 7</td></tr>
+<tr><td><b>C</b></td><td>Operazionale con retroazione e condensatori</td><td>G<sub>id</sub>(s), diagramma di Bode, G<sub>loop</sub>, f*, margine di fase, risposta a gradino, A<sub>0</sub> minimo</td><td>Cap. 8</td></tr>
+</tbody></table></div>
+<div class="note"><b>Come studiare con questa guida.</b> Per ogni argomento leggi in quest'ordine: <i>Concetti</i> (capire cosa succede) → <i>Validità</i> (quando la formula funziona) → <i>Formule</i> → <i>Procedura</i> (come si attacca l'esercizio) → <i>Tranelli</i>. Il formulario rapido in fondo (Parte 9) raccoglie tutto in forma da esame.</div>
+<div class="note warn"><b>Stato dei materiali.</b> Le dispense caricate coprono i capitoli 1–5 (fino al MOSFET). I capitoli 6–8 (CMOS/digitale, piccolo segnale, operazionali, BJT) sono costruiti dai <b>temi d'esame risolti</b> e dalle esercitazioni, perché la dispensa relativa non è ancora caricata: quando la carichi li aggiorno con le definizioni esatte del corso.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Costanti e valori numerici da ricordare (Si, T = 300 K)</h3>
+<div class="tablewrap"><table class="ft">
+<thead><tr><th>Grandezza</th><th>Valore</th><th>Note</th></tr></thead><tbody>
+<tr><td>\(q\)</td><td>\(1.6\cdot10^{-19}\ \mathrm{C}\)</td><td>carica elementare; 1 eV = \(1.6\cdot10^{-19}\) J</td></tr>
+<tr><td>\(V_{th}=kT/q\)</td><td>≈ 25 mV (25.85 mV esatti)</td><td>tensione termica; \(kT\approx25\) meV</td></tr>
+<tr><td>\(n_i\) (Si)</td><td>\(\approx1.4\cdot10^{10}\ \mathrm{cm^{-3}}\)</td><td>\(n_i^2\approx2\cdot10^{20}\ \mathrm{cm^{-6}}\). Usa sempre il valore dato dal testo</td></tr>
+<tr><td>\(E_g\) (Si)</td><td>1.12 eV</td><td>\(E_i\approx\) metà gap (a \(E_g/2=0.56\) eV da \(E_c\) e \(E_v\), scarto ≈ 12 meV)</td></tr>
+<tr><td>\(N_c,\ N_v\)</td><td>\(2.8\cdot10^{19},\ 1.04\cdot10^{19}\ \mathrm{cm^{-3}}\)</td><td>densità efficaci di stati</td></tr>
+<tr><td>\(\epsilon_{Si}\)</td><td>\(\approx10^{-12}\ \mathrm{F/cm}\) (11.7 ε₀)</td><td>\(\epsilon_0=8.85\cdot10^{-14}\) F/cm = \(8.85\cdot10^{-12}\) F/m</td></tr>
+<tr><td>\(\epsilon_{ox}\) (SiO₂)</td><td>≈ \(3\cdot10^{-13}\ \mathrm{F/cm}\) (0.3 pF/cm; esatto 3.9 ε₀ = 3.45·10⁻¹³)</td><td>\(C_{ox}=\epsilon_{ox}/t_{ox}\); nei TdE \(C_{ox}\) è quasi sempre dato (200 o 333 nF/cm²: 15 nm o 9 nm)</td></tr>
+<tr><td>\(\mu_n,\ \mu_p\) (massa, poco drogato)</td><td>1300, 400 cm²/Vs</td><td>scendono col drogaggio (a \(10^{18}\): ≈ 300, 150)</td></tr>
+<tr><td>\(\mu_n,\ \mu_p\) (superficie, canale MOS)</td><td>800, 300 cm²/Vs</td><td>valori di default del corso se il testo non dice altro</td></tr>
+<tr><td>\(D_n,\ D_p\)</td><td>20, 7 cm²/s (con μ=800, 300)</td><td>sempre \(D=\mu V_{th}\) (Einstein)</td></tr>
+<tr><td>\(v_{th}\), \(v_{sat}\)</td><td>\(\approx10^7\) cm/s</td><td>velocità termica e di saturazione della deriva</td></tr>
+<tr><td>\(E_{BD}\) (Si)</td><td>\(\approx4\cdot10^5\ \mathrm{V/cm}\)</td><td>campo di valanga; per l'ossido ≈ decine di MV/cm (vedi testo)</td></tr>
+<tr><td>Atomi di Si</td><td>\(5\cdot10^{22}\ \mathrm{cm^{-3}}\)</td><td>confronto con i drogaggi \(10^{14}\!-\!10^{19}\)</td></tr>
+<tr><td>\(\chi_{Si}\)</td><td>≈ 4.05 eV</td><td>affinità elettronica (usata per la funzione lavoro \(\Psi_M\), TdE 9-6-2026)</td></tr>
+<tr><td>\(m_e\)</td><td>\(9.1\cdot10^{-31}\) kg</td><td>per velocità termica \(v_{th}=\sqrt{3kT/m^*}\)</td></tr>
+</tbody></table></div>
+<div class="trap"><b>Unità, il primo tranello.</b> Il corso lavora in <b>cm</b> (drogaggi in cm⁻³, ε in F/cm, J in A/cm², campi in V/cm). Se mescoli m e cm sbagli di 10⁶. Regola pratica: converti <i>tutto</i> in cm all'inizio (1 µm = 10⁻⁴ cm; 1 nm = 10⁻⁷ cm) e controlla la dimensione fisica del risultato (x<sub>d</sub> di una giunzione è tipicamente 0.1–3 µm).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Circuiti di base (Cap. 1) usati in tutti gli esercizi</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(I=\dfrac{dQ}{dt}=A\,J=A\,q\,v\,n\)</td><td>I [A], Q [C], J [A/cm²], v velocità media [cm/s], n densità [cm⁻³]</td></tr>
+<tr><td>\(V=RI,\quad R=\rho\dfrac{L}{S}\)</td><td>R [Ω], ρ [Ω·cm], L lunghezza, S sezione</td></tr>
+<tr><td>\(Q=CV,\quad I=C\dfrac{dV}{dt},\quad C\simeq\epsilon\dfrac{A}{d}\)</td><td>C [F], ε [F/cm], A area, d distanza armature</td></tr>
+<tr><td>\(P=V\,I\)</td><td>potenza dissipata da un passivo (V e I con convenzione degli utilizzatori)</td></tr>
+<tr><td>\(V_{out}=V_{in}\dfrac{R_2}{R_1+R_2}\)</td><td>partitore di tensione (a vuoto)</td></tr>
+<tr><td>Thévenin: \(V_{th},\ R_{th}\); Norton: \(I_N=V_{th}/R_{th}\)</td><td>rete lineare = generatore + una resistenza</td></tr>
+<tr><td>\(Z_C=\dfrac{1}{sC}=\dfrac{1}{j2\pi fC}\),&nbsp; \(Z_L=sL\)</td><td>impedenza del condensatore: ∞ in continua (aperto), 0 ad alta frequenza (corto)</td></tr>
+<tr><td>\(\tau=R_{eq}C,\qquad f_p=\dfrac{1}{2\pi\tau}\)</td><td>\(R_{eq}\) = resistenza vista ai capi di C <i>con i generatori indipendenti spenti</i></td></tr>
+<tr><td>\(v(t)=v(\infty)+\big[v(0^+)-v(\infty)\big]e^{-t/\tau}\)</td><td>risposta a gradino di un circuito del 1° ordine</td></tr>
+<tr><td>\(t_{50\%}=\tau\ln2\approx0.69\,\tau,\quad t_{10\to90}=\tau\ln9\)</td><td>tempi di salita/discesa</td></tr>
+<tr><td>\(P_{dyn}=C\,V_{AA}^2\,f\)</td><td>potenza dinamica per caricare/scaricare C a frequenza f (vedi Cap. 6)</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li><b>Il condensatore è un serbatoio di carica.</b> Se la tensione è costante non passa corrente (aperto). Per cambiare la tensione serve spostare carica: più corrente hai a disposizione, più veloce cambia. Ecco perché le capacità <i>rallentano</i> i circuiti: tutto il corso (tempi di commutazione, poli, risposta in frequenza) è «quanto velocemente un generatore riesce a caricare una capacità».</li>
+<li><b>Il metodo dei due estremi</b> (usatissimo nei TdE per tracciare un Bode): analizza il circuito a <i>frequenza zero</i> (C = aperto, L = corto) e a <i>frequenza infinita</i> (C = corto). Hai già i due valori asintotici del guadagno; i poli/zeri sono le frequenze 1/(2πτ) dove si passa dall'uno all'altro.</li>
+<li><b>Gradino su un circuito RC:</b> subito dopo il gradino la tensione ai capi di C non può cambiare (C = generatore di tensione); a regime C è un aperto. Tra i due valori l'esponenziale con τ = R<sub>eq</sub>C.</li>
+<li><b>Il generatore ideale impone una grandezza</b> (V o I) e lascia libera l'altra. Un generatore di corrente ai capi di un diodo ti dà direttamente I: ricavi V dal logaritmo.</li>
+<li><b>I segnali digitali</b> hanno una soglia: il rumore piccolo non cambia il simbolo letto. I segnali analogici portano l'informazione nell'ampiezza e sono più sensibili al rumore, ma sono veloci e interfacciano il mondo fisico.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura: transitorio del 1° ordine in 4 passi</h3>
+<ol class="steps">
+<li>Valore iniziale <b>v(0⁺)</b>: il condensatore tiene la sua tensione (era scarico → corto per i salti di ingresso).</li>
+<li>Valore finale <b>v(∞)</b>: condensatore aperto, risolvi la rete in continua.</li>
+<li><b>τ</b>: spegni i generatori, calcola la R vista dal condensatore (combinazioni serie/parallelo), τ = R<sub>eq</sub>C.</li>
+<li>Scrivi l'esponenziale e, se serve, il tempo per arrivare a una soglia: \(t=\tau\ln\dfrac{v(0^+)-v(\infty)}{v(t)-v(\infty)}\).</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Dimenticare di spegnere i generatori quando calcoli R<sub>eq</sub> per τ (un generatore di tensione ideale = corto, di corrente = aperto).</li>
+<li>Usare la τ del circuito <i>senza</i> il generatore che pilota C: in un partitore con C la τ è C·(R₁‖R₂), non C·R₁.</li>
+<li>Confondere il polo f<sub>p</sub> = 1/(2πτ) (in Hz) con 1/τ (rad/s).</li>
+</ul></div>
+</section>

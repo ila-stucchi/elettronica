@@ -1,0 +1,220 @@
+<title>Formulario di Elettronica</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Concetto: quaderno di laboratorio a indice laterale. Ogni argomento ha cinque blocchi colorati per funzione
+   (formule, concetti, validità, procedura, tranelli) che si possono filtrare. Colore = funzione, mai decorazione. */
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --surface-2:#EDF1F6; --ink:#14202C; --muted:#566576; --line:#D5DDE6;
+  --accent:#2B47D6; --accent-ink:#FFFFFF;
+  --f:#1B5CC0; --f-bg:#E7EFFC;
+  --c:#0C7566; --c-bg:#E1F3EF;
+  --v:#8D5F00; --v-bg:#FFF3D6;
+  --p:#6439BD; --p-bg:#EEE8FB;
+  --t:#B0251D; --t-bg:#FCE9E7;
+  --hl:#FFE88A;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --hdr:56px; --side:268px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D131A; --surface:#141C25; --surface-2:#1B2531; --ink:#E5ECF3; --muted:#93A2B3; --line:#263341;
+    --accent:#8EA5FF; --accent-ink:#0D131A;
+    --f:#8DB6FF; --f-bg:#15263F; --c:#5FD1BC; --c-bg:#112B28; --v:#F0C25C; --v-bg:#33270C;
+    --p:#B9A0FF; --p-bg:#24193F; --t:#FF9A92; --t-bg:#3A1714; --hl:#6A5A12; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D131A; --surface:#141C25; --surface-2:#1B2531; --ink:#E5ECF3; --muted:#93A2B3; --line:#263341;
+  --accent:#8EA5FF; --accent-ink:#0D131A;
+  --f:#8DB6FF; --f-bg:#15263F; --c:#5FD1BC; --c-bg:#112B28; --v:#F0C25C; --v-bg:#33270C;
+  --p:#B9A0FF; --p-bg:#24193F; --t:#FF9A92; --t-bg:#3A1714; --hl:#6A5A12; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 12px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+a{color:var(--accent)}
+b,strong{font-weight:600}
+sub,sup{line-height:0;font-size:.75em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+/* ---------- barra superiore ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--hdr);display:flex;align-items:center;gap:12px;
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px))) calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--cond);font-weight:700;font-size:1.15rem;letter-spacing:.01em;white-space:nowrap;margin-right:auto}
+.brand small{font-family:var(--mono);font-weight:500;font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:10px}
+.btn{font:inherit;font-size:.82rem;font-weight:500;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);
+  border-radius:6px;padding:6px 11px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+#navbtn{display:none}
+
+/* ---------- impaginazione ---------- */
+.shell{display:grid;grid-template-columns:var(--side) minmax(0,1fr);gap:32px;max-width:1360px;margin:0 auto;padding-block:24px 64px}
+.side{position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 16px);align-self:start;
+  max-height:calc(100vh - var(--hdr) - 40px);overflow:auto;padding-right:6px;font-size:.88rem}
+.side h4{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.side h4:first-child{margin-top:0}
+.search{width:100%;font:inherit;font-size:.9rem;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.hint{font-size:.76rem;color:var(--muted);margin:6px 0 0;min-height:1.2em}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.toc a{display:flex;gap:9px;align-items:baseline;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none;line-height:1.3}
+.toc a:hover{background:var(--surface-2)}
+.toc a.on{background:var(--surface-2);box-shadow:inset 2px 0 0 var(--accent);font-weight:600}
+.toc .n{font-family:var(--mono);font-size:.68rem;color:var(--muted);min-width:3.4em;flex:none}
+.filters{display:flex;flex-direction:column;gap:5px}
+.filters label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.86rem}
+.filters input{accent-color:var(--accent);margin:0}
+.sw{width:11px;height:11px;border-radius:3px;flex:none}
+main{min-width:0}
+
+/* ---------- hero ---------- */
+.hero{margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(2rem,4.6vw,3rem);line-height:1.05;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.hero p{margin:0 0 14px;color:var(--muted);max-width:70ch}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.legend div{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 11px;font-size:.84rem;line-height:1.35}
+.legend b{display:flex;align-items:center;gap:8px;margin-bottom:2px;font-size:.88rem}
+.legend span{color:var(--muted)}
+
+/* ---------- argomenti ---------- */
+.topic{display:flex;flex-direction:column;gap:16px;margin-bottom:56px}
+.thead{margin-bottom:2px}
+.tnum{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.thead h2{font-family:var(--cond);font-weight:700;font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.12;margin:2px 0 8px;letter-spacing:-.005em;text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:76ch;font-size:.97rem}
+.topic .b-f{order:1}.topic .b-c{order:2}.topic .b-v{order:3}.topic .b-p{order:4}.topic .b-t{order:5}
+.topic .blk.intro{order:0}
+
+.blk{--bk:var(--f);--bkbg:var(--f-bg);background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.b-c{--bk:var(--c);--bkbg:var(--c-bg)}
+.b-v{--bk:var(--v);--bkbg:var(--v-bg)}
+.b-p{--bk:var(--p);--bkbg:var(--p-bg)}
+.b-t{--bk:var(--t);--bkbg:var(--t-bg)}
+.blk>h3{margin:0;padding:11px 16px;background:var(--bkbg);color:var(--bk);font-family:var(--cond);font-weight:600;font-size:1.08rem;
+  display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
+.blk>h3::after{content:"–";margin-left:auto;font-family:var(--mono);opacity:.7}
+.blk.shut>h3::after{content:"+"}
+.blk.shut>:not(h3){display:none}
+.blk>:not(h3){margin-inline:16px}
+.blk>h3+*{margin-top:14px}
+.blk>:last-child{margin-bottom:16px}
+.tag{font-family:var(--mono);font-weight:500;font-size:.72rem;min-width:1.7em;padding:1px 6px;text-align:center;border-radius:4px;background:var(--bk);color:var(--surface)}
+.blk h4{font-family:var(--cond);font-weight:600;font-size:.98rem;margin:20px 16px 8px;padding-bottom:4px;border-bottom:1px dashed var(--line);color:var(--ink)}
+.blk p{margin-top:0;margin-bottom:10px}
+.blk ul{padding-left:1.15rem;margin-top:0;margin-bottom:10px}
+.blk li{margin-bottom:7px}
+.blk li::marker{color:var(--bk)}
+.conv{font-size:.88rem;background:var(--surface-2);border-radius:6px;padding:8px 11px}
+
+.tablewrap{overflow-x:auto;margin-top:6px;margin-bottom:10px;-webkit-overflow-scrolling:touch}
+.ft{border-collapse:collapse;width:100%;font-size:.92rem}
+.ft th{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ft td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ft td:first-child{min-width:15rem}
+.ft tbody tr:last-child td{border-bottom:0}
+.ft tr:hover td{background:var(--surface-2)}
+.ft td.sub{font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--f);background:var(--f-bg);padding:5px 10px}
+.ft.tde td:first-child{min-width:6rem}
+.ft.tde td{font-size:.86rem;min-width:13rem}
+.ft.tde td:first-child{min-width:6.5rem}
+
+.steps{list-style:none;counter-reset:s;padding:0;margin-top:0;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.steps li{counter-increment:s;position:relative;padding-left:2.1rem;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.1rem;width:1.45rem;height:1.45rem;border-radius:50%;background:var(--bk);color:var(--surface);
+  font-family:var(--mono);font-size:.72rem;font-weight:500;display:grid;place-items:center}
+.note,.prac{border-radius:8px;padding:10px 14px;font-size:.92rem;margin-top:8px;margin-bottom:8px}
+.note{background:var(--surface-2);border:1px solid var(--line)}
+.note.warn{background:var(--v-bg);border-color:transparent}
+.prac{background:var(--c-bg);border:1px solid transparent}
+.prac b:first-child{color:var(--c)}
+.trap{background:var(--t-bg);border-radius:8px;padding:10px 14px;font-size:.92rem;margin-top:8px;margin-bottom:8px}
+.trap b:first-child{color:var(--t)}
+mjx-container{max-width:100%}
+mjx-container[display="false"]{margin:0 1px}
+.ft td mjx-container,.fl dd mjx-container{overflow-x:auto;overflow-y:hidden;vertical-align:middle;padding-block:2px}
+
+/* ---------- formulario ---------- */
+.fgrid{columns:2 460px;column-gap:16px}
+.fcard{break-inside:avoid;display:inline-block;width:100%;margin:0 0 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fcard h3{margin:0;padding:9px 14px;font-family:var(--cond);font-weight:600;font-size:1rem;background:var(--f-bg);color:var(--f);border-bottom:1px solid var(--line)}
+.fl{margin:0;padding:4px 14px 8px}
+.fl>div{display:grid;grid-template-columns:minmax(6.5rem,32%) minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.fl>div:last-child{border-bottom:0}
+.fl dt{font-size:.78rem;color:var(--muted);font-weight:500;line-height:1.3}
+.fl dd{margin:0;min-width:0;font-size:.9rem;overflow-x:auto}
+.topic.wide{margin-bottom:40px}
+
+mark.hit{background:var(--hl);color:inherit;border-radius:2px}
+.hide-f .b-f,.hide-c .b-c,.hide-v .b-v,.hide-p .b-p,.hide-t .b-t{display:none}
+.nomatch{display:none!important}
+main.searching .blk.shut>:not(h3){display:block}
+footer{border-top:1px solid var(--line);padding:18px 0 28px;color:var(--muted);font-size:.84rem}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-top:16px}
+  #navbtn{display:inline-block}
+  .side{position:static;max-height:none;display:none;margin-bottom:22px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .side.open{display:block}
+  .brand small{display:none}
+  .fgrid{columns:1}
+}
+@media (max-width:560px){
+  .fl>div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .blk>:not(h3){margin-inline:12px}
+  .blk h4{margin-inline:12px}
+}
+@media print{
+  .top,.side{display:none}.shell{display:block;padding:0}body{padding:0}
+  .blk.shut>:not(h3){display:block}
+  .blk{break-inside:auto}.fcard{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false}};
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+
+<header class="top">
+  <div class="brand">Formulario di Elettronica<small>Fondamenti di elettronica · POLIMI</small></div>
+  <button class="btn" id="navbtn" type="button" aria-expanded="false" aria-controls="side">Indice</button>
+  <button class="btn" id="themebtn" type="button" aria-label="Cambia tema">Tema</button>
+</header>
+
+<div class="shell">
+<aside class="side" id="side" aria-label="Indice e filtri">
+  <h4>Cerca</h4>
+  <input class="search" id="q" type="search" placeholder="es. soglia, Φbi, breakdown" autocomplete="off" aria-label="Cerca nel formulario">
+  <p class="hint" id="qhint"></p>
+  <h4>Mostra</h4>
+  <div class="filters" id="filters">
+    <label><input type="checkbox" data-k="f" checked><span class="sw" style="background:var(--f)"></span>Formule</label>
+    <label><input type="checkbox" data-k="c" checked><span class="sw" style="background:var(--c)"></span>Concetti</label>
+    <label><input type="checkbox" data-k="v" checked><span class="sw" style="background:var(--v)"></span>Validità</label>
+    <label><input type="checkbox" data-k="p" checked><span class="sw" style="background:var(--p)"></span>Procedure</label>
+    <label><input type="checkbox" data-k="t" checked><span class="sw" style="background:var(--t)"></span>Tranelli</label>
+  </div>
+  <h4>Indice</h4>
+  <ol class="toc" id="toc"></ol>
+</aside>
+
+<main id="main">
+<div class="hero">
+  <h1>Formulario e guida concettuale</h1>
+  <p>Costruito dalle 5 dispense (cap. 1–5), 6 esercitazioni e 7 temi d'esame risolti del corso di Fondamenti di elettronica per Ingegneria Fisica (Prof. G. Ferrari, Politecnico di Milano). Per ogni argomento: formule, idea fisica, condizioni di validità, procedura di risoluzione e tranelli dei TdE.</p>
+  <div class="legend">
+    <div><b><span class="sw" style="background:var(--f)"></span>1 · Formule chiave</b><span>con simboli e unità</span></div>
+    <div><b><span class="sw" style="background:var(--c)"></span>2 · Concetti</b><span>perché funziona, a cosa serve</span></div>
+    <div><b><span class="sw" style="background:var(--v)"></span>3 · Validità</b><span>ipotesi e regioni di funzionamento</span></div>
+    <div><b><span class="sw" style="background:var(--p)"></span>4 · Procedura</b><span>l'algoritmo dai TdE</span></div>
+    <div><b><span class="sw" style="background:var(--t)"></span>5 · Tranelli</b><span>errori classici</span></div>
+  </div>
+</div>

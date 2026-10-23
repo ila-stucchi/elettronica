@@ -1,0 +1,165 @@
+<section class="topic wide" id="t-form">
+<header class="thead"><span class="tnum">Parte 9</span><h2>Formulario completo pronto per l'esame</h2>
+<p class="lead">Tutte le formule usate negli esercizi dei TdE e delle esercitazioni, in forma compatta. Simboli: <b>V<sub>th</sub></b> = kT/q ≈ 25 mV; tutte le lunghezze in cm quando c'è ε o un drogaggio.</p></header>
+
+<div class="fgrid">
+
+<div class="fcard"><h3>Semiconduttori all'equilibrio</h3>
+<dl class="fl">
+<div><dt>Azione di massa</dt><dd>\(np=n_i^2\), \(n_i\approx1.4\cdot10^{10}\,\mathrm{cm^{-3}}\)</dd></div>
+<div><dt>Fermi</dt><dd>\(n=n_ie^{(E_F-E_i)/kT}\); \(p=n_ie^{(E_i-E_F)/kT}\)</dd></div>
+<div><dt>Drogato (tipo n / p)</dt><dd>\(n\simeq N_D-N_A,\ p=\dfrac{n_i^2}{n}\);&nbsp; \(p\simeq N_A-N_D,\ n=\dfrac{n_i^2}{p}\)</dd></div>
+<div><dt>Completa</dt><dd>\(n=\dfrac{N_D-N_A}2+\sqrt{\big(\tfrac{N_D-N_A}2\big)^2+n_i^2}\)</dd></div>
+<div><dt>Potenziali di Fermi</dt><dd>\(\phi_{fn,p}=V_{th}\ln\dfrac{N_{D,A}}{n_i}\)</dd></div>
+<div><dt>Deriva / conducibilità</dt><dd>\(J=q(n\mu_n+p\mu_p)E,\ \ \rho=\dfrac1{qN\mu},\ \ R=\rho\dfrac LS\)</dd></div>
+<div><dt>Diffusione, Einstein</dt><dd>\(J_n=qD_n\dfrac{dn}{dx},\ J_p=-qD_p\dfrac{dp}{dx},\ D=\mu V_{th}\)</dd></div>
+<div><dt>Ricombinazione</dt><dd>\(R-G=\dfrac{pn-n_i^2}{(p+n+2n_i)\tau}\to\dfrac{p'}\tau;\ \ L=\sqrt{D\tau}\)</dd></div>
+<div><dt>Bande ↔ campo</dt><dd>\(E=\tfrac1q\dfrac{dE_c}{dx}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Giunzione pn (V<sub>D</sub> &gt; 0 diretta)</h3>
+<dl class="fl">
+<div><dt>Built-in</dt><dd>\(\Phi_{bi}=V_{th}\ln\dfrac{N_AN_D}{n_i^2}\)</dd></div>
+<div><dt>ZCS</dt><dd>\(x_d=\sqrt{\dfrac{2\epsilon(\Phi_{bi}-V_D)}{q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)}\); \(N_Ax_p=N_Dx_n\); \(x_n=x_d\dfrac{N_A}{N_A+N_D}\)</dd></div>
+<div><dt>Campo massimo</dt><dd>\(|E_{max}|=\dfrac{qN_Dx_n}{\epsilon}=\dfrac{2(\Phi_{bi}-V_D)}{x_d}\)</dd></div>
+<div><dt>Cadute nella ZCS</dt><dd>\(\varphi_n=\tfrac{qN_Dx_n^2}{2\epsilon}\), \(\varphi_p=\tfrac{qN_Ax_p^2}{2\epsilon}\)</dd></div>
+<div><dt>Minoritari ai bordi</dt><dd>\(n(-x_p)=\tfrac{n_i^2}{N_A}e^{V_D/V_{th}}\)</dd></div>
+<div><dt>Diodo</dt><dd>\(I=I_s(e^{V_D/V_{th}}-1)\)</dd></div>
+<div><dt>I<sub>s</sub> base corta</dt><dd>\(Aqn_i^2\Big(\dfrac{D_n}{N_AW_p}+\dfrac{D_p}{N_DW_n}\Big)\)</dd></div>
+<div><dt>I<sub>s</sub> base lunga</dt><dd>\(Aqn_i^2\Big(\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\Big)\)</dd></div>
+<div><dt>Scelta base</dt><dd>\(W\ll L\) corta; \(W\gg L\) lunga; \(t_{tr}=\dfrac{W^2}{2D}\ll\tau\)</dd></div>
+<div><dt>V a data I</dt><dd>\(V_D=V_{th}\ln\!\big(\tfrac{I}{I_s}+1\big)\); ×2 in I: +17 mV; ×10: +60 mV</dd></div>
+<div><dt>Rapporto iniettate</dt><dd>\(\dfrac{J_n}{J_p}=\dfrac{N_D}{N_A}\dfrac{D_n}{D_p}\dfrac{L_p}{L_n}\)</dd></div>
+<div><dt>G-R in ZCS</dt><dd>\(J_{ric}=\tfrac{qx_dn_i}{2\tau}e^{V/2V_{th}}\); \(J_{gen}=\tfrac{qx_dn_i}{2\tau}\)</dd></div>
+<div><dt>Capacità</dt><dd>\(C_j=\epsilon\dfrac{A}{x_d}\), \(C_j\propto(\Phi_{bi}-V_D)^{-1/2}\)</dd></div>
+<div><dt>Breakdown</dt><dd>\(\Phi_{bi}+V_{BD}=\dfrac{\epsilon E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\), \(E_{BD}=4\cdot10^5\) V/cm</dd></div>
+<div><dt>Temperatura</dt><dd>\(\dfrac{dV_D}{dT}\approx-2\,\mathrm{mV/K}\) (I = cost); \(I_s\propto n_i^2\)</dd></div>
+<div><dt>Sensore T</dt><dd>\(V_{D1}-V_{D2}=\tfrac{kT}q\ln N\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Luce, fotodiodo, cella solare, p-i-n</h3>
+<dl class="fl">
+<div><dt>Fotone</dt><dd>\(E_{ph}=\dfrac{hc}\lambda,\ \lambda[\mu m]=\dfrac{1.24}{E[eV]}\); assorb. se \(E_{ph}>E_g\)</dd></div>
+<div><dt>Flusso</dt><dd>\(\varphi_{ph}=\dfrac{P_{ott}}{E_{ph}}\) [fot/s]; \(\Phi(0)=\dfrac{\varphi_{ph}}A\)</dd></div>
+<div><dt>Lambert-Beer</dt><dd>\(\Phi(x)=\Phi(0)e^{-x/L_A}\)</dd></div>
+<div><dt>Fotocorrente</dt><dd>\(I_{ph}=q\varphi_{ph}\big(e^{-x_1/L_A}-e^{-x_2/L_A}\big)\) (x<sub>1</sub>..x<sub>2</sub>: zona con campo)</dd></div>
+<div><dt>Buio</dt><dd>\(I_{buio}\approx I_s\ (+I_{gen})\)</dd></div>
+<div><dt>p-i-n</dt><dd>\(E\simeq\dfrac{\Phi_{bi}+V_R}{W_i}\), \(C=\epsilon\dfrac{A}{W_i}\), \(t_{tr}=\dfrac{W_i}{\mu E}\), \(\tau=R_{tot}C\)</dd></div>
+<div><dt>Cella (V<sub>oc</sub>, I<sub>sc</sub>)</dt><dd>\(V_{oc}=V_{th}\ln\!\big(1+\tfrac{I_{ph}}{I_s}\big)\), \(I_{sc}=-I_{ph}\)</dd></div>
+<div><dt>Con generatore I</dt><dd>\(V_D=V_{th}\ln\!\big(1+\tfrac{I_D+I_{ph}}{I_s}\big)\); \(\eta=\tfrac{V_DI_{gen}}{\varphi_{ph}E_{ph}}\)</dd></div>
+<div><dt>Ripple alimentatore</dt><dd>\(\Delta V\simeq V_{max}\dfrac T{RC}\); \(V_{rms}=V_p/\sqrt2\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>BJT (attiva diretta)</h3>
+<dl class="fl">
+<div><dt>Collettore</dt><dd>\(I_C=qAD_n\dfrac{n_i^2}{N_Bx_B}e^{V_{BE}/V_{th}}\)</dd></div>
+<div><dt>Base</dt><dd>\(I_B=qAD_p\dfrac{n_i^2}{N_Ex_E}e^{V_{BE}/V_{th}}\)</dd></div>
+<div><dt>Guadagno</dt><dd>\(\beta=\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{x_E}{x_B}\) (\(x_E\to L_E\) se corto)</dd></div>
+<div><dt>Transito, carica</dt><dd>\(t_{tr}=\dfrac{x_B^2}{2D_n}\), \(Q_B=I_Ct_{tr}\)</dd></div>
+<div><dt>Ricombinazione</dt><dd>\(I_{ric}=\dfrac{t_{tr}}{\tau_B}I_E\), \(\dfrac1\beta=\dfrac1{\beta_{iniez}}+\dfrac{t_{tr}}{\tau_B}\)</dd></div>
+<div><dt>Caso generale</dt><dd>\(\beta_{ric}=\dfrac1{\cosh(x_B/L_B)-1}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Struttura MOS</h3>
+<dl class="fl">
+<div><dt>Ossido</dt><dd>\(C_{ox}=\dfrac{\epsilon_{ox}}{t_{ox}}\), \(C_G=C_{ox}WL\), \(\epsilon_{ox}\approx3\cdot10^{-13}\) F/cm</dd></div>
+<div><dt>Banda piatta (n⁺/p)</dt><dd>\(V_{FB}=-\Big(\dfrac{E_g}{2q}+\phi_{fp}\Big)\); in generale \(\psi_{gate}-\psi_{Si}\)</dd></div>
+<div><dt>Con Q<sub>ox</sub></dt><dd>\(V_{FB}=V_{FB0}-\dfrac{Q_{ox}}{C_{ox}}\)</dd></div>
+<div><dt>Bilancio</dt><dd>\(V_G-V_{FB}=V_{ox}+\phi_S\)</dd></div>
+<div><dt>Svuotamento</dt><dd>\(\phi_S=\dfrac{qN_Ax_d^2}{2\epsilon_{Si}}\), \(V_{ox}=\dfrac{qN_Ax_d}{C_{ox}}\)</dd></div>
+<div><dt>Soglia</dt><dd>\(V_T=V_{FB}+\dfrac{\sqrt{2q\epsilon_{Si}N_A\,2\phi_{fp}}}{C_{ox}}+2\phi_{fp}\)</dd></div>
+<div><dt>Inversione</dt><dd>\(\phi_S=2\phi_{fp}\), \(x_{d,T}=\sqrt{\tfrac{2\epsilon\,2\phi_{fp}}{qN_A}}\), \(Q_{inv}=-C_{ox}(V_G-V_T)\)</dd></div>
+<div><dt>Campi</dt><dd>\(E_{ox}=\tfrac{V_{ox}}{t_{ox}}\), \(E_{Si,max}=\tfrac{qN_Ax_d}{\epsilon_{Si}}\), \(\epsilon_{ox}E_{ox}=\epsilon_{Si}E_{Si}\) (senza canale)</dd></div>
+<div><dt>Body effect</dt><dd>\(V_T=V_{T0}+\gamma(\sqrt{2\phi_{fp}+V_{SB}}-\sqrt{2\phi_{fp}})\), \(\gamma=\tfrac{\sqrt{2q\epsilon N_A}}{C_{ox}}\)</dd></div>
+<div><dt>Limiti</dt><dd>\(V_{BD,ox}=t_{ox}E_{BD,ox}\); \(V_{G,min}=V_{FB}-V_{BD,ox}\); \(V_{G,max}=V_{FB}+V_{BD,ox}+2\phi_{fp}\)</dd></div>
+<div><dt>Capacità</dt><dd>acc./inv.: \(C_{ox}WL\); svuot.: \(\tfrac1C=\tfrac1{C_{ox}}+\tfrac{x_d}{\epsilon_{Si}}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>MOSFET (nMOS; pMOS con V<sub>SG</sub>, V<sub>SD</sub>, |V<sub>Tp</sub>|, μ<sub>p</sub>)</h3>
+<dl class="fl">
+<div><dt>Costante k</dt><dd>\(k=\tfrac12\mu C_{ox}\dfrac WL\) [A/V²]; \(\mu_n=800,\ \mu_p=300\) cm²/Vs</dd></div>
+<div><dt>Spento</dt><dd>\(V_{GS}&lt;V_T\Rightarrow I_D=0\)</dd></div>
+<div><dt>Ohmico</dt><dd>\(V_{GD}>V_T\):&nbsp; \(I_D=2k\big[(V_{GS}-V_T)V_{DS}-\tfrac{V_{DS}^2}2\big]\)</dd></div>
+<div><dt>Saturo</dt><dd>\(V_{GD}&lt;V_T\):&nbsp; \(I_D=k(V_{GS}-V_T)^2\); \(V_{DS,sat}=V_{GS}-V_T\)</dd></div>
+<div><dt>R<sub>ch</sub> (V<sub>DS</sub> piccola)</dt><dd>\(R_{ch}=\dfrac{1}{2k(V_{GS}-V_T)}\)</dd></div>
+<div><dt>CLM</dt><dd>\(I_D=k(V_{GS}-V_T)^2\big(1+\tfrac{V_{DS}-V_{DS,sat}}{LE_{max}}\big)\)</dd></div>
+<div><dt>g<sub>m</sub></dt><dd>\(g_m=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\tfrac{2I_D}{V_{GS}-V_T}\)</dd></div>
+<div><dt>V<sub>GS</sub> da I</dt><dd>\(V_{GS}=V_T+\sqrt{I_D/k}\)</dd></div>
+<div><dt>Con R sul source</dt><dd>\(I_D=k(V_G-RI_D-V_T)^2\) (2° grado)</dd></div>
+<div><dt>Giunzioni S/D</dt><dd>\(C_j=\epsilon_{Si}\dfrac{\text{Area}}{x_d}\); \(C_{j,ch}=\dfrac{\epsilon_{Si}WL}{x_{d,T}}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>CMOS digitale</h3>
+<dl class="fl">
+<div><dt>Soglia logica</dt><dd>\(V_{TH}=\dfrac{V_{Tn}+\sqrt{k_p/k_n}(V_{AA}-|V_{Tp}|)}{1+\sqrt{k_p/k_n}}\)</dd></div>
+<div><dt>Resistenza equiv.</dt><dd>\(R_{eq}=\dfrac{V_{AA}}{k(V_{AA}-V_T)^2}\); serie di n: \(k_{eq}=k/n\)</dd></div>
+<div><dt>Tempo</dt><dd>\(t=R_{eq}C_L\ln\dfrac{V_{AA}}{V_{TH}}\) (scarica); \(R_{eq,p}C_L\ln\tfrac{V_{AA}}{V_{AA}-V_{TH}}\) (carica); \(t_{50}=\tau\ln2\)</dd></div>
+<div><dt>Carico</dt><dd>\(C_L=C_{ox}(W_n+W_p)L\)</dd></div>
+<div><dt>Potenza dinamica</dt><dd>\(P_d=C_LV_{AA}^2f\); in generale \(\sum C_iV_{AA}\Delta V_if_i\)</dd></div>
+<div><dt>Impulso breve</dt><dd>\(\Delta V=I_{sat}\Delta t/C_L\)</dd></div>
+<div><dt>Porte</dt><dd>nMOS serie = AND, parallelo = OR; pMOS duale; OUT=NOT(funzione pull-down)</dd></div>
+<div><dt>Statico n+p accesi</dt><dd>nMOS ohmico + pMOS saturo: \(V_{out}=I_{Dp,sat}R_{ch,n}\), \(P=V_{AA}I\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Amplificatore a MOSFET (piccolo segnale)</h3>
+<dl class="fl">
+<div><dt>Modello</dt><dd>\(i_d=g_mv_{gs}\); DC e V<sub>DD</sub> → massa</dd></div>
+<div><dt>Source comune</dt><dd>\(A_v=-g_m(R_D\|R_L)\); con R<sub>S</sub>: \(\tfrac{-g_mR_D}{1+g_mR_S}\)</dd></div>
+<div><dt>Follower</dt><dd>\(A_v=\dfrac{R}{R+1/g_m}\)</dd></div>
+<div><dt>R vista dal source</dt><dd>\(1/g_m\)</dd></div>
+<div><dt>Poli</dt><dd>\(f_p=\dfrac{1}{2\pi R_{eq}C}\): \(\tfrac{g_m}{2\pi C}\) (source), \(\tfrac1{2\pi C(R_1\|R_2)}\) (ingresso), \(\tfrac1{2\pi C(R_D+R_L)}\) (uscita)</dd></div>
+<div><dt>Bode</dt><dd>pendenza = 20 dB/dec × (zeri − poli); G(0), G(∞) da C aperti/chiusi</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Operazionale e retroazione</h3>
+<dl class="fl">
+<div><dt>Ideale</dt><dd>\(V^+=V^-\); non inv. \(G_{id}=1+Z_2/Z_1\); inv. \(-Z_2/Z_1\)</dd></div>
+<div><dt>OA reale</dt><dd>\(A=\dfrac{A_0}{1+s/\omega_0}\), \(GBW=A_0f_0\)</dd></div>
+<div><dt>Anello</dt><dd>\(G_{loop}=-A\beta\); \(G_{loop}(0)=-A_0\dfrac{R_1}{R_1+R_2}\)</dd></div>
+<div><dt>Reale</dt><dd>\(G=G_{id}\dfrac{-G_{loop}}{1-G_{loop}}\); errore \(\simeq\dfrac1{1+|G_{loop}(0)|}\)</dd></div>
+<div><dt>Frequenza f*</dt><dd>\(|G_{loop}(f^*)|=1\); \(f^*\simeq|G_{loop}(0)|f_0\) (−20) o \(\sqrt{|G_{loop}(0)|f_0f_p}\) (−40)</dd></div>
+<div><dt>Margine di fase</dt><dd>\(\varphi_m=180^\circ-\sum\mathrm{atan}\tfrac{f^*}{f_p}+\sum\mathrm{atan}\tfrac{f^*}{f_z}\); stabile se &gt; 0°</dd></div>
+<div><dt>Gradino</dt><dd>\(V(0^+)\) con \(G_{id}(\infty)\), \(V(\infty)\) con \(G_{id}(0)\), \(\tau=RC\)</dd></div>
+<div><dt>A<sub>0</sub> minimo</dt><dd>\(A_0>(\tfrac1\varepsilon-1)\dfrac{R_1+R_2}{R_1}\)</dd></div>
+<div><dt>Ordine di grandezza di τ*</dt><dd>\(\tau^*\simeq\dfrac{1}{2\pi f^*}\simeq\dfrac{\tau}{|G_{loop}(0)|}\)</dd></div>
+</dl></div>
+
+<div class="fcard"><h3>Circuiti RC e Bode</h3>
+<dl class="fl">
+<div><dt>Costante di tempo</dt><dd>\(\tau=R_{eq}C\), \(f_p=\tfrac1{2\pi\tau}\)</dd></div>
+<div><dt>Gradino</dt><dd>\(v=v_\infty+(v_{0^+}-v_\infty)e^{-t/\tau}\); \(t_{50}=0.69\tau\)</dd></div>
+<div><dt>C in DC / HF</dt><dd>aperto / corto</dd></div>
+<div><dt>Fase</dt><dd>polo: −90° (±1 decade); zero LHP: +90°</dd></div>
+</dl></div>
+
+</div>
+</section>
+
+<section class="topic" id="t-tde">
+<header class="thead"><span class="tnum">Parte 10</span><h2>Mappa dei TdE: cosa è uscito e dove si studia</h2>
+<p class="lead">Per ogni TdE caricato, il contenuto dei tre esercizi e alcuni risultati numerici da usare come verifica quando rifai il tema. (Il file «260211» contiene nell'intestazione la data 13-1-2026, ma il testo è diverso dal «260113».)</p></header>
+<div class="tablewrap"><table class="ft tde"><thead><tr><th>TdE</th><th>A (dispositivi)</th><th>B (MOSFET/CMOS)</th><th>C (operazionali)</th></tr></thead><tbody>
+<tr><td><b>25-1-2025</b></td><td>Fotodiodo p-i-n: Φ<sub>bi</sub> = 886.4 mV; E costante in i; C ≈ 10 fF; I<sub>ph</sub> = 5.3 µA; I<sub>buio</sub> = 0.64 fA</td><td>Latch NOR con pass-MOS (S,R,Q); R<sub>eq</sub> = 494 Ω, τ = 494 ps, t = 200 ps; P<sub>d</sub> = 330.75 nW</td><td>Passa-alto non inv. con cancellazione polo-zero, f<sub>p1</sub> = 1.6 kHz; I<sub>OA,max</sub> = 20 mA; f* = 0.25·GBW = 4 MHz</td></tr>
+<tr><td><b>8-2-2025</b></td><td>Pass-transistor: V<sub>T</sub> = 0.762 V (body), W &gt; 9.1 µm; capacità 36 fF (V<sub>G</sub>=0) e 99.6 fF (V<sub>G</sub>=5 V); V<sub>2</sub> ∈ [0, 5.5 V]</td><td>Due inverter: V<sub>TH</sub> = 0.85 V; t = 79 ps + 5.7 ns; V<sub>out,max</sub> = 219 mV; P<sub>d</sub> = 80.8 µW</td><td>G<sub>id</sub>(0) = −1000, f<sub>p</sub> = 3.18 kHz, f<sub>z</sub> = 31.8 MHz; A<sub>0</sub> &gt; 10⁵; φ<sub>m</sub> = 99°</td></tr>
+<tr><td><b>13-1-2026</b></td><td>L<sub>min</sub> = 407 nm; V<sub>T</sub> = 0.5 V, k = 2 mA/V², L = 2 µm, t<sub>ox</sub> = 15 nm; V<sub>FB</sub> = −1.083 V ⇒ σ<sub>ox</sub> = +25.8 nC/cm²</td><td>Rete XOR; t<sub>01→11</sub> = 2.5 ns; P<sub>AA</sub> = 4.31 µW</td><td>Trans-impedenza: V<sub>out</sub> = 2.5 V + 1 V·sin; G<sub>loop</sub>(0) = −10⁵; φ<sub>m</sub> ≈ 90°; |G| ≈ 100 kΩ</td></tr>
+<tr><td><b>11-2-2026</b></td><td>Φ<sub>bi</sub> = 586 mV, x<sub>d</sub> = 852 nm, E<sub>max</sub> = 10.2 kV/cm; base lunga: I<sub>s</sub> = 10.8 fA, V<sub>D</sub> = 401 mV; fotodiodo I<sub>ph</sub> = 4.6 pA</td><td>nMOS + pMOS con RC sul gate: V<sub>out</sub> = 98 mV, P = 8.8 mW; ΔV = 405 mV; P<sub>din</sub> = 20.2 µW</td><td>Poli 15.9 kHz e 106.1 kHz; G<sub>loop</sub>(0) = −90.9; f* = 10 MHz; I<sub>in</sub> = 98.9 nA</td></tr>
+<tr><td><b>9-6-2026</b></td><td>MOS: V<sub>FB</sub> = −0.52 V, Ψ<sub>M</sub> = 4.48 V; x<sub>d</sub> = 85 nm; E<sub>ox</sub> = 1.77 MV/cm, E<sub>Si,max</sub> = 110 → 167 kV/cm con V<sub>B</sub> = −1 V</td><td>Source comune: g<sub>m</sub> = 300 µA/V; G(0) = 0; G(∞) = −3.46; f<sub>p1</sub> = 160 Hz, f<sub>p2</sub> = 24.5 kHz</td><td>Differenziale con tolleranze; G<sub>loop</sub>(0) = −A₀R₁/(R₁+R₂); f* = 893 kHz, φ<sub>m</sub> = 28°</td></tr>
+<tr><td><b>6-7-2026</b></td><td>Diretta: x<sub>d</sub> = 179 nm, E<sub>max</sub> = 23.9 kV/cm; due diodi in serie: V<sub>x</sub> = 9.983 V; in breakdown V<sub>x</sub> = 59.3 V, V<sub>A</sub> = 59.585 V</td><td>Inseguitore di source: R<sub>1</sub> = 70 kΩ, g<sub>m</sub> = 2 mA/V; τ<sub>p1</sub> = 18 ms, τ<sub>p2</sub> = 1.04 ms; G(∞) = 0.77</td><td>G<sub>id</sub> = (1+sC(R<sub>1</sub>+R<sub>2</sub>))/(1+sCR<sub>1</sub>); gradino 0.5 V → 11.5 V → 1.5 V; A<sub>0</sub> ≥ 2.1·10⁵</td></tr>
+<tr><td><b>2-9-2026</b></td><td>MOS: V<sub>T</sub> = 0.427 V, Q<sub>ch</sub> = 1.03 pC (6.44·10⁶ e⁻); V<sub>ox</sub> = 0.5 V ⇒ sottosoglia, V<sub>GB</sub> = 80 mV; gate p⁺: V<sub>FB</sub> = +0.178 V, V<sub>T</sub> = 1.547 V</td><td>NOR: I<sub>d</sub> = 5.83 mA; V<sub>S</sub> = 241.7 mV, I<sub>d</sub> = 4.83 mA; f<sub>out</sub> = 250 kHz, P<sub>d</sub> = 0.136 mW</td><td>Senza retroazione: 10 V, τ = 4 µs; con retroazione 10 mV, τ* = 4 ns; f* = 253 kHz, φ<sub>m</sub> = 9.4°</td></tr>
+</tbody></table></div>
+<div class="note"><b>Cosa significa per lo studio.</b> A è sempre «fisica del dispositivo con numeri»: la procedura è meccanica e ripetibile; B richiede di <i>riconoscere la regione di funzionamento</i> e di non confondere ohmico e saturazione; C è sempre lo stesso schema (G<sub>id</sub> → G<sub>loop</sub> → f* → φ<sub>m</sub>): un esercizio in cui si prendono quasi tutti i punti se si ha la procedura.</div>
+
+<div class="blk b-t"><h3>Dieci errori che ricorrono nei temi</h3>
+<ol class="steps">
+<li>Unità: cm vs m (drogaggi in cm⁻³, ε in F/cm).</li>
+<li>Φ<sub>bi</sub>, x<sub>d</sub>: usare il drogaggio sbagliato o il V<sub>D</sub> col segno sbagliato.</li>
+<li>Base corta/lunga scelta senza confrontare W con L = √(Dτ).</li>
+<li>Corrente inversa «&gt; I<sub>s</sub>» ⇒ breakdown (non esiste altra possibilità).</li>
+<li>Fotoni: Φ(0) per area o totale, E<sub>ph</sub> in eV o J, x misurato dalla superficie giusta, q (non 2q).</li>
+<li>MOS: V<sub>ox</sub> ≠ V<sub>G</sub>; V<sub>G</sub>−V<sub>FB</sub> = V<sub>ox</sub> + φ<sub>S</sub>; verificare soglia dopo l'ipotesi.</li>
+<li>MOSFET: regione decisa con V<sub>GD</sub> vs V<sub>T</sub>; verificare l'ipotesi a posteriori; effetto body con V<sub>SB</sub>.</li>
+<li>Tempi di commutazione: R<sub>eq</sub> = V<sub>AA</sub>/I<sub>sat</sub> (per eccesso) e ln(·) giusto; serie = R sommate.</li>
+<li>Operazionale: dimenticare il polo f₀ in G<sub>loop</sub>; confondere G<sub>id</sub> e G<sub>loop</sub>; f* con la pendenza sbagliata.</li>
+<li>C aperto in DC, corto in HF; spegnere V<sub>DD</sub> e i DC nel piccolo segnale.</li>
+</ol></div>
+</section>

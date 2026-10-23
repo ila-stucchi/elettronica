@@ -1,0 +1,82 @@
+<section class="topic" id="t-opamp">
+<header class="thead"><span class="tnum">Cap. 8 · da TdE</span><h2>Operazionali, retroazione, guadagno d'anello e stabilità</h2>
+<p class="lead">Esercizio C di <b>tutti e 7</b> i TdE. Si ripete sempre lo stesso schema: guadagno ideale G<sub>id</sub> → Bode ideale → guadagno d'anello G<sub>loop</sub> → frequenza f* e margine di fase → guadagno reale. La dispensa relativa non è ancora caricata: questa sezione è ricostruita dalle soluzioni.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea circuitale</h3>
+<ul>
+<li><b>Operazionale ideale.</b> Guadagno differenziale infinito, correnti d'ingresso nulle. Con retroazione negativa l'uscita si porta dove serve per rendere <b>V⁺ = V⁻</b> (cortocircuito virtuale). Questo permette di calcolare il guadagno ideale G<sub>id</sub> usando solo le impedenze della rete di retroazione.</li>
+<li><b>Operazionale reale.</b> Guadagno finito A(s) = A₀/(1+s/ω₀): polo dominante f₀ (decine–centinaia di Hz), A₀ ≈ 10⁵, prodotto guadagno-banda GBW = A₀f₀ (es. 16 MHz).</li>
+<li><b>Guadagno d'anello G<sub>loop</sub> = «quanto vale il segnale dopo aver fatto il giro dell'anello».</b> Si apre l'anello, si applica un test all'uscita dell'operazionale e si guarda cosa torna all'ingresso invertente (con il segno). È (meno) A(s) per il trasferimento β(s) della rete di retroazione: G<sub>loop</sub>(0) ≈ −A₀β(0) negativo con retroazione negativa. Più è grande in modulo, più il circuito si comporta come l'ideale: \(G_{reale}=G_{id}\dfrac{-G_{loop}}{1-G_{loop}}=G_{id}\dfrac{T}{1+T}\) con T = −G<sub>loop</sub> = Aβ.</li>
+<li><b>Dove G<sub>reale</sub> ≈ G<sub>id</sub>:</b> finché |G<sub>loop</sub>| ≫ 1. Alla frequenza f* in cui |G<sub>loop</sub>| = 1 la retroazione «finisce»: il guadagno reale si separa dall'ideale, e oltre f* compare un polo aggiuntivo. Per questo f* è la <b>banda a anello chiuso</b>.</li>
+<li><b>Margine di fase φ<sub>m</sub></b> = 180° − (ritardo di fase aggiuntivo di G<sub>loop</sub> a f*). Se φ<sub>m</sub> &gt; 0 il circuito è stabile; &gt; 60° ben smorzato; piccolo (es. 9°) = stabile ma con forte picco in risposta e rischio di instabilità per poli trascurati o tolleranze. Se φ<sub>m</sub> &lt; 0 oscilla.</li>
+<li><b>Come i condensatori entrano:</b> a f = 0 sono aperti, a f → ∞ sono corti. G<sub>id</sub> mostra zeri/poli della rete di retroazione: <i>poli di G<sub>id</sub> = zeri di β</i>, <i>zeri di G<sub>id</sub> = poli di β</i> (per il non invertente G<sub>id</sub> = 1/β).</li>
+<li><b>Circuito non retroazionato</b> (TdE 2-9-2026 C.1): l'uscita dell'operazionale è A·V<sub>in</sub> (saturerebbe!) seguito da un RC: esponenziale verso A·V<sub>in</sub>. Non confondere con il circuito retroazionato del punto C.2, che risponde con τ* ≈ τ/|G<sub>loop</sub>(0)| molto più breve.</li>
+<li><b>Corrente erogata dall'operazionale</b> = corrente nella rete di retroazione/carico; confrontala con il massimo (es. 20 mA nel TdE 25-1-2025).</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td colspan="2" class="sub">Guadagno ideale</td></tr>
+<tr><td>Non invertente: \(G_{id}=1+\dfrac{Z_2}{Z_1}\);&nbsp; invertente: \(G_{id}=-\dfrac{Z_2}{Z_1}\)</td><td>Z<sub>1</sub> verso massa/ingresso, Z<sub>2</sub> di retroazione; \(Z_C=1/sC\)</td></tr>
+<tr><td>\(G_{id}(s)=1+\dfrac{R_2}{R_1+\frac1{sC}}=\dfrac{1+sC(R_1+R_2)}{1+sCR_1}\)</td><td>TdE 6-7-2026: G<sub>id</sub>(0) = 1, G<sub>id</sub>(∞) = 1+R<sub>2</sub>/R<sub>1</sub> = 21; zero a \(\tfrac{1}{2\pi C(R_1+R_2)}=758\) Hz, polo a \(\tfrac1{2\pi CR_1}=15.9\) kHz</td></tr>
+<tr><td>\(G_{id}=\dfrac{sC_1}{1+sC_1R_1}\) (passa-alto non invertente a ingresso su C)</td><td>zero nell'origine e polo a 1/(2πR₁C₁) = 1.6 kHz; guadagno 1 ad alta f</td></tr>
+<tr><td>Trans-impedenza (ingresso in corrente): \(V_{out}=-Z_{fb}I_{in}\) / \(R_2I_{in}\) ad alta f</td><td>DC: tutta in R<sub>1</sub> se C aperto; AC alta f: in R<sub>2</sub>. TdE 13-1-2026: \(V_{out}\simeq2.5\,V+R_2\,I_{in}\)</td></tr>
+<tr><td>\(G_{id}(0)=-\dfrac{R_2}{R_1},\ \ G_{id}(\infty)=-\dfrac{R_2\|R_3}{R_1}\)</td><td>esempio con C in serie a R<sub>3</sub>: \(f_p=\tfrac1{2\pi C(R_2+R_3)}\), \(f_z=\tfrac1{2\pi CR_3}\) (TdE 8-2-2025 C)</td></tr>
+<tr><td>Sovrapposizione: \(V_{out}=V_2\dfrac{R_4}{R_3+R_4}\Big(1+\dfrac{R_2}{R_1}\Big)-V_1\dfrac{R_2}{R_1}\)</td><td>differenziale (TdE 9-6-2026 C); sostituire gli estremi di tolleranza per V<sub>out,max/min</sub></td></tr>
+<tr><td colspan="2" class="sub">Guadagno d'anello e guadagno reale</td></tr>
+<tr><td>\(A(s)=\dfrac{A_0}{1+s/\omega_0},\quad f_0=\dfrac{\omega_0}{2\pi},\quad GBW=A_0f_0\)</td><td>modello dell'operazionale a un polo</td></tr>
+<tr><td>\(G_{loop}(s)=-A(s)\,\beta(s)\),&nbsp; \(\beta=\dfrac{V_{fb}}{V_{out}}\)</td><td>β(s): trasferimento da uscita OA a ingresso invertente (altri generatori spenti). Non invertente \(\beta=Z_1/(Z_1+Z_2)\)</td></tr>
+<tr><td>\(G_{loop}(0)=-A_0\dfrac{R_1}{R_1+R_2}\)</td><td>con rete resistiva di retroazione (R<sub>1</sub> a massa)</td></tr>
+<tr><td>\(G_{reale}=G_{id}\cdot\dfrac{-G_{loop}}{1-G_{loop}}\)</td><td>fattore di correzione \(\dfrac{|G_{loop}|}{1+|G_{loop}|}\)</td></tr>
+<tr><td>Errore relativo: \(\Big|\dfrac{G_{id}-G_{reale}}{G_{id}}\Big|=\dfrac1{|1-G_{loop}|}\approx\dfrac1{1+|G_{loop}(0)|}\)</td><td>Per errore &lt; ε: \(A_0>\Big(\dfrac1\varepsilon-1\Big)\dfrac{R_1+R_2}{R_1}\) (≈ 99 (R<sub>1</sub>+R<sub>2</sub>)/R<sub>1</sub> per 1%)</td></tr>
+<tr><td>Offset: \(V_{out}\simeq(\ldots)\pm V_{OS}\cdot G_{id}^{(V^+)}\)</td><td>l'offset costante è riportato in uscita con il guadagno non invertente in continua (C aperto ⇒ spesso ×1; TdE 13-1-2026)</td></tr>
+<tr><td colspan="2" class="sub">Frequenza f* e margine di fase</td></tr>
+<tr><td>\(|G_{loop}(f^*)|=1\)</td><td>definizione di f*</td></tr>
+<tr><td>Pendenza −20 dB/dec in f*: \(f^*\simeq|G_{loop}(0)|\,f_0\)&nbsp;(= GBW·β(∞) se la rete è piatta)</td><td>es. 1 MHz = 10⁵·R₁/(R₁+R₂)·f₀</td></tr>
+<tr><td>Due poli prima di f* (−40 dB/dec): \(f^*\simeq\sqrt{|G_{loop}(0)|\,f_0\,f_p}\)</td><td>es. 893 kHz (TdE 9-6-2026 C.3)</td></tr>
+<tr><td>\(\varphi_m=180^\circ-\sum\arctan\!\dfrac{f^*}{f_{p,i}}+\sum\arctan\!\dfrac{f^*}{f_{z,i}}\)</td><td>poli (anche f₀) tolgono fase, zeri LHP la aggiungono. Es.: \(180^\circ-\operatorname{atan}\tfrac{f^*}{f_0}-\operatorname{atan}\tfrac{f^*}{f_p}\)</td></tr>
+<tr><td>\(\varphi_m\approx90^\circ\) se a f* conta solo il polo dominante;&nbsp; \(\varphi_m=9.4^\circ\) (TdE 2-9-2026), \(28^\circ\) (TdE 9-6-2026), \(99^\circ\) e \(90^\circ\) (TdE 8-2-2025, 13-1-2026)</td><td>stabile se φ<sub>m</sub> &gt; 0°</td></tr>
+<tr><td colspan="2" class="sub">Risposta temporale (retroazione)</td></tr>
+<tr><td>Salto di ingresso ΔV: \(V_{out}(0^+)=V_{out}(0^-)+G_{id}(\infty)\Delta V\); \(V_{out}(\infty)=V_{out}(0^-)+G_{id}(0)\Delta V\); \(\tau=\)costante del polo</td><td>TdE 6-7-2026 C.2: V<sub>out</sub>(0⁺) = 1 + 21·0.5 = 11.5 V, V<sub>out</sub>(∞) = 1.5 V, τ = CR₁ = 10 µs</td></tr>
+<tr><td>Polo ad anello chiuso: \(\tau^*\simeq\dfrac1{2\pi f^*}\simeq\dfrac{\tau}{|G_{loop}(0)|}\)</td><td>TdE 2-9-2026 C.2: τ = R<sub>u</sub>C = 4 µs → τ* = 4 ns</td></tr>
+<tr><td>Senza retroazione: \(V_{out}(t)=A\,V_{in}\big(1-e^{-t/R_uC}\big)\)</td><td>RC d'uscita dell'OA (TdE 2-9-2026 C.1: 10 V, τ = 4 µs)</td></tr>
+<tr><td>\(I_{OA}=\dfrac{V_{out}}{Z_{fb}}=\dfrac{V_{out}}{R_2+\frac1{sC_2}}\simeq\dfrac{V_{in}}{R_2}\) (ad alta f)</td><td>corrente massima erogata dall'operazionale</td></tr>
+<tr><td>Corrente di ingresso con retroazione: \(I=\dfrac{V_{diff}}{R_d}=\dfrac{V_{out}/A_0}{R_d}\)</td><td>TdE 11-2-2026 C.3: 0.989 mV/R<sub>d</sub> = 98.9 nA</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Operazionale ideale (cortocircuito virtuale)</b> solo con retroazione <i>negativa</i> e |G<sub>loop</sub>| ≫ 1. Deve esistere l'anello (collegamento uscita → ingresso invertente, non al non-invertente).</li>
+<li><b>G<sub>reale</sub> = G<sub>id</sub>·[−G<sub>loop</sub>/(1−G<sub>loop</sub>)]</b> vale in tutto il range di frequenza purché si usi il G<sub>loop</sub> corretto (con tutti i poli e gli zeri). A frequenze molto maggiori di f* il guadagno reale è molto diverso da G<sub>id</sub>.</li>
+<li><b>f* ≈ |G<sub>loop</sub>(0)|f₀</b> solo se a f* il Bode di G<sub>loop</sub> ha pendenza −20 dB/dec e tutte le singolarità di β sono già «intervenute» (o ancora non intervenute). Con altre pendenze usa la relazione corretta (√).</li>
+<li><b>Stabilità</b> richiede φ<sub>m</sub> &gt; 0; calcola la fase <i>a f*</i> usando gli atan, non asintoticamente, quando le frequenze sono vicine (es. f* = 253 kHz con poli a 1.6 kHz e 40 kHz).</li>
+<li><b>Condensatori:</b> aperti in DC, corti a f → ∞; analisi DC (offset, componenti continue) separata dall'analisi a frequenza (sinusoidi, gradini): sovrapposizione degli effetti.</li>
+<li><b>Saturazione dell'uscita e slew-rate</b> non sono modellati: un gradino grande può non essere seguito come previsto.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura-tipo dell'esercizio C (valida per tutti e 7 i TdE)</h3>
+<ol class="steps">
+<li><b>G<sub>id</sub>(s) e Bode ideale.</b> Cortocircuito virtuale V⁺ = V⁻; scrivi G<sub>id</sub> con le impedenze. Valuta G<sub>id</sub>(0) (C aperti) e G<sub>id</sub>(∞) (C corti). Frequenze di polo/zero da τ = RC con le R viste ai capi del condensatore. Disegna le rette con pendenze ±20 dB/dec. Poli e zeri cancellati (stessa frequenza) spariscono.</li>
+<li><b>Calcolo diretto (se serve).</b> Sinusoide ad alta frequenza → C = corto o impedenza trascurabile; componenti continue → C = aperto. Risposta a gradino → V(0⁺) con G(∞), V(∞) con G(0), τ del polo.</li>
+<li><b>Guadagno d'anello.</b> Interrompi tra uscita OA e ingresso invertente; spegni gli altri generatori; calcola β(s) = V⁻/V<sub>out</sub> (nel non invertente con R<sub>1</sub> a massa e R<sub>2</sub>: β = R<sub>1</sub>/(R<sub>1</sub>+R<sub>2</sub>)); G<sub>loop</sub> = −A(s)β(s). Ricava G<sub>loop</sub>(0) e i poli/zeri di β (R<sub>eq</sub>C come sopra: es. C(R<sub>3</sub>+R<sub>1</sub>‖R<sub>2</sub>) → 2.9 MHz) e <b>aggiungi il polo dell'operazionale f₀</b>.</li>
+<li><b>Bode di G<sub>loop</sub></b>: livello a bassa f (|G<sub>loop</sub>(0)|), poi tutti i poli/zeri in ordine crescente di frequenza, compreso f₀. Trova f* dove la retta incontra 0 dB (|G|=1).</li>
+<li><b>Margine di fase.</b> φ<sub>m</sub> = 180° − Σatan(f*/f<sub>p</sub>) + Σatan(f*/f<sub>z</sub>). Commenta: stabile se &gt; 0°, ben smorzato oltre 60°; qui quante «decine di gradi» e che cosa comporta (picco, rischio da poli trascurati).</li>
+<li><b>G<sub>reale</sub>.</b> Stesso andamento di G<sub>id</sub> fino a f*, poi un polo aggiuntivo a f* (se pendenza −20 dB/dec). Se β cambia (es. condensatore che porta β a un valore minore), la banda reale si riduce di conseguenza.</li>
+<li><b>Requisiti di accuratezza:</b> |G<sub>id</sub>(0)−G<sub>reale</sub>(0)|/|G<sub>id</sub>(0)| &lt; ε ⇒ A₀ &gt; (1/ε − 1)(R<sub>1</sub>+R<sub>2</sub>)/R<sub>1</sub> (es. A₀ &gt; 10⁵). «Comportamento ideale fino a f<sub>max</sub>»: imponi |G<sub>loop</sub>(f<sub>max</sub>)| ≥ 1, con C in corto: A₀f₀R₁/((R₁+R₂)f<sub>max</sub>) ≥ 1 (es. A₀ ≥ 2.1·10⁵ a 1 MHz).</li>
+<li><b>Effetto delle tolleranze.</b> A₀ compare solo in G<sub>loop</sub> (effetto minuscolo: 50.00 mV contro 49.9985 mV); le resistenze che compaiono in G<sub>id</sub> (R₃ ±1%) spostano l'uscita molto di più.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Dimenticare il polo dell'operazionale</b> nel diagramma di G<sub>loop</sub> (e quindi sbagliare f* e φ<sub>m</sub>).</li>
+<li><b>Confondere G<sub>id</sub> e G<sub>loop</sub>.</b> G<sub>id</sub> descrive la funzione del circuito (ingresso→uscita); G<sub>loop</sub> descrive la retroazione e decide la stabilità e dove G<sub>reale</sub> diverge da G<sub>id</sub>. A<sub>0</sub> compare <i>solo</i> in G<sub>loop</sub>.</li>
+<li><b>Segno di G<sub>loop</sub>(0):</b> è negativo (retroazione negativa); −G<sub>loop</sub>/(1−G<sub>loop</sub>) è &lt; 1. Con la convenzione T = −G<sub>loop</sub> la correzione è T/(1+T).</li>
+<li><b>f* con pendenza sbagliata:</b> se prima di f* ci sono due poli (−40 dB/dec) non usare |G<sub>loop</sub>(0)|f₀ ma la radice. Verifica graficamente che f* sia davvero dove |G|=1.</li>
+<li><b>Condensatore a f* già corto o aperto?</b> Per il calcolo di G<sub>loop</sub>(1 MHz) il condensatore è un corto se tutte le singolarità sono già intervenute (TdE 6-7-2026): G<sub>loop</sub> ≈ A₀f₀/f · R₁/(R₁+R₂).</li>
+<li><b>Modulo di G<sub>reale</sub> tra i due poli</b>: nel trans-impedenza è ≈ R₂ (100 kΩ) fra 1.6 kHz e 1 MHz.</li>
+<li><b>Gradino: scegliere il valore iniziale sbagliato.</b> Subito dopo il salto la tensione ai capi di C non cambia ⇒ usi G(∞); poi evolve verso G(0).</li>
+<li><b>Operazionale non retroazionato</b> (stadio senza anello): <i>non</i> si applica G<sub>id</sub>; l'uscita è A·V<sub>in</sub> (qui satura ma il testo ne usa il valore ideale).</li>
+<li><b>Fase:</b> a f* la fase di G<sub>loop</sub> va riferita a −180° di partenza: φ<sub>m</sub> = 180° meno i ritardi aggiuntivi, non la fase assoluta.</li>
+<li><b>Correnti dell'OA:</b> con C₂ in serie a R₂ a 10 MHz l'impedenza di C₂ è trascurabile ⇒ corrente = V/R₂ (e non V/(R₂+1/sC₂) in continua).</li>
+</ul></div>
+</section>

@@ -1,0 +1,94 @@
+<section class="topic" id="t-cmos">
+<header class="thead"><span class="tnum">Cap. 6 · da TdE</span><h2>Circuiti digitali CMOS: porte, tempi e potenza</h2>
+<p class="lead">Esercizio B di 5 TdE su 7: inverter e porte NAND/NOR/XOR, soglia logica, tempi di commutazione, potenza dinamica, latch. La dispensa corrispondente non è ancora caricata: qui trovi la teoria usata nelle soluzioni.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea circuitale</h3>
+<ul>
+<li><b>Livelli logici.</b> 0 logico = 0 V, 1 logico = V<sub>AA</sub> (es. 1.8 V, 1.35 V, 5 V). L'informazione è «sopra o sotto la soglia».</li>
+<li><b>Inverter CMOS.</b> Un pMOS verso V<sub>AA</sub> (pull-up) e un nMOS verso massa (pull-down), con gate comuni all'ingresso. Ingresso alto → nMOS acceso, pMOS spento → uscita 0 V. Ingresso basso → il contrario → uscita V<sub>AA</sub>. In regime statico <b>non c'è mai un cammino diretto V<sub>AA</sub>–massa</b>: potenza statica nulla (a parte perdite). L'uscita è sempre «forzata» da un lato: l'inverter dà tensioni piene e impedenza bassa.</li>
+<li><b>Porte complesse come reti di interruttori.</b> Trattando i MOS come interruttori ideali: nMOS conduce se il gate è alto, pMOS se è basso. <b>nMOS in serie = AND</b> (conduce solo se tutti alti), <b>nMOS in parallelo = OR</b>. La rete di pull-up pMOS è la <i>duale</i> (serie ↔ parallelo). L'uscita è bassa se esiste un cammino nMOS attivo, alta se esiste un cammino pMOS attivo. Esempi dei TdE: NOR (nMOS paralleli, pMOS in serie): <i>OUT = \(\overline{A+B}\)</i>; XOR/XNOR; \(Y=\overline{A+B}\), \(O=A\overline B+\overline AB\).</li>
+<li><b>Soglia logica V<sub>TH</sub>.</b> Tensione d'ingresso per cui V<sub>out</sub> = V<sub>in</sub>: in quel punto entrambi i transistori sono in <b>saturazione</b> (V<sub>GD</sub> = 0). Se i due transistori sono simmetrici (k<sub>n</sub> = k<sub>p</sub>) V<sub>TH</sub> ≈ V<sub>AA</sub>/2. Un secondo inverter con tutte le k scalate dello stesso fattore ha la <i>stessa</i> V<sub>TH</sub> (ma più corrente e più capacità).</li>
+<li><b>Perché le commutazioni richiedono tempo.</b> Il carico è una capacità C<sub>L</sub> (soprattutto le capacità di gate C<sub>ox</sub>WL delle porte pilotate). Il transistore la carica/scarica con la sua corrente: poiché è non lineare lo si approssima con una <b>resistenza equivalente</b> R<sub>eq</sub> = V<sub>AA</sub>/I<sub>D,sat</sub> (stima «per eccesso», perché la corrente reale cala poco a poco) e la tensione evolve come un RC.</li>
+<li><b>Il pMOS è più lento dell'nMOS</b> (mobilità minore); più transistori in <b>serie</b> sommano le resistenze (k<sub>eq</sub> = k/n). Nelle porte la transizione più lenta è quella attraverso i pMOS in serie (NOR) o gli nMOS in serie (NAND).</li>
+<li><b>Potenza.</b> Statica ≈ 0; dinamica: ogni volta che una capacità C si carica da 0 a V<sub>AA</sub> la sorgente eroga l'energia C V<sub>AA</sub>² (metà immagazzinata nella capacità, metà dissipata nel pMOS; la scarica dissipa l'energia immagazzinata nell'nMOS). Ripetuta f volte al secondo ⇒ P<sub>d</sub> = C V<sub>AA</sub>² f. Se i tempi di commutazione sono ≪ periodo, la potenza di «cross-conduction» (entrambi accesi durante la transizione) si trascura.</li>
+<li><b>Impulsi più corti del tempo di commutazione</b> non fanno commutare l'uscita: la capacità si carica solo parzialmente a corrente costante I<sub>sat</sub>: ΔV = I<sub>sat</sub>·Δt/C<sub>L</sub> (TdE 8-2-2025 B.3: 219 mV; TdE 11-2-2026 B.3: 405 mV).</li>
+<li><b>Latch e memoria.</b> Due porte NOR/NAND incrociate ricordano il valore precedente quando S = R = 0. Tipicamente appaiono nMOS «pass-transistor»: ricorda che S e D sono simmetrici (si decidono dai potenziali).</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> È come si costruisce ogni processore e memoria: miliardi di porte CMOS. Le grandezze che decidono un progetto sono <b>velocità</b> (R<sub>eq</sub>C<sub>L</sub>) e <b>consumo</b> (C V<sub>AA</sub>² f): ridurre V<sub>AA</sub> riduce il consumo col quadrato.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(k_n(V_{TH}-V_{Tn})^2=k_p(V_{AA}-V_{TH}-|V_{Tp}|)^2\)<br>\(V_{TH}=\dfrac{V_{Tn}+\sqrt{k_p/k_n}\,(V_{AA}-|V_{Tp}|)}{1+\sqrt{k_p/k_n}}\)</td><td>soglia logica dell'inverter (entrambi saturi). Se \(k_n=k_p\): \(V_{TH}=\dfrac{V_{AA}+V_{Tn}-|V_{Tp}|}{2}\) (es. 0.85 V per V<sub>AA</sub> = 1.8 V)</td></tr>
+<tr><td>\(R_{eq}=\dfrac{V_{DS,iniz}}{I_{D,iniz}}\); \(R_{eq,n}=\dfrac{V_{AA}}{I_{Dn,sat}}=\dfrac{V_{AA}}{k_n(V_{AA}-V_T)^2}\)</td><td>stima per eccesso (corrente iniziale massima). Se parte a cavallo ohmico/saturazione: \(R_{eq}=\dfrac{V_{AA}-V_T}{k(V_{AA}-V_T)^2}=\dfrac1{k(V_{AA}-V_T)}\)</td></tr>
+<tr><td>Serie di n transistori uguali: \(k_{eq}=\dfrac{k}{n}\), \(R_{eq}\to n\,R_{eq}\)</td><td>es. due nMOS in serie: \(k_{eq}=k/2\)</td></tr>
+<tr><td>\(\tau=R_{eq}C_L\)</td><td>costante di tempo di commutazione</td></tr>
+<tr><td>Scarica da V<sub>AA</sub> a V: \(V(t)=V_{AA}e^{-t/\tau}\Rightarrow t=\tau\ln\dfrac{V_{AA}}{V}\)</td><td>commutazione definita alla soglia: \(t_{c}=R_{eq,n}C_L\ln\dfrac{V_{AA}}{V_{TH}}\) (nMOS)</td></tr>
+<tr><td>Carica verso V<sub>AA</sub>: \(t_c=R_{eq,p}C_L\ln\dfrac{V_{AA}}{V_{AA}-V_{TH}}\) (pMOS);&nbsp; al 50%: \(t_{50}=\tau\ln2\)</td><td>tempo per portare l'uscita a V<sub>TH</sub> partendo da 0</td></tr>
+<tr><td>\(t_{tot}=t_{c1}+t_{c2}\)</td><td>ritardo di due stadi in cascata</td></tr>
+<tr><td>\(C_L=C_{ox}\sum(W_n+W_p)L\)</td><td>carico di un inverter = capacità di gate dei transistori pilotati (es. 55 fF)</td></tr>
+<tr><td>\(P_d=C_L\,V_{AA}^2\,f\)</td><td>potenza dinamica per un nodo con una commutazione completa V<sub>AA</sub>→0→V<sub>AA</sub> a frequenza f [W]</td></tr>
+<tr><td>\(P_d=\sum_i C_i\,V_{AA}\,\Delta V_i\,f_i\)</td><td>caso generale (escursione ΔV<sub>i</sub> ≠ V<sub>AA</sub>, es. 1.35 V su V<sub>AA</sub> = 1.8 V); conta ogni <i>carica</i> del nodo: tensione di alimentazione × carica spostata</td></tr>
+<tr><td>\(P_{AA}\simeq(C_{Gn}+C_{Gp})fV_{AA}^2+C_LfV_{AA}^2\)</td><td>un inverter: carica le capacità di gate (ingresso) e di carico (uscita)</td></tr>
+<tr><td>\(\Delta V=\dfrac{I_{sat}\,\Delta t}{C_L}\)</td><td>impulso breve: carica parziale a corrente costante (verifica che ΔV &lt; |V<sub>T</sub>| per l'ipotesi di saturo)</td></tr>
+<tr><td>\(P_{stat}=V_{AA}\,I_{DD}\)</td><td>nei casi in cui due transistori sono accesi insieme (es. 8.8 mW per V<sub>AA</sub> = 5 V e I = 1.76 mA)</td></tr>
+<tr><td>Ritardo di spegnimento per gate RC: \(\Delta t=RC\ln\dfrac{V_{x,0}}{V_T}\)</td><td>il nMOS resta spento finché V<sub>x</sub> (che scarica con RC) &gt; V<sub>T</sub> (TdE 11-2-2026 B.2: 1.7 µs)</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Interruttori ideali</b> solo per capire la funzione logica; per correnti/tensioni vere serve il modello a regioni.</li>
+<li><b>R<sub>eq</sub> = V<sub>AA</sub>/I<sub>sat</sub></b> sovrastima il tempo (è un limite superiore) perché la corrente reale decresce man mano che V<sub>DS</sub> scende. Va usata dove l'esame dice «stima per eccesso».</li>
+<li><b>Potenza dinamica</b>: tempi di commutazione ≪ periodo del segnale, rapporto tra periodo e tempo di commutazione grande; nessuna cross-conduction.</li>
+<li><b>Impulso breve</b>: corrente costante ⇒ transistore saturo per tutto l'intervallo (V<sub>out</sub> &lt; |V<sub>T</sub>|).</li>
+<li>Stati statici: ogni transistore è <b>spento</b> (V<sub>GS</sub> &lt; V<sub>T</sub>), <b>ohmico</b> o <b>saturo</b>; se due transistori in serie sono accesi, uno è ohmico e l'altro saturo (quello meno conduttivo è saturo: tipicamente il pMOS). Verifica sempre l'ipotesi a posteriori.</li>
+<li>Un nodo con tutti i transistori spenti è in <b>alta impedenza</b>: mantiene la tensione storica (memoria capacitiva) e non è definito.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo (dai TdE)</h3>
+<h4>A) Funzione logica di una rete CMOS (TdE 13-1-2026 B.1; 2-9-2026 B.1; 25-1-2025 B.1)</h4>
+<ol class="steps">
+<li>Pull-down (nMOS): scrivi quando esiste un cammino da OUT a massa (serie = AND, parallelo = OR). OUT = 0 se quel cammino conduce.</li>
+<li>Verifica che il pull-up sia il duale (se lo è, OUT = NOT della funzione del pull-down).</li>
+<li>Costruisci la tabella di verità; nelle porte a latch segnala gli stati «memoria» (nodo flottante).</li>
+</ol>
+<h4>B) Soglia logica e tempo di commutazione (TdE 8-2-2025 B.1–B.2)</h4>
+<ol class="steps">
+<li>V<sub>TH</sub> imponendo l'uguaglianza delle correnti di saturazione; con k<sub>n</sub> = k<sub>p</sub> ⇒ V<sub>TH</sub> = (V<sub>AA</sub>+V<sub>Tn</sub>−|V<sub>Tp</sub>|)/2.</li>
+<li>C<sub>L</sub> = C<sub>ox</sub>(W<sub>n2</sub>+W<sub>p2</sub>)L (capacità d'ingresso dello stadio seguente).</li>
+<li>R<sub>eq,n</sub> = V<sub>AA</sub>/I<sub>Dn,sat</sub> e R<sub>eq,p</sub> = V<sub>AA</sub>/I<sub>Dp,sat</sub> con I<sub>sat</sub> = k(V<sub>AA</sub>−V<sub>T</sub>)².</li>
+<li>t<sub>c</sub> = R<sub>eq</sub>C<sub>L</sub>·ln(·) come sopra; il tempo complessivo è la somma dei due stadi (qui 79 ps + 5.7 ns ≈ 5.8 ns).</li>
+<li>Confronto con la durata dell'impulso: se t<sub>c</sub> &lt; durata l'uscita commuta completamente; se no, ΔV = I<sub>sat</sub>Δt/C<sub>L</sub>.</li>
+<li>Corrente massima dall'alimentazione = corrente di saturazione dei transistori che conducono (il più grande tra quelli coinvolti).</li>
+</ol>
+<h4>C) Analisi statica di una cella (TdE 11-2-2026 B.1; 2-9-2026 B.2)</h4>
+<ol class="steps">
+<li>Per ogni combinazione di ingressi, stato di ciascun transistore: confronta V<sub>GS</sub> (o V<sub>SG</sub>) con la soglia.</li>
+<li>Se è acceso un solo transistore: V<sub>out</sub> è V<sub>AA</sub> o 0 (o alta impedenza se tutti spenti). Se sono accesi nMOS e pMOS: <b>assumi nMOS ohmico, pMOS saturo</b>; I<sub>Dp,sat</sub> = k<sub>p</sub>(V<sub>SG</sub>−|V<sub>Tp</sub>|)², R<sub>ch,n</sub> = 1/[2k<sub>n</sub>(V<sub>GS</sub>−V<sub>T</sub>)]; V<sub>out</sub> = I<sub>Dp,sat</sub>R<sub>ch,n</sub>; verifica V<sub>out</sub> &lt; V<sub>GS</sub>−V<sub>T</sub>. Potenza P = V<sub>AA</sub>I.</li>
+<li>Con R in serie al source (TdE 2-9-2026 B.2, AB = 00→10): V<sub>s</sub> = R·I<sub>d</sub> e I<sub>d</sub> = k(V<sub>AA</sub>−V<sub>s</sub>−V<sub>T</sub>)² ⇒ equazione di 2° grado per V<sub>s</sub> (radice con V<sub>GS</sub> &gt; V<sub>T</sub>), transistore saturo perché V<sub>GD</sub> = 0. Se invece il drain è più basso del gate di meno di V<sub>T</sub> ipotizza saturo e verifica con V<sub>D</sub> = V<sub>AA</sub>−I<sub>d</sub>R.</li>
+</ol>
+<h4>D) Transitorio con gate RC (TdE 11-2-2026 B.2)</h4>
+<ol class="steps">
+<li>Cosa succede subito dopo il fronte: V<sub>x</sub> salta (se pilotata da un transistore) e poi scarica con RC.</li>
+<li>Δt di spegnimento dell'nMOS = RC ln(V<sub>x,0</sub>/V<sub>T</sub>); nel frattempo l'uscita si carica con τ ≈ R<sub>eq,p</sub>C<sub>L</sub>; dopo Δt l'nMOS riporta l'uscita al livello basso con τ₂ = (R<sub>eq,n</sub>‖R<sub>ch,p</sub>)C.</li>
+</ol>
+<h4>E) Potenza media su forme d'onda (TdE 25-1-2025 B.3; 13-1-2026 B.3; 2-9-2026 B.3)</h4>
+<ol class="steps">
+<li>Disegna le forme d'onda su un periodo e conta, per ogni nodo, quante <i>cariche complete</i> (0→V<sub>AA</sub>) avvengono (es.: S due volte in 120 µs con escursione 1.35 V, R una volta, Q una volta con 1.8 V).</li>
+<li>P<sub>d</sub> = Σ V<sub>AA</sub>·C<sub>i</sub>·ΔV<sub>i</sub>/T. Con una sola scarica/carica per periodo e commutazione completa: C<sub>L</sub>f<sub>out</sub>V<sub>AA</sub>².</li>
+<li>Trascura cross-conduzione se i tempi di commutazione sono ≪ T (verificalo con R<sub>eq</sub>C).</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Usare ln 2 al posto di ln(V<sub>AA</sub>/V<sub>TH</sub>)</b> (e viceversa): dipende da dove definisci la «commutazione». Se il testo dice «a metà» o V<sub>AA</sub>/2 usa quello; se «fino alla soglia logica» usa V<sub>TH</sub>.</li>
+<li><b>Dimenticare la differenza di escursione</b> (1.35 V vs 1.8 V) nel calcolo della potenza dinamica: l'energia è V<sub>AA</sub>·C·ΔV, non C V<sub>AA</sub>².</li>
+<li><b>Scordare di sommare le capacità di gate dell'ingresso</b> (C<sub>Gn</sub>+C<sub>Gp</sub>) alla potenza dell'inverter, o di includerle nel carico del driver precedente.</li>
+<li><b>Serie di transistori</b>: la R equivalente si somma (n·R); parallelo: la corrente si somma.</li>
+<li><b>Transitorio dominato dal pMOS</b>: il pMOS è circa 2–3× più lento dell'nMOS per le mobilità; nel TdE la R<sub>eq,p</sub> = 444 kΩ contro 1.9 kΩ dell'altro stadio (k molto diverse): la commutazione lenta decide il ritardo e se l'impulso passa.</li>
+<li><b>Dimenticare che un nodo flottante tiene il valore</b> («stato di memoria»): in tabella di verità non scrivere 0 o 1.</li>
+<li><b>Ipotesi di saturazione senza verifica</b>: controlla V<sub>GD</sub> &lt; V<sub>T</sub> (nMOS) o V<sub>DG</sub> &lt; |V<sub>T</sub>| (pMOS). Per V<sub>out,max</sub> = I<sub>sat</sub>Δt/C<sub>L</sub> verifica V<sub>out</sub> &lt; |V<sub>Tp</sub>| (nel TdE 219 mV &lt; |V<sub>Tp</sub>| ✓).</li>
+<li><b>Leggere male quale transistore commuta</b> (TdE 25-1-2025 B.2: commuta solo S, attraverso un nMOS; la transizione 1.35 V → 0 V parte da V<sub>DS</sub> = V<sub>AA</sub>−V<sub>T</sub>, a cavallo ohmico/saturazione).</li>
+</ul></div>
+</section>

@@ -1,0 +1,160 @@
+<section class="topic" id="t-app">
+<header class="thead"><span class="tnum">Cap. 4</span><h2>Applicazioni della giunzione pn</h2>
+<p class="lead">Diodo come componente (taglio, raddrizzatore, Zener), sensore di temperatura, fotodiodo (anche p-i-n) e cella fotovoltaica. Il fotodiodo compare in 3 TdE su 7 (25-1-2025, 11-2-2026, e in Esercitazione 5).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Il diodo è una valvola a due stati.</b> Sotto ≈ 0.7 V non passa (quasi) niente, a 0.7 V può passare qualsiasi corrente perché l'esponenziale è così ripido che V<sub>D</sub> si muove di pochi mV (ogni 25 mV la corrente cambia di e ≈ 2.7×; ogni 60 mV di 10×). Per l'analisi a mano si usa il modello <b>a soglia</b>: spento (I = 0, V<sub>D</sub> &lt; 0.7 V) o acceso (V<sub>D</sub> = 0.7 V, I &gt; 0).</li>
+<li><b>Circuito di taglio.</b> Resistenza + diodo verso massa: l'uscita non può scendere sotto −0.7 V (il diodo si accende e blocca la tensione). Serve a proteggere un nodo dalle escursioni. Attenzione a due limiti: il diodo deve sopportare la corrente di picco (P = 0.7 V · I) e la tensione inversa massima (V<sub>BD</sub> &gt; picco del segnale).</li>
+<li><b>Alimentatore stabilizzato.</b> Trasformatore (riduce 325 V di picco a ≈ 15 V) → <b>raddrizzatore a un diodo</b> (taglia la semionda negativa, sottrae 0.7 V) → <b>condensatore di filtro</b> (il condensatore mantiene la tensione di picco; quando il diodo si spegne scarica sul carico con τ = RC) → <b>Zener</b> (a valle, in breakdown, fissa la tensione V<sub>Z</sub> e riduce il ripple di un fattore ≈ r<sub>z</sub>/(r<sub>z</sub>+R)). Più grande C o R, minore l'ondulazione (ripple ≈ V<sub>max</sub> T/RC). Il diodo con C vede in inversa fino a ≈ 2 V<sub>picco</sub>.</li>
+<li><b>Zener.</b> Diodo progettato per lavorare in breakdown a una V<sub>Z</sub> stabile; in quella regione si comporta come un generatore di tensione V<sub>Z</sub> con piccola resistenza serie r<sub>z</sub> (decine di Ω) a patto che I<sub>Z</sub> &gt; I<sub>min</sub> e che V<sub>Z</sub>·I<sub>Z</sub> non superi la potenza dissipabile.</li>
+<li><b>Sensore di temperatura.</b> A corrente costante V<sub>D</sub> scende di ≈ 2 mV/K, ma dipende da I<sub>s</sub> (processo, geometria). Con <b>due diodi uguali e correnti I₁ = N·I₂</b> la differenza ΔV = (kT/q) ln N è <i>proporzionale a T</i> e non dipende da I<sub>s</sub>: sensore lineare e accurato.</li>
+<li><b>Fotone → coppia e-lacuna.</b> Un fotone di energia E<sub>ph</sub> = hc/λ &gt; E<sub>g</sub> (λ &lt; 1.1 µm nel Si) rompe un legame e crea una coppia; l'energia in eccesso va in calore. Il flusso di fotoni decade esponenzialmente (<b>Lambert-Beer</b>): Φ(x) = Φ(0) e<sup>−x/L<sub>A</sub></sup>. Senza campo, la coppia ricombina senza corrente; <b>in presenza di campo</b> elettrone e lacuna sono separati (deriva) e danno corrente.</li>
+<li><b>Fotodiodo (inversa).</b> Dove c'è il campo (la ZCS) ogni fotone assorbito dà <i>esattamente una carica q</i> in corrente (non due: l'elettrone e la lacuna fanno ciascuno solo metà del percorso). I fotoni assorbiti fuori dalla ZCS e a più di una lunghezza di diffusione da essa vanno persi; quelli entro ≈ L<sub>diff</sub> contribuiscono in parte (coefficiente &lt; 1). Si lavora in <b>inversa</b> per: ZCS più larga (più fotoni raccolti), campo alto (risposta veloce), C<sub>j</sub> piccola (RC piccolo), niente corrente diretta spuria.</li>
+<li><b>Fotodiodo p-i-n.</b> Una zona intrinseca lunga W<sub>i</sub> (decine/centinaia di µm) tra p⁺ e n⁺ allunga la regione con campo (costante) dove si assorbe la luce nel vicino infrarosso (L<sub>A</sub> grande), tenendo basse le resistenze delle zone drogate. Svantaggio: serve tensione inversa alta per un campo sufficiente; il tempo di risposta è dominato dal <b>tempo di transito</b> t = W<sub>i</sub>/(μE), non da RC.</li>
+<li><b>Cella solare.</b> Stessa giunzione, ma senza generatore: le cariche fotogenerate si accumulano (p positivo, n negativo) creando una tensione V<sub>D</sub> &gt; 0 che riduce la barriera e fa passare una corrente di diffusione che compensa I<sub>ph</sub>. In circuito aperto I<sub>diff</sub> = I<sub>ph</sub> ⇒ V<sub>oc</sub> = V<sub>th</sub> ln(1+I<sub>ph</sub>/I<sub>s</sub>); in corto-circuito I<sub>sc</sub> = −I<sub>ph</sub>. La curva I-V si trasla verso il basso di I<sub>ph</sub>; nel quarto quadrante il dispositivo <i>eroga</i> potenza. Efficienza massima ≈ 28% per il Si (perdite: fotoni sotto-gap e termalizzazione dell'energia in eccesso).</li>
+</ul></div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td colspan="2" class="sub">Diodo e circuiti</td></tr>
+<tr><td>\(I_D=I_s\big(e^{V_D/V_{th}}-1\big)\)</td><td>I<sub>s</sub> tipicamente 1 fA – 1 nA</td></tr>
+<tr><td>Modello a soglia: spento \(I=0,\ V_D&lt;0.7\ \text{V}\); acceso \(V_D=0.7\ \text{V},\ I&gt;0\)</td><td>tensione di innesco 0.7 V se non diversamente indicato</td></tr>
+<tr><td>Taglio: \(I=\dfrac{V_{out}-V_{in}}{R}=\dfrac{-0.7-V_{in}}{R}\)</td><td>corrente nel diodo quando conduce</td></tr>
+<tr><td>\(V_{rms}=\dfrac{V_p}{\sqrt2},\quad V_p=\sqrt2\cdot230=325\ \text{V}\)</td><td>valore efficace e di picco della rete (50 Hz, T = 20 ms)</td></tr>
+<tr><td>\(V_R(t)=V_{max}\,e^{-(t-t_0)/RC}\),&nbsp; ripple \(\Delta V\simeq V_{max}\dfrac{T}{RC}\)</td><td>scarica di C sul carico R; T = periodo (20 ms a una semionda)</td></tr>
+<tr><td>Zener: \(V\simeq V_Z+r_zI_Z\),&nbsp; ripple a valle \(\simeq\dfrac{r_z}{r_z+R_{DZ}}\Delta V\)</td><td>r<sub>z</sub> resistenza dinamica; R<sub>DZ</sub> resistenza in serie allo Zener</td></tr>
+<tr><td>Sensore: \(V_{out}=V_{D1}-V_{D2}=\dfrac{kT}{q}\ln\dfrac{I_1}{I_2}=\dfrac{kT}{q}\ln N\)</td><td>I₁ = N·I₂; proporzionale a T, indipendente da I<sub>s</sub></td></tr>
+<tr><td colspan="2" class="sub">Luce</td></tr>
+<tr><td>\(E_{ph}=h\nu=\dfrac{hc}{\lambda}\),&nbsp; \(\lambda[\mu m]\simeq\dfrac{1.24}{E_{ph}[eV]}\);&nbsp; assorbimento se \(E_{ph}&gt;E_g\Rightarrow\lambda&lt;1.1\ \mu m\)</td><td>E<sub>ph</sub> [eV o J: 1 eV = 1.6·10⁻¹⁹ J]</td></tr>
+<tr><td>\(\Phi(0)=\dfrac{P_{ott}}{E_{ph}\,A}\) &nbsp;(flusso per unità di area)<br>\(\varphi_{ph}=\dfrac{P_{ott}}{E_{ph}}\) &nbsp;(fotoni/s totali)</td><td>Φ [fotoni/(s·cm²)]; P<sub>ott</sub> [W]; <b>attenzione</b>: φ<sub>ph</sub> già in fotoni/s nell'Esercitazione 5</td></tr>
+<tr><td>\(\Phi(x)=\Phi(0)\,e^{-x/L_A},\quad L_A=1/\alpha\)</td><td>Lambert-Beer; α [cm⁻¹] coefficiente di assorbimento, L<sub>A</sub> lunghezza di assorbimento</td></tr>
+<tr><td>\(I_{ph}=q\,A\big[\Phi(x_1)-\Phi(x_2)\big]=q\,\varphi_{ph}\big(e^{-x_1/L_A}-e^{-x_2/L_A}\big)\)</td><td>fotocorrente dalla regione con campo tra x<sub>1</sub> e x<sub>2</sub> (misurate dalla superficie illuminata, <i>con A solo se Φ per unità di area</i>)</td></tr>
+<tr><td>Stima migliore: \(A_{ass}\approx W\,(x_d+\tfrac{L_n}{2}+\tfrac{L_p}{2})\)</td><td>metà dei portatori generati a ≈ L dalla ZCS vi entra (TdE 11-2-2026)</td></tr>
+<tr><td>Fotodiodo: \(I=-(I_{s}+I_{gen})-I_{ph}\) (inversa), con \(I_{buio}\approx I_s\) se G-R trascurabile</td><td>I<sub>buio</sub> è circa fA, I<sub>ph</sub> μA: rapporto 10⁹</td></tr>
+<tr><td>p-i-n: \(E\simeq\dfrac{\Phi_{bi}+V_R}{W_i}\), &nbsp;\(C=\epsilon_{Si}\dfrac{A}{W_i}\)</td><td>zone di carica nelle regioni drogate trascurabili: verifica con \(x_{dn}=\dfrac{\epsilon E}{qN_D}\)</td></tr>
+<tr><td>p-i-n all'equilibrio: \(\Phi_{bi}=\dfrac{qN\,x}{\epsilon}\,(W_i+x)\) per \(N_A=N_D=N\) e \(x=x_{dn}=x_{dp}\)</td><td>da qui x e la caduta su W<sub>i</sub>: \(V_i=E\,W_i\) (Esercitazione 5 es. 1)</td></tr>
+<tr><td>Tempo di risposta: \(t_{tr}=\dfrac{W_i}{\mu E}=\dfrac{W_i}{v}\), &nbsp;\(\tau_{RC}=R_{tot}C\)</td><td>R<sub>tot</sub> = R delle zone drogate quasi neutre in serie; il più lento limita la banda</td></tr>
+<tr><td>Ottimo di W<sub>i</sub>: \(W_i^{*}=L_A\ln\!\Big(\dfrac{2\tau\,\varphi_{ph}}{L_A\,A\,n_i}\Big)-W_n\)</td><td>massimizza I<sub>ph</sub>−I<sub>buio</sub> con \(I_{buio}\approx\dfrac{qAn_iW_i}{2\tau}\) lineare in W<sub>i</sub> (Esercitazione 5 es. 3; va verificato che sia ≤ W<sub>i</sub> disponibile)</td></tr>
+<tr><td colspan="2" class="sub">Cella fotovoltaica</td></tr>
+<tr><td>\(I_D=I_s\big(e^{V_D/V_{th}}-1\big)-I_{ph}\)</td><td>corrente totale (verso p→n); I<sub>ph</sub> sottrae</td></tr>
+<tr><td>\(V_{oc}=V_{th}\ln\!\Big(1+\dfrac{I_{ph}}{I_s}\Big),\qquad I_{sc}=-I_{ph}\)</td><td>circuito aperto / corto circuito</td></tr>
+<tr><td>\(V_D=V_{th}\ln\!\Big(1+\dfrac{I_D+I_{ph}}{I_s}\Big)\)</td><td>cella con generatore di corrente (Es. 5, punto 4: \(I_D=-I_{gen}\))</td></tr>
+<tr><td>\(P=V_D\cdot I_{gen},\qquad \eta=\dfrac{P}{P_{ott}}=\dfrac{V_D\,I_{gen}}{\varphi_{ph}E_{ph}}\)</td><td>potenza scambiata col generatore e rendimento di conversione</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Modello a soglia (0.7 V)</b>: ok per scegliere lo stato del diodo e per correnti «normali»; non per calcoli di precisione (usa l'esponenziale con I<sub>s</sub>). In inversa l'errore è ≈ R·I<sub>s</sub> (pV).</li>
+<li><b>Fotodiodo semplice</b>: L<sub>diff</sub> ≪ x<sub>d</sub> per trascurare i portatori generati vicino alla ZCS; ricombinazione in ZCS trascurabile; riflessione superficiale trascurata (se il testo non la dà). I fotoni sono assorbiti solo se E<sub>ph</sub> &gt; E<sub>g</sub>.</li>
+<li><b>Lambert-Beer</b>: α uniforme (indipendente da drogaggio e giunzioni); x misurato dalla superficie illuminata. Se illumini dal lato n la ZCS è a distanza W<sub>n</sub>−x<sub>dn</sub> … W<sub>n</sub>+x<sub>dp</sub>.</li>
+<li><b>p-i-n</b>: W<sub>i</sub> ≫ x<sub>dn</sub>, x<sub>dp</sub>; campo costante; V<sub>R</sub> ≫ Φ<sub>bi</sub> per E ≈ V<sub>R</sub>/W<sub>i</sub>; ricombinazione trascurabile ⇒ I<sub>buio</sub> = I<sub>s</sub> di base corta (fA o meno).</li>
+<li><b>Cella solare</b>: bassa iniezione, I<sub>ph</sub> costante rispetto a V<sub>D</sub> (a rigore dipende da x<sub>d</sub>); V<sub>oc</sub> sempre &lt; Φ<sub>bi</sub> (≈ 0.5–0.7 V nel Si).</li>
+<li><b>Zener</b>: I<sub>Z</sub> &gt; I<sub>min</sub> e P &lt; P<sub>max</sub>; V<sub>A</sub> deve rimanere sempre &gt; V<sub>Z</sub>.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure</h3>
+<h4>A) Circuito con diodi (modello a soglia)</h4>
+<ol class="steps">
+<li><b>Ipotizza</b> lo stato di ogni diodo (acceso/spento).</li>
+<li>Acceso → sostituisci con generatore da 0.7 V e calcola la corrente (deve essere &gt; 0). Spento → circuito aperto e calcola V<sub>D</sub> (deve essere &lt; 0.7 V).</li>
+<li>Se l'ipotesi è contraddetta cambia stato. Con più diodi prova prima quello «più acceso» (anodo molto più alto del catodo).</li>
+<li>Controlla corrente di picco e V<sub>inversa</sub> max del diodo (&lt; V<sub>BD</sub>); con C di filtro l'inversa è ≈ 2·V<sub>picco</sub>.</li>
+</ol>
+<h4>B) Fotodiodo semplice (TdE 11-2-2026 A.3)</h4>
+<ol class="steps">
+<li>Calcola φ<sub>ph</sub> = P<sub>ott</sub>/E<sub>ph</sub> (E<sub>ph</sub> in J!) o Φ(0) = Iott/Eph (Iott in W/cm²).</li>
+<li>Posiziona la ZCS: x<sub>1</sub> = profondità del bordo ZCS dalla superficie, x<sub>2</sub> = x<sub>1</sub> + x<sub>d</sub> (con x<sub>d</sub> dalla V applicata). I fotoni assorbiti: Φ(x₁) − Φ(x₂).</li>
+<li>I<sub>ph</sub> = q·A·Φ<sub>ass</sub>. Seconda approssimazione: allarga la zona utile a ± L/2.</li>
+<li>Corrente totale in cella aperta/fotodiodo: I = I<sub>D</sub> − I<sub>ph</sub> (stesso verso). Con V<sub>D</sub> = 150 mV (diretta) il diodo dà I<sub>D</sub> = 4.3 pA e I<sub>ph</sub> = 4.6 pA ⇒ I ≈ −0.3 pA: la fotocorrente è <i>opposta</i> alla corrente di diretta.</li>
+<li>Per la corrente di buio: I<sub>s</sub> (base lunga o corta) con i dati di drogaggio.</li>
+</ol>
+<h4>C) p-i-n (TdE 25-1-2025 A; Esercitazione 5)</h4>
+<ol class="steps">
+<li>Φ<sub>bi</sub> dalle zone esterne (n⁺ e p⁺) con V<sub>th</sub>ln(N<sub>A</sub>N<sub>D</sub>/n<sub>i</sub>²).</li>
+<li>E<sub>max</sub> ≈ (Φ<sub>bi</sub>+V<sub>R</sub>)/(x₂−x₁) (E costante in i). Verifica x<sub>dn</sub> = εE/(qN<sub>D</sub>) ≪ spessori.</li>
+<li>C = εA/(x₂−x₁); R<sub>tot</sub> = Σ x/(qμNA) delle zone n e p; τ = R<sub>tot</sub>C; t<sub>tr</sub> = W<sub>i</sub>/(μ<sub>n</sub>E). Confronta: spesso τ è fs–ps ma t<sub>tr</sub> è ns ⇒ il tempo di transito limita la velocità.</li>
+<li>I<sub>ph</sub> = q φ<sub>ph</sub>(e<sup>−x₁/L<sub>A</sub></sup> − e<sup>−x₂/L<sub>A</sub></sup>); I<sub>buio</sub> = I<sub>s</sub> (fA) ⇒ rapporto enorme.</li>
+<li>Breakdown: E<sub>BD</sub> = (Φ<sub>bi</sub>+V<sub>BD</sub>)/W<sub>i</sub> ⇒ V<sub>BD</sub> ≈ E<sub>BD</sub>W<sub>i</sub> (kV con W<sub>i</sub> = 100 µm).</li>
+</ol>
+<h4>D) Cella solare con generatore di corrente (Esercitazione 5 es. 4)</h4>
+<ol class="steps">
+<li>Al buio: I<sub>D</sub> = −I<sub>gen</sub> con |I<sub>gen</sub>| &gt; I<sub>s</sub> ⇒ giunzione in <b>breakdown</b> (V<sub>D</sub> = −V<sub>BD</sub> ⇒ V da campo critico); ZCS e C<sub>j</sub> = εA/x<sub>d</sub> a quella tensione.</li>
+<li>Illuminata: I<sub>ph</sub> = qφ<sub>ph</sub>·(frazione assorbita utile, incluso L<sub>n</sub> se richiesto). Se I<sub>ph</sub> &gt; I<sub>gen</sub> la giunzione passa in <b>diretta</b> con V<sub>D</sub> = V<sub>th</sub> ln(1 + (I<sub>ph</sub> − I<sub>gen</sub>)/I<sub>s</sub>).</li>
+<li>Potenza P = V<sub>D</sub>·I<sub>gen</sub> (con V<sub>D</sub> &gt; 0 la cella eroga potenza al generatore); η = P/(φ<sub>ph</sub>E<sub>ph</sub>).</li>
+</ol>
+<h4>E) Alimentatore (dispensa 4.2.2)</h4>
+<ol class="steps">
+<li>V<sub>S,picco</sub> = 325/N; V<sub>max</sub> = V<sub>S,picco</sub> − 0.7 V.</li>
+<li>Ripple ΔV = V<sub>max</sub>T/(RC) (per C grande e carico costante); correzione Zener: × r<sub>z</sub>/(r<sub>z</sub>+R<sub>DZ</sub>).</li>
+<li>Diodo: V<sub>BD</sub> &gt; 2V<sub>picco</sub> (con C) e picco di corrente alla ricarica.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Fotoni «per unità di area» vs «totali».</b> Φ(0) = P/(E<sub>ph</sub>A) è per cm²; moltiplica per l'area <i>solo della ZCS efficace</i> o per l'area illuminata. Nell'Esercitazione 5 il testo dà già φ<sub>ph</sub> = 10¹⁶ s⁻¹ (totale): non moltiplicare ancora per A.</li>
+<li><b>E<sub>ph</sub> in eV vs J.</b> Per φ = P/E<sub>ph</sub> converti E<sub>ph</sub> in J (1.6·10⁻¹⁹).</li>
+<li><b>Dimenticare che ogni fotone dà q e non 2q</b>: la corrente di una coppia separata in ZCS è q (le due cariche percorrono tratti complementari del circuito).</li>
+<li><b>Sbagliare l'origine dell'asse x</b>: gli esponenziali partono dalla superficie illuminata; se illumini dal lato n le distanze sono W<sub>n</sub>−x<sub>dn</sub>, W<sub>n</sub>+x<sub>dp</sub>.</li>
+<li><b>Tenere i fotoni assorbiti in zone neutre «lontane»</b>: non contribuiscono (solo ±L dalla ZCS).</li>
+<li><b>Segno della fotocorrente</b>: I<sub>ph</sub> ha verso opposto alla corrente di diretta (n→p dentro la giunzione); nella cella V<sub>D</sub> positiva e I<sub>D</sub> negativa = potenza erogata.</li>
+<li><b>Raddrizzatore + C</b>: il diodo vede in inversa 2V<sub>picco</sub>, non V<sub>picco</sub>; e il ripple va calcolato dalla tensione <i>dopo</i> il diodo (V<sub>max</sub> = V<sub>p</sub>−0.7 V).</li>
+<li><b>Sensore di temperatura</b>: il segno di dV/dT è negativo; non spiegarlo con V<sub>th</sub> (che cresce) ma con I<sub>s</sub> che cresce esponenzialmente.</li>
+<li><b>Zener a polarizzazione inversa</b>: convenzione dei segni opposta (V<sub>Z</sub>, I<sub>Z</sub> positive in inversa).</li>
+</ul></div>
+</section>
+
+<section class="topic" id="t-bjt">
+<header class="thead"><span class="tnum">Cap. 4 (§4.5)</span><h2>Transistore bipolare a giunzione (BJT)</h2>
+<p class="lead">Due giunzioni affiancate: una in diretta che <i>inietta</i>, una in inversa che <i>raccoglie</i>. Dalla dispensa 4.5 e dall'Esercitazione 6 (T.E. 17 novembre 2011).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti</h3>
+<ul>
+<li>Un diodo in inversa ha tanto campo ma pochi portatori: poca corrente. Un diodo in diretta inietta tanti portatori ma senza campo che li trasporti. Il BJT usa la <b>giunzione base-emettitore in diretta</b> per iniettare elettroni nella base e la <b>base-collettore in inversa</b> per «aspirarli» col suo campo. Se la base è più sottile della lunghezza di diffusione, quasi tutti arrivano al collettore.</li>
+<li><b>Zona attiva diretta:</b> V<sub>BE</sub> &gt; 0 (≈ 0.7 V), V<sub>BC</sub> &lt; 0 ⇒ V<sub>CB</sub> &gt; 0, V<sub>CE</sub> &gt; 0. Il BJT è un generatore di corrente I<sub>C</sub> comandato da V<sub>BE</sub>, quasi indipendente da V<sub>CE</sub>.</li>
+<li><b>La corrente di base</b> è il «costo» del processo: sono le lacune iniettate dalla base nell'emettitore (piccole perché N<sub>E</sub> ≫ N<sub>B</sub>) più quelle che servono a compensare la ricombinazione in base. β = I<sub>C</sub>/I<sub>B</sub> ≈ 100–400 si ottiene con emettitore molto drogato e base sottile.</li>
+<li><b>Amplificazione:</b> con una R sul collettore, V<sub>R</sub> = R·β·I<sub>B</sub>; la potenza in uscita R β² I<sub>B</sub>² può superare quella d'ingresso V<sub>BE</sub>I<sub>B</sub>; l'energia viene dal generatore di alimentazione.</li>
+</ul>
+<div class="prac"><b>Nella pratica.</b> Amplificatore di corrente/tensione e interruttore. Nella dispensa il MOSFET sarà usato per gli stessi scopi (stessa idea: un terminale comanda la corrente tra altri due).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n(x_{dp})=\dfrac{n_i^2}{N_B}e^{V_{BE}/V_{th}},\quad n(x_B')\approx0\)</td><td>elettroni in base: al bordo B-E e al bordo B-C (aspirati dal campo). N<sub>B</sub> drogaggio di base</td></tr>
+<tr><td>\(I_C=qAD_n\dfrac{n_i^2}{N_Bx_B}\,e^{V_{BE}/V_{th}}\)</td><td>x<sub>B</sub> = larghezza neutra della base (x<sub>B</sub>′ − x<sub>dp</sub>); D<sub>n</sub> degli elettroni in base; profilo lineare</td></tr>
+<tr><td>\(I_B\simeq qAD_p\dfrac{n_i^2}{N_Ex_E}\big(e^{V_{BE}/V_{th}}-1\big)\)</td><td>lacune base→emettitore; x<sub>E</sub> larghezza neutra emettitore; D<sub>p</sub> delle lacune in emettitore</td></tr>
+<tr><td>\(\beta=\dfrac{I_C}{I_B}\simeq\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{x_E}{x_B}\)</td><td>guadagno di corrente (iniezione). Progetto: \(N_E=\beta\dfrac{D_pN_Bx_B}{D_nx_E}\)</td></tr>
+<tr><td>\(x_E\to L_{p,E}=\sqrt{D_p\tau_E}\) se \(L_{p,E}\ll x_E\)</td><td>emettitore a «base lunga»: β diminuisce (più lacune da fornire) → \(\beta=\dfrac{D_n}{D_p}\dfrac{N_E}{N_B}\dfrac{L_{p,E}}{x_B}\)</td></tr>
+<tr><td>\(t_{tr}=\dfrac{x_B^2}{2D_n},\qquad Q_B=\dfrac12\,qA\,n(0)\,x_B=I_C\,t_{tr}\)</td><td>tempo di transito in base e carica di elettroni accumulati in base</td></tr>
+<tr><td>\(I_{ric}\simeq\dfrac{t_{tr}}{\tau_B}\,I_E=\dfrac{Q_B}{\tau_B}\)</td><td>corrente di ricombinazione in base (fornita dal contatto di base); τ<sub>B</sub> tempo di vita in base</td></tr>
+<tr><td>\(\dfrac1\beta=\dfrac1{\beta_{iniez}}+\dfrac{t_{tr}}{\tau_B}\),&nbsp; cioè \(I_B=I_{B,iniez}+I_{ric}\)</td><td>le due componenti di I<sub>B</sub> si sommano; con probabilità di ricombinazione p<sub>r</sub>: \(1/\beta=1/\beta_{iniez}+p_r\)</td></tr>
+<tr><td>\(\beta_{ric}=\dfrac{1}{\cosh(x_B/L_B)-1}\simeq\dfrac{\tau_B}{t_{tr}}\)</td><td>caso generale con profilo sinh (L<sub>B</sub> = √(D<sub>n</sub>τ<sub>B</sub>)): \(n\propto\sinh\frac{x_B-x}{L_B}\), \(I_C\propto\frac1{\sinh}\), \(I_E\propto\coth\)</td></tr>
+<tr><td>\(I_C=\beta I_B\),&nbsp; \(I_E=(\beta+1)I_B\),&nbsp; \(V_R=R\,I_C=R\beta I_B\)</td><td>relazioni terminali in zona attiva</td></tr>
+</tbody></table></div></div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Validità e regioni</h3>
+<ul>
+<li><b>Attiva diretta:</b> BE diretta, BC inversa. <b>Saturazione:</b> entrambe dirette (I<sub>C</sub> &lt; βI<sub>B</sub>). <b>Interdizione:</b> entrambe inverse. <b>Attiva inversa:</b> scambio dei ruoli (β bassissimo).</li>
+<li>Profili: <b>base corta</b> in base ed emettitore (x ≪ L), <b>base lunga</b> nel collettore (grande).</li>
+<li>Seconde correzioni: ricombinazione in base (riduce β) e modulazione della larghezza di base con V<sub>BC</sub> (effetto Early: I<sub>C</sub> cresce leggermente con V<sub>CE</sub>); si riduce con collettore poco drogato (ZCS soprattutto nel collettore).</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedura (Esercitazione 6, es. 1)</h3>
+<ol class="steps">
+<li><b>Progetto di N<sub>E</sub> per un β dato</b>: \(N_E=\beta D_pN_Bx_B/(D_nx_E)\). Usa D<sub>n</sub> del <i>minoritario in base</i> (elettroni) e D<sub>p</sub> del minoritario in emettitore (lacune).</li>
+<li><b>Carica in base</b> per I<sub>C</sub> dato: \(Q_B=I_C\,x_B^2/(2D_n)\).</li>
+<li><b>Emettitore con τ<sub>e</sub> breve</b> (80 ps): calcola L = √(D<sub>p</sub>τ<sub>e</sub>) e confrontalo con x<sub>E</sub> = 2 µm; se L ≪ x<sub>E</sub> sostituisci x<sub>E</sub> con L nella formula di β.</li>
+<li><b>Ricombinazione in base con probabilità 0.01</b>: le lacune per ricombinare vengono dal contatto di base ⇒ I<sub>B</sub> aumenta di 0.01·I<sub>E</sub>; \(1/\beta=1/\beta_{iniez}+0.01\).</li>
+<li><b>τ<sub>B</sub> con profilo non perturbato</b>: \(t_{tr}/\tau_B=0.01\Rightarrow\tau_B=100\,t_{tr}\), \(t_{tr}=x_B^2/2D_n\).</li>
+<li><b>τ<sub>B</sub> per β = 1</b> (ricombinazione dominante e profilo deformato): \(\cosh(x_B/L_B)-1=1\Rightarrow x_B/L_B=\operatorname{arccosh}2\approx1.317\Rightarrow L_B=x_B/1.317,\ \tau_B=L_B^2/D_n\).</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li>Scambiare D<sub>n</sub> e D<sub>p</sub> (nel β i diffusivi sono quelli dei <i>minoritari</i> di base ed emettitore).</li>
+<li>Dimenticare che la corrente di ricombinazione in base va sommata a I<sub>B</sub> (β ≠ β<sub>iniez</sub>), o aggiungerla a I<sub>C</sub>.</li>
+<li>Usare x<sub>B</sub> «metallurgico» invece della base <i>neutra</i> (meno le ZCS di EB e BC).</li>
+<li>Scambiare i ruoli delle polarizzazioni: V<sub>BE</sub> &gt; 0, V<sub>BC</sub> &lt; 0 ⇒ V<sub>CE</sub> = V<sub>CB</sub>+V<sub>BE</sub> &gt; 0.</li>
+</ul></div>
+</section>

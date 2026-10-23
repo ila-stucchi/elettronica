@@ -1,0 +1,154 @@
+<section class="topic" id="t-mos">
+<header class="thead"><span class="tnum">Cap. 5</span><h2>Condensatore MOS e transistore MOSFET</h2>
+<p class="lead">Compare in tutti i TdE: nell'esercizio A come struttura MOS (V<sub>T</sub>, V<sub>FB</sub>, V<sub>ox</sub>, E<sub>ox</sub>, carica di canale, capacità, breakdown) e nell'esercizio B come interruttore/amplificatore (regioni ohmica/saturazione, k, g<sub>m</sub>).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Un condensatore con un semiconduttore come seconda armatura.</b> Gate (metallo o polisilicio) – ossido isolante – silicio. Una tensione sul gate crea un campo verticale che sposta le cariche nel silicio: non passa corrente, ma cambia <i>quanti portatori ci sono sotto l'ossido</i>. Il MOSFET sfrutta proprio questo: «modulare con un campo (non con una corrente) la conducibilità di uno strato di Si».</li>
+<li><b>Tensione di banda piatta V<sub>FB</sub>.</b> Gate e silicio hanno livelli di Fermi diversi (funzioni lavoro diverse): appena li metti in contatto gli elettroni si spostano e creano un campo. V<sub>FB</sub> è la tensione che bisogna applicare per <i>cancellare</i> questo campo (bande piatte, carica nulla). Con gate n⁺ su Si p è negativa (≈ −0.9 V): senza tensione le bande sono già «piegate». Cariche positive fisse nell'ossido richiamano elettroni e rendono V<sub>FB</sub> ancora più negativa (e abbassano V<sub>T</sub>).</li>
+<li><b>Tre regimi del MOS (p-Si, gate n⁺):</b>
+<br>• <b>Accumulazione</b> (V<sub>G</sub> &lt; V<sub>FB</sub>): il gate è negativo, richiama lacune sotto l'ossido; il MOS è un condensatore C<sub>ox</sub> tra gate e body; tutta l'eccedenza V<sub>G</sub>−V<sub>FB</sub> cade nell'ossido.
+<br>• <b>Svuotamento</b> (V<sub>FB</sub> &lt; V<sub>G</sub> &lt; V<sub>T</sub>): le lacune sono respinte, restano gli ioni B⁻ (zona di carica spaziale di larghezza x<sub>d</sub>); la tensione si ripartisce tra ossido e silicio (equazione di 2° grado).
+<br>• <b>Inversione</b> (V<sub>G</sub> &gt; V<sub>T</sub>): le bande sono piegate di 2φ<sub>fp</sub> e sotto l'ossido gli elettroni uguagliano i vecchi maggioritari (n<sub>s</sub> = N<sub>A</sub>): si forma il <b>canale</b>. Poiché gli elettroni crescono esponenzialmente con φ<sub>S</sub> ma gli ioni solo con √φ<sub>S</sub>, ogni ulteriore volt sul gate va in <b>carica libera</b> (Q<sub>inv</sub> = −C<sub>ox</sub>(V<sub>G</sub>−V<sub>T</sub>)); φ<sub>S</sub> resta ≈ 2φ<sub>fp</sub> e x<sub>d</sub> resta ≈ x<sub>d,T</sub>.</li>
+<li><b>Il MOSFET.</b> Si mettono due isole n⁺ (source, drain) ai lati del MOS. Per V<sub>GS</sub> &lt; V<sub>T</sub> la struttura n⁺-p-n⁺ è due diodi in antiserie: nessuna corrente. Per V<sub>GS</sub> &gt; V<sub>T</sub> si forma un canale di elettroni che collega S e D: se V<sub>DS</sub> &gt; 0 gli elettroni scorrono da S a D (la corrente va da D a S).</li>
+<li><b>Regione ohmica.</b> Il canale è un resistore la cui conduttanza dipende da V<sub>GS</sub>. Se V<sub>DS</sub> è piccola: R<sub>ch</sub> = 1/[μC<sub>ox</sub>(W/L)(V<sub>GS</sub>−V<sub>T</sub>)]. Aumentando V<sub>DS</sub> il potenziale lungo il canale cresce da S a D e la tensione ai capi dell'ossido cala verso D: meno carica vicino al drain, la corrente cresce meno che linearmente.</li>
+<li><b>Saturazione (pinch-off).</b> Quando V<sub>GD</sub> = V<sub>T</sub> (V<sub>DS</sub> = V<sub>GS</sub>−V<sub>T</sub>) il canale si «strozza» al drain; oltre, la tensione in eccesso cade in un brevissimo tratto tra il punto di pinch-off e il drain e la corrente non cresce più (I<sub>D,sat</sub> = k(V<sub>GS</sub>−V<sub>T</sub>)²): il MOSFET è un <b>generatore di corrente pilotato da V<sub>GS</sub></b>. Il pinch-off non ferma la corrente: gli elettroni vengono accelerati dal campo intenso.</li>
+<li><b>Modulazione della lunghezza di canale.</b> Più V<sub>DS</sub>, più il pinch-off arretra verso il source, L effettivo diminuisce, la corrente cresce leggermente (I<sub>D</sub> ∝ 1+ΔL/L).</li>
+<li><b>Effetto body.</b> Se il source è a potenziale maggiore del substrato (V<sub>SB</sub> &gt; 0) la zona svuotata sotto il canale si allarga (la superficie è «agganciata» al source, tutto il V<sub>SB</sub> cade nella ZCS) ⇒ più carica fissa da compensare ⇒ <b>V<sub>T</sub> sale</b>. Per questo si preferisce V<sub>SB</sub> = 0; un nMOS che trasferisce un segnale alto (source che sale) ha V<sub>T</sub> maggiore.</li>
+<li><b>Capacità di gate.</b> In accumulazione e in inversione il gate «vede» un condensatore C<sub>ox</sub>WL, ma verso terminali diversi (body in accumulazione; source/drain in inversione). In svuotamento C<sub>ox</sub> è in serie a C<sub>dep</sub> = ε<sub>Si</sub>/x<sub>d</sub> ⇒ capacità minore. Le capacità sono ciò che rallenta i circuiti (Cap. 6).</li>
+<li><b>nMOS vs pMOS.</b> Lo specchio: substrato n, S/D p, V<sub>T</sub> &lt; 0, canale di lacune. Si usa V<sub>SG</sub>, V<sub>SD</sub> positive e I<sub>D</sub> da S a D. A parità di W/L il pMOS conduce ≈ 2.7× meno (μ<sub>p</sub> ≈ μ<sub>n</sub>/2.7): per un inverter simmetrico si dimensiona W<sub>p</sub> ≈ 2–3 W<sub>n</sub>.</li>
+<li><b>Limiti di tensione.</b> (i) breakdown delle giunzioni S/D–substrato; (ii) rottura dell'ossido: E<sub>ox</sub> &gt; E<sub>BD,ox</sub> ≈ 10⁷ V/cm (V<sub>BD,ox</sub> = t<sub>ox</sub>E<sub>BD,ox</sub>); (iii) DIBL e punch-through: la ZCS del drain si avvicina e poi tocca quella del source.</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Il MOSFET è l'elemento base dei circuiti integrati digitali (inverter, porte, memorie) e analogici (amplificatori, specchi di corrente). Come <b>interruttore</b> (spento/ohmico) o come <b>generatore di corrente</b>/amplificatore (saturazione). Il gate isolato non assorbe corrente statica: consumi bassissimi, per questo ha sostituito il BJT nei circuiti integrati.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<h4>Struttura MOS</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(C_{ox}=\dfrac{\epsilon_{ox}}{t_{ox}},\qquad C_G=C_{ox}\,W\,L\)</td><td>C<sub>ox</sub> [F/cm²]; ε<sub>ox</sub> ≈ 3·10⁻¹³ F/cm; t<sub>ox</sub> [cm]; es. 200 nF/cm² ↔ t<sub>ox</sub> = 15 nm; 333 nF/cm² ↔ 9 nm</td></tr>
+<tr><td>\(V_{FB}=\psi_{gate}-\psi_{Si}\)</td><td>ψ funzione lavoro (in V = qψ in eV). Al: 4.1; poly n⁺: 4.05; poly p⁺: 5.17; Au: 5.1</td></tr>
+<tr><td>\(\psi_{Si}=\chi_{Si}+\dfrac{E_g}{2q}\pm\phi_f\)&nbsp;(+ tipo p con \(\phi_{fp}\); − tipo n con \(\phi_{fn}\))</td><td>χ<sub>Si</sub> = 4.05 eV; funzione lavoro del Si</td></tr>
+<tr><td>poly n⁺ su Si-p: \(V_{FB}=-\Big(\dfrac{E_g}{2q}+\phi_{fp}\Big)\)</td><td>caso tipico (≈ −0.9…−0.95 V). Es.: N<sub>A</sub> = 2·10¹⁶ → −914 mV</td></tr>
+<tr><td>\(V_{FB}=V_{FB0}-\dfrac{Q_{ox}}{C_{ox}}\)</td><td>cariche fisse positive Q<sub>ox</sub> [C/cm²] all'interfaccia (tipiche 1–10 nC/cm²); se sono a distanza dall'interfaccia conta solo la frazione indotta nel Si</td></tr>
+<tr><td>\(V_G-V_{FB}=V_{ox}+\phi_S\)&nbsp;(Eq. 5-1)</td><td>bilancio delle tensioni: V<sub>ox</sub> sull'ossido, φ<sub>S</sub> potenziale di superficie (piegamento delle bande)</td></tr>
+<tr><td><b>Accumulazione</b> \(V_G&lt;V_{FB}\): \(Q_{acc}\simeq-C_{ox}(V_G-V_{FB})\),&nbsp; \(V_{ox}\simeq V_G-V_{FB}\)</td><td>tutta l'eccedenza cade nell'ossido; φ<sub>S</sub> trascurabile</td></tr>
+<tr><td><b>Svuotamento</b>: \(\phi_S=\dfrac{qN_Ax_d^2}{2\epsilon_{Si}}\),&nbsp; \(x_d=\sqrt{\dfrac{2\epsilon_{Si}\phi_S}{qN_A}}\),&nbsp; \(V_{ox}=\dfrac{qN_Ax_d}{C_{ox}}=\dfrac{\sqrt{2q\epsilon_{Si}N_A\phi_S}}{C_{ox}}\)</td><td>ZCS sotto l'ossido, carica \(Q_{dep}=-qN_Ax_d\). Equazione: \(V_G-V_{FB}=\dfrac{\sqrt{2q\epsilon_{Si}N_A\phi_S}}{C_{ox}}+\phi_S\) (2° grado in φ<sub>S</sub> o in x<sub>d</sub>)</td></tr>
+<tr><td>\(V_T=V_{FB}+\dfrac{\sqrt{2q\epsilon_{Si}N_A\,2\phi_{fp}}}{C_{ox}}+2\phi_{fp}\)</td><td>tensione di soglia nMOS; ricava anche V<sub>FB</sub> da V<sub>T</sub> noto (TdE 13-1-2026, 9-6-2026)</td></tr>
+<tr><td>\(x_{d,T}=\sqrt{\dfrac{2\epsilon_{Si}\,2\phi_{fp}}{qN_A}}\);&nbsp; \(V_{ox,T}=\dfrac{qN_Ax_{d,T}}{C_{ox}}\)</td><td>ZCS alla soglia (≈ 100–200 nm); resta circa costante per V<sub>G</sub> &gt; V<sub>T</sub></td></tr>
+<tr><td><b>Inversione</b> \(V_G&gt;V_T\): \(\phi_S\simeq2\phi_{fp}\),&nbsp; \(Q_{inv}=-C_{ox}(V_G-V_T)\)</td><td>carica di canale per unità di area; \(Q_{ch}=A\,C_{ox}(V_{GB}-V_T)\), numero di elettroni \(N=Q_{ch}/q\)</td></tr>
+<tr><td>\(V_{ox}=V_{ox,T}+(V_G-V_T)=V_G-V_{FB}-2\phi_{fp}\),&nbsp; \(E_{ox}=\dfrac{V_{ox}}{t_{ox}}\)</td><td>sopra soglia (φ<sub>S</sub> ≈ 2φ<sub>fp</sub> fisso)</td></tr>
+<tr><td>\(\epsilon_{ox}E_{ox}=\epsilon_{Si}E_{Si}\)&nbsp;→&nbsp;\(E_{Si,max}=E_{ox}\dfrac{\epsilon_{ox}}{\epsilon_{Si}}=\dfrac{qN_Ax_d}{\epsilon_{Si}}\)</td><td>continuità di D all'interfaccia (≈ 3× più campo nell'ossido, se non c'è carica di canale). <b>Sopra soglia</b> c'è anche la carica di canale: il salto è maggiore (TdE 9-6-2026: E<sub>ox</sub> = 1.77 MV/cm, E<sub>Si,max</sub> = 110 kV/cm)</td></tr>
+<tr><td>Concentrazioni alla superficie: \(n_s=\dfrac{n_i^2}{N_A}e^{q\phi_S/kT},\ \ p_s=N_Ae^{-q\phi_S/kT}\)</td><td>a V<sub>T</sub>: n<sub>s</sub> = N<sub>A</sub>. A distanza d dall'ossido: \(\phi_S(d)=\dfrac{qN_A(x_d-d)^2}{2\epsilon_{Si}}\)</td></tr>
+<tr><td>Parametri da misure: \(\sqrt{\dfrac{I_1}{I_2}}=\dfrac{V_{GS1}-V_T}{V_{GS2}-V_T}\);&nbsp; \(k=\tfrac12\mu C_{ox}\dfrac WL,\ C_G=C_{ox}WL\Rightarrow\dfrac{k}{C_G}=\dfrac{\mu}{2L^2}\)</td><td>V<sub>T</sub> e k dalla curva I<sub>D</sub>(V<sub>GS</sub>) in saturazione; L e t<sub>ox</sub> dalla capacità di gate sopra soglia (TdE 13-1-2026)</td></tr>
+</tbody></table></div>
+
+<h4>Corrente e regimi del MOSFET</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th></th><th>nMOS</th><th>pMOS</th></tr></thead><tbody>
+<tr><td>Costante k [A/V²]</td><td>\(k_n=\tfrac12\mu_nC_{ox}\dfrac WL\)</td><td>\(k_p=\tfrac12\mu_pC_{ox}\dfrac WL\)</td></tr>
+<tr><td>Soglia a V<sub>SB</sub> = 0</td><td>\(V_{Tn0}=V_{FB}+\dfrac{\sqrt{2q\epsilon N_A2\phi_{fp}}}{C_{ox}}+2\phi_{fp}&gt;0\)</td><td>\(V_{Tp0}=V_{FB}-\dfrac{\sqrt{2q\epsilon N_D2\phi_{fn}}}{C_{ox}}-2\phi_{fn}&lt;0\)</td></tr>
+<tr><td>Effetto body</td><td>\(V_T=V_{T0}+\gamma\big(\sqrt{2\phi_{fp}+V_{SB}}-\sqrt{2\phi_{fp}}\big)\),&nbsp; \(\gamma=\dfrac{\sqrt{2q\epsilon_{Si}N_A}}{C_{ox}}\)</td><td>\(V_T=V_{T0}-\gamma\big(\sqrt{2\phi_{fn}+V_{BS}}-\sqrt{2\phi_{fn}}\big)\),&nbsp; \(\gamma=\dfrac{\sqrt{2q\epsilon_{Si}N_D}}{C_{ox}}\)</td></tr>
+<tr><td>Interdizione</td><td>\(V_{GS}&lt;V_T\Rightarrow I_D\simeq0\)</td><td>\(V_{SG}&lt;|V_{Tp}|\Rightarrow I_D\simeq0\)</td></tr>
+<tr><td>Ohmica</td><td>\(V_{GS}&gt;V_T,\ V_{DS}&lt;V_{GS}-V_T\):<br>\(I_D=2k_n\Big[(V_{GS}-V_T)V_{DS}-\dfrac{V_{DS}^2}{2}\Big]\)</td><td>\(V_{SG}&gt;|V_{Tp}|,\ V_{SD}&lt;V_{SG}-|V_{Tp}|\):<br>\(I_D=2k_p\Big[(V_{SG}-|V_{Tp}|)V_{SD}-\dfrac{V_{SD}^2}{2}\Big]\)</td></tr>
+<tr><td>Saturazione</td><td>\(V_{GS}&gt;V_T,\ V_{DS}&gt;V_{GS}-V_T\):<br>\(I_D=k_n(V_{GS}-V_T)^2\)</td><td>\(V_{SG}&gt;|V_{Tp}|,\ V_{SD}&gt;V_{SG}-|V_{Tp}|\):<br>\(I_D=k_p(V_{SG}-|V_{Tp}|)^2\)</td></tr>
+<tr><td>Corrente ID</td><td>da D a S</td><td>da S a D</td></tr>
+</tbody></table></div>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(R_{ch}=\dfrac{V_{DS}}{I_D}\simeq\dfrac{1}{\mu C_{ox}\frac WL(V_{GS}-V_T)}=\dfrac1{2k(V_{GS}-V_T)}\)</td><td>resistenza di canale per V<sub>DS</sub> ≪ V<sub>GS</sub>−V<sub>T</sub> [Ω]; <b>massima</b> alla V<sub>in</sub> più alta (V<sub>GS</sub>−V<sub>T</sub> minimo, con effetto body)</td></tr>
+<tr><td>\(V_{DS,sat}=V_{GS}-V_T\)&nbsp;(limite; sul bordo \(I_D=kV_{DS}^2\))</td><td>tensione di saturazione; curva di confine tra ohmica e saturazione</td></tr>
+<tr><td>\(R_{eq}\simeq\dfrac{V_{DS,iniz}}{I_{D,iniz}}\)&nbsp;(ad es. \(\dfrac{V_{AA}}{k(V_{AA}-V_T)^2}\)) </td><td>resistenza equivalente per stime (per eccesso) dei tempi di commutazione (Cap. 6)</td></tr>
+<tr><td>\(I_D=k(V_{GS}-V_T)^2\Big(1+\dfrac{V_{DS}-V_{DS,sat}}{L\,E_{max}}\Big)\)</td><td>modulazione della lunghezza di canale (se non indicato: trascurata)</td></tr>
+<tr><td>\(g_m=\dfrac{\partial I_D}{\partial V_{GS}}=2k(V_{GS}-V_T)=2\sqrt{kI_D}=\dfrac{2I_D}{V_{GS}-V_T}\)</td><td>transconduttanza in saturazione [A/V = S] (Cap. 7)</td></tr>
+<tr><td>\(C_G=C_{ox}WL\)</td><td>in inversione tra gate e S/D (≈ ½ verso source e ½ verso drain); in accumulazione tra gate e body</td></tr>
+<tr><td>\(\dfrac1{C_{gate}}=\dfrac1{C_{ox}}+\dfrac1{C_{dep}},\quad C_{dep}=\dfrac{\epsilon_{Si}}{x_d}\)</td><td>capacità per unità di area in svuotamento (V<sub>FB</sub> &lt; V<sub>G</sub> &lt; V<sub>T</sub>), tra gate e body</td></tr>
+<tr><td>\(C_{j,pn}\simeq\epsilon_{Si}\dfrac{\text{Area}_{3D}}{x_{d,pn}}\)</td><td>capacità delle giunzioni S/D–body: area = fondo + pareti laterali (TdE 8-2-2025: W·L<sub>D</sub> + 2H·L<sub>D</sub> + 2H·W per il drain); sotto canale: \(C_{j,ch}=\epsilon_{Si}WL/x_{d,T}\)</td></tr>
+<tr><td>\(C_T(V_G&gt;V_T)=C_G+C_{j,ch}+C_{j,pn}\);&nbsp; \(C_T(V_G=0)=C_{j,pn}\)</td><td>capacità vista da un terminale di S/D: a V<sub>G</sub>=0 solo giunzioni; con canale si aggiungono gate e ZCS sotto canale (TdE 8-2-2025: 36 fF → 99.6 fF)</td></tr>
+</tbody></table></div>
+
+<h4>Limiti sulle tensioni</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Significato</th></tr></thead><tbody>
+<tr><td>\(V_{BD,ox}=t_{ox}E_{BD,ox},\ E_{BD,ox}\approx10^7\ \text{V/cm}\)</td><td>rottura dell'ossido (20 nm → 20 V; 9 nm → 9 V)</td></tr>
+<tr><td>\(V_{G,min}=V_{FB}-V_{BD,ox}\)</td><td>gate negativo: tutta l'eccedenza oltre V<sub>FB</sub> cade nell'ossido</td></tr>
+<tr><td>\(V_{G,max}=V_{FB}+V_{BD,ox}+2\phi_{fp}\)</td><td>sopra soglia: V<sub>ox</sub> = V<sub>G</sub>−V<sub>FB</sub>−2φ<sub>fp</sub> = V<sub>BD,ox</sub>. <i>Non</i> vale V<sub>ox</sub> = V<sub>G</sub> sotto soglia</td></tr>
+<tr><td>\(V_{D,BD}\): \(\Phi_{bi}+V_{BD}=\dfrac{\epsilon E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\)</td><td>breakdown giunzione drain–substrato (≈ N<sub>A</sub> poco drogato domina): es. 15.8 V per N<sub>A</sub> = 3·10¹⁶, N<sub>D</sub> = 10¹⁹</td></tr>
+<tr><td>punch-through se \(x_{d,D}+x_{d,S}\ge L_G\)</td><td>confronta x<sub>d</sub> a V<sub>BD</sub> con la lunghezza di gate; solitamente non è limitante (servono ≫ 100 V)</td></tr>
+<tr><td>\(L_{min}=2\,x_{d,p}\) (caso peggiore: V<sub>S</sub>=V<sub>D</sub> massimi, V<sub>B</sub> = 0)</td><td>lunghezza minima per non unire le ZCS di S e D (TdE 13-1-2026: 407 nm)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità e regioni di funzionamento</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Condizione</th><th>Regione</th><th>Che modello usare</th></tr></thead><tbody>
+<tr><td>V<sub>GS</sub> &lt; V<sub>T</sub></td><td><b>Interdizione</b></td><td>I<sub>D</sub> = 0; interruttore aperto; capacità di gate verso body (≈ C<sub>ox</sub>WL in accumulazione)</td></tr>
+<tr><td>V<sub>GS</sub> &gt; V<sub>T</sub> e V<sub>GD</sub> &gt; V<sub>T</sub> (V<sub>DS</sub> &lt; V<sub>GS</sub>−V<sub>T</sub>)</td><td><b>Ohmica / triodo</b></td><td>resistore R<sub>ch</sub>; I<sub>D</sub> con la formula completa (parabola)</td></tr>
+<tr><td>V<sub>GS</sub> &gt; V<sub>T</sub> e V<sub>GD</sub> &lt; V<sub>T</sub> (V<sub>DS</sub> &gt; V<sub>GS</sub>−V<sub>T</sub>)</td><td><b>Saturazione</b></td><td>generatore di corrente k(V<sub>GS</sub>−V<sub>T</sub>)²</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Canale lungo</b>: L ≫ 1 µm (modello a mobilità costante, forte inversione). Per L più corti compaiono saturazione di velocità e DIBL (non trattati).</li>
+<li><b>Simmetria source/drain</b>: S e D non sono caratteristiche costruttive, li decidono i potenziali: nMOS → S è il terminale più basso, D il più alto; pMOS → S è il più alto. Per i circuiti di commutazione i ruoli si scambiano durante il transitorio.</li>
+<li>La saturazione richiede V<sub>GD</sub> &lt; V<sub>T</sub> (nMOS). Una buona verifica: se V<sub>GD</sub> = 0 V (gate collegato al drain) il transistore è <i>sicuramente</i> saturo (V<sub>GD</sub> = 0 &lt; V<sub>T</sub>).</li>
+<li><b>Sopra soglia</b>: φ<sub>S</sub> ≈ 2φ<sub>fp</sub>, x<sub>d</sub> ≈ x<sub>d,T</sub>, E<sub>Si</sub> ≈ costante; il campo nell'ossido cresce con V<sub>G</sub>. <b>Sotto soglia</b>: nessuna carica di canale, equazione di 2° grado.</li>
+<li><b>Effetto body</b>: quando V<sub>SB</sub> ≠ 0 ricalcola V<sub>T</sub>; per un pass-transistor che trasmette V<sub>in</sub> verso un carico, V<sub>SB</sub> = V<sub>in</sub> (body a massa).</li>
+<li><b>Approssimazione di svuotamento</b> nel Si sotto l'ossido: ioni ≫ portatori liberi, vera anche a φ<sub>S</sub> ≈ 2φ<sub>fp</sub> (a 10 nm dall'interfaccia gli elettroni sono già 10× meno che in superficie).</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo</h3>
+<h4>A) Parametri di una struttura MOS (TdE 2-9-2026 A.1, 9-6-2026 A.1)</h4>
+<ol class="steps">
+<li>φ<sub>fp</sub> = V<sub>th</sub> ln(N<sub>A</sub>/n<sub>i</sub>) (≈ 0.35–0.40 V).</li>
+<li>V<sub>FB</sub>: gate poly n⁺ + Si-p: −(E<sub>g</sub>/2q + φ<sub>fp</sub>); altro metallo: ψ<sub>M</sub> − (χ + E<sub>g</sub>/2q + φ<sub>fp</sub>). Con carica Q<sub>ox</sub>: − Q<sub>ox</sub>/C<sub>ox</sub>. (Se il TdE dà V<sub>T</sub> e chiede V<sub>FB</sub> o Q<sub>ox</sub>, inverti la formula di V<sub>T</sub>.)</li>
+<li>V<sub>T</sub> = V<sub>FB</sub> + √(2qε N<sub>A</sub> 2φ<sub>fp</sub>)/C<sub>ox</sub> + 2φ<sub>fp</sub> (aggiungi effetto body con V<sub>SB</sub> se serve).</li>
+<li>Se V<sub>GB</sub> &gt; V<sub>T</sub>: Q<sub>ch</sub> = A C<sub>ox</sub> (V<sub>GB</sub> − V<sub>T</sub>); n° elettroni = Q<sub>ch</sub>/q.</li>
+</ol>
+<h4>B) «Dato V<sub>ox</sub> trova V<sub>G</sub>» (TdE 2-9-2026 A.2) — trova il regime</h4>
+<ol class="steps">
+<li><b>Ipotizza sopra soglia</b>: V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + 2φ<sub>fp</sub>. Se esce &lt; V<sub>T</sub> l'ipotesi è <b>falsa</b> ⇒ sei sotto soglia.</li>
+<li><b>Sotto soglia</b>: E<sub>ox</sub> = V<sub>ox</sub>/t<sub>ox</sub>; E<sub>Si,max</sub> = E<sub>ox</sub>ε<sub>ox</sub>/ε<sub>Si</sub>; V<sub>Si</sub> = ε<sub>Si</sub>E<sub>Si,max</sub>²/(2qN<sub>A</sub>); V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + V<sub>Si</sub>. Controlla che sia &lt; V<sub>T</sub> (esempio: V<sub>ox</sub> = 0.5 V → V<sub>Si</sub> = 0.521 V → V<sub>G</sub> = 80 mV &lt; V<sub>T</sub> = 427 mV ✓).</li>
+</ol>
+<h4>C) MOS all'equilibrio (V<sub>G</sub> = 0) (TdE 9-6-2026 A.2)</h4>
+<ol class="steps">
+<li>−V<sub>FB</sub> = V<sub>ox</sub> + V<sub>Si</sub> con V<sub>ox</sub> = qN<sub>A</sub>x<sub>d</sub>/C<sub>ox</sub> e V<sub>Si</sub> = qN<sub>A</sub>x<sub>d</sub>²/(2ε<sub>Si</sub>): equazione di 2° grado in x<sub>d</sub> (soluzione positiva). Esempio: x<sub>d</sub> = 85 nm, V<sub>ox</sub> = 227 mV, V<sub>Si</sub> = 289 mV.</li>
+<li>Diagramma a bande: E<sub>F</sub> costante a sinistra (gate) e nel Si; salto qV<sub>ox</sub> nell'ossido, curvatura qV<sub>Si</sub> nel Si.</li>
+</ol>
+<h4>D) Campi e tensione con V<sub>B</sub> ≠ 0 (TdE 9-6-2026 A.3)</h4>
+<ol class="steps">
+<li>V<sub>B</sub> = 0, sopra soglia: V<sub>Si</sub> ≈ 2φ<sub>fp</sub>; V<sub>ox</sub> = V<sub>G</sub> − V<sub>FB</sub> − V<sub>Si</sub>; E<sub>ox</sub> = V<sub>ox</sub>/t<sub>ox</sub>; x<sub>d</sub> da V<sub>Si</sub>; E<sub>Si,max</sub> = qN<sub>A</sub>x<sub>d</sub>/ε<sub>Si</sub>.</li>
+<li>V<sub>B</sub> = −1 V (con source a 0): V<sub>SB</sub> = 1 V ⇒ V<sub>Si</sub> = 2φ<sub>fp</sub> + V<sub>SB</sub>; x<sub>d</sub> cresce, E<sub>Si,max</sub> cresce; <b>E<sub>ox</sub> quasi invariato</b> (la carica totale nel Si resta quasi uguale: meno elettroni liberi, più ioni).</li>
+</ol>
+<h4>E) Dimensionare un pass-transistor (TdE 8-2-2025 A.1)</h4>
+<ol class="steps">
+<li>R<sub>ch</sub> massima per V<sub>in</sub> massima: calcola V<sub>T</sub> con effetto body (V<sub>SB</sub> = V<sub>in,max</sub>).</li>
+<li>Imponi R<sub>ch</sub> =1/[μC<sub>ox</sub>(W/L)(V<sub>G</sub> − V<sub>in,max</sub> − V<sub>T</sub>)] &lt; R<sub>max</sub> ⇒ W<sub>min</sub>. Ex.: V<sub>T</sub> sale da 0.253 V a 0.762 V con V<sub>SB</sub> = 3 V ⇒ W &gt; 9.1 µm per 500 Ω.</li>
+</ol>
+<h4>F) Capacità viste a un terminale (TdE 8-2-2025 A.2)</h4>
+<ol class="steps">
+<li>Per V<sub>G</sub> = 0 (spento): carica solo ai bordi delle giunzioni; C = ε<sub>Si</sub>·Area<sub>eff</sub>/x<sub>d,pn</sub> (x<sub>d</sub> all'equilibrio); area effettiva = fondo + pareti (formula 3D).</li>
+<li>Per V<sub>G</sub> &gt; V<sub>T</sub>: aggiungi C<sub>G</sub> = C<sub>ox</sub>WL e C<sub>j,ch</sub> = ε<sub>Si</sub>WL/x<sub>d,T</sub>.</li>
+</ol>
+<h4>G) Intervallo di tensioni ammissibili (TdE 8-2-2025 A.3; dispensa 5.5)</h4>
+<ol class="steps">
+<li>Evita polarizzazione diretta di S/D–body: V<sub>S/D</sub> ≥ V<sub>B</sub>.</li>
+<li>Breakdown giunzione: V<sub>BD,pn</sub> da E<sub>max</sub> = E<sub>BD</sub> (formula Φ<sub>bi</sub>+V<sub>BD</sub> = …).</li>
+<li>Breakdown ossido: V<sub>ox</sub> &lt; t<sub>ox</sub>E<sub>BD,ox</sub> (attenzione al ramo gate-drain: nel n⁺ il piegamento è trascurabile, V<sub>ox</sub> ≈ V<sub>GD</sub>).</li>
+<li>Punch-through: confronta x<sub>d,BD</sub> con L<sub>G</sub> (qui 312 nm &lt; L<sub>G</sub> ⇒ non limitante).</li>
+</ol>
+<h4>H) Parametri da grafico (TdE 13-1-2026 A.2)</h4>
+<ol class="steps">
+<li>Da due punti di I<sub>D</sub>(V<sub>GS</sub>) in saturazione: √(I₁/I₂) = (V₁−V<sub>T</sub>)/(V₂−V<sub>T</sub>) ⇒ V<sub>T</sub> (es.: 2 mA e 0.5 mA a 1.5 V e 1 V ⇒ V<sub>T</sub> = 0.5 V, k = 2 mA/V²).</li>
+<li>Da C<sub>G</sub> ≈ C<sub>ox</sub>WL (misurata sopra soglia) e k ⇒ L e t<sub>ox</sub>.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>«V<sub>ox</sub> = V<sub>G</sub>».</b> Sbagliato: <b>V<sub>G</sub> − V<sub>FB</sub> = V<sub>ox</sub> + φ<sub>S</sub></b>. V<sub>FB</sub> sposta lo zero; φ<sub>S</sub> = 2φ<sub>fp</sub> sopra soglia.</li>
+<li><b>Usare V<sub>G</sub> = V<sub>FB</sub> + V<sub>ox</sub> + 2φ<sub>fp</sub> senza verificare V<sub>G</sub> &gt; V<sub>T</sub></b> (TdE 2-9-2026 A.2: l'ipotesi era falsa).</li>
+<li><b>Segno di V<sub>FB</sub> e del contributo di Q<sub>ox</sub></b>: cariche positive ⇒ V<sub>FB</sub> più negativa (σ<sub>ox</sub> = +25.8 nC/cm² nel TdE 13-1-2026). Per gate poly-p⁺ su Si-p V<sub>FB</sub> ≈ +0.18 V e V<sub>T</sub> ≈ 1.5 V (poco pratico); su Si-n il segno cambia.</li>
+<li><b>Gate collegato a drain ⇒ saturazione</b> (V<sub>GD</sub> = 0). Ma attenzione a V<sub>GD</sub> vs V<sub>GS</sub>: la regione si decide con V<sub>GD</sub> (nMOS: sat se V<sub>GD</sub> &lt; V<sub>T</sub>), non con V<sub>GS</sub>.</li>
+<li><b>Transistore con resistenza sul source</b> (TdE 2-9-2026 B.2): V<sub>S</sub> = R·I<sub>D</sub> e V<sub>GS</sub> = V<sub>G</sub> − V<sub>S</sub> ⇒ I<sub>D</sub> = k(V<sub>G</sub>−RI<sub>D</sub>−V<sub>T</sub>)²: equazione di 2° grado, scegli la radice con V<sub>GS</sub> &gt; V<sub>T</sub> (l'altra è non fisica).</li>
+<li><b>Dimenticare l'effetto body</b> in un circuito con source a potenziale ≠ body (pass-transistor, nMOS in serie/NAND).</li>
+<li><b>Mobilità</b>: nel canale μ<sub>n</sub> ≈ 800, μ<sub>p</sub> ≈ 300 cm²/Vs (non 1300/400).</li>
+<li><b>ox vs Si</b>: E<sub>ox</sub> ≈ 3 E<sub>Si</sub> all'interfaccia; ε<sub>ox</sub> = 3·10⁻¹³, ε<sub>Si</sub> = 10⁻¹² F/cm.</li>
+<li><b>Capacità sotto soglia/sopra soglia</b>: la stessa C<sub>ox</sub>WL ha significati diversi (gate–body vs gate–S/D); in svuotamento è minore (serie con C<sub>dep</sub>).</li>
+<li><b>Ricordare che V<sub>GS</sub>−V<sub>T</sub> è la «tensione di overdrive»</b>: serve a tutto (R<sub>ch</sub>, V<sub>DS,sat</sub>, g<sub>m</sub>, I<sub>D</sub>). Controllalo sempre &gt; 0.</li>
+<li><b>nMOS «0 bene, 1 male»</b>: come interruttore tira bene a massa; trasferendo un livello alto il source sale e il canale si spegne a V<sub>out</sub> = V<sub>G</sub> − V<sub>T</sub> (con effetto body). Il pMOS è l'opposto.</li>
+</ul></div>
+</section>

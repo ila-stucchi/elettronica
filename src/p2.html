@@ -1,0 +1,149 @@
+<section class="topic" id="t-pn">
+<header class="thead"><span class="tnum">Cap. 3</span><h2>La giunzione pn</h2>
+<p class="lead">Il componente chiave dell'esercizio A: diodo, fotodiodo, drain/source dei MOSFET. Tre domande a cui devi saper rispondere sempre: <b>quanta carica c'è</b> (x<sub>d</sub>, E<sub>max</sub>), <b>quanta corrente passa</b> (I<sub>s</sub>, V<sub>D</sub>), <b>quando si rompe</b> (breakdown).</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Come nasce.</b> Metti a contatto una zona p (tante lacune) con una n (tanti elettroni). Per diffusione le lacune vanno in n e gli elettroni in p, lasciando dietro di sé ioni di drogante <i>fissi</i>: negativi (B⁻) in p, positivi (P⁺) in n. Questa carica fissa crea un campo elettrico che spinge i portatori indietro (deriva). All'equilibrio deriva = diffusione e la corrente netta è zero.</li>
+<li><b>Zona svuotata (ZCS).</b> Nella regione attorno alla giunzione metallurgica restano solo gli ioni: per questo si chiama «svuotata» (di portatori liberi) o «di carica spaziale». Fuori ci sono due zone <i>neutre</i> in cui n ≈ N<sub>D</sub> o p ≈ N<sub>A</sub> e il campo è nullo. Poiché la carica positiva e quella negativa si bilanciano, N<sub>A</sub>x<sub>p</sub> = N<sub>D</sub>x<sub>n</sub>: <b>la zona meno drogata si svuota di più</b>.</li>
+<li><b>Campo e potenziale.</b> Con densità di carica costante il campo cresce linearmente, è massimo sulla giunzione metallurgica e nullo ai bordi (profilo triangolare); il potenziale è la sua area (due parabole). L'integrale del campo è la <b>tensione di built-in Φ<sub>bi</sub></b>: la «barriera» che separa i livelli di Fermi delle due zone neutre. Φ<sub>bi</sub> è interna: <i>non</i> la misuri con un voltmetro (i contatti metallo-semiconduttore la compensano esattamente).</li>
+<li><b>Diagramma a bande:</b> disegna E<sub>F</sub> piatto; in ogni zona neutra posiziona E<sub>c</sub>, E<sub>v</sub> secondo il drogaggio; raccordale nella ZCS con due parabole (più strette dove drogaggio maggiore). Il salto totale è qΦ<sub>bi</sub>.</li>
+<li><b>Polarizzazione diretta (V<sub>D</sub> &gt; 0 su p).</b> La tensione esterna cade quasi tutta sulla ZCS (è la zona più resistiva) e <b>abbassa la barriera</b> a q(Φ<sub>bi</sub>−V<sub>D</sub>): la ZCS si restringe e molti più portatori riescono a scavalcare la barriera. Ai bordi della ZCS i minoritari salgono di un fattore e<sup>V<sub>D</sub>/V<sub>th</sub></sup> rispetto all'equilibrio. Ogni 60 mV (≈ 2.3·V<sub>th</sub>) la corrente cresce di 10×.</li>
+<li><b>Chi porta la corrente?</b> Nelle zone neutre i minoritari in eccesso diffondono verso i contatti e (a base lunga) ricombinano; i maggioritari arrivano dal contatto per deriva e sostituiscono quelli persi. La corrente totale è la stessa in ogni sezione, ma cambia chi la porta. La corrente di un portatore è proporzionale al <b>suo</b> gradiente: più ripido il profilo, più corrente.</li>
+<li><b>Base corta vs base lunga.</b> Se la zona neutra è più corta della lunghezza di diffusione (W ≪ L, tempo di transito t<sub>tr</sub> = W²/2D ≪ τ) quasi nessuno ricombina: il profilo dei minoritari è una <b>retta</b> che va da n<sub>i</sub>²/N·e<sup>V/V<sub>th</sub></sup> (bordo ZCS) a n<sub>i</sub>²/N (contatto). Se W ≫ L il profilo è un <b>esponenziale</b> con costante L e il contatto non «vede» più nulla: conta L, non W.</li>
+<li><b>Polarizzazione inversa.</b> La barriera sale, la ZCS si allarga (∝ √(Φ<sub>bi</sub>+V<sub>R</sub>)), i minoritari ai bordi vengono «aspirati» via (quasi 0) e il gradiente è fisso e piccolo: la corrente satura a −I<sub>s</sub>, indipendente dalla tensione (fenomeno di diffusione). In più la ZCS <i>genera</i> coppie (R−G &lt; 0): la corrente di generazione cresce come √V e può superare I<sub>s</sub>.</li>
+<li><b>Capacità di giunzione.</b> Quando varia V la ZCS cambia estensione: carica si sposta ai suoi bordi, come in un condensatore piano le cui armature sono le due zone neutre a distanza x<sub>d</sub>: C<sub>j</sub> = εA/x<sub>d</sub>. Più inversa → x<sub>d</sub> più grande → C<sub>j</sub> più piccola. In diretta domina la corrente: C<sub>j</sub> non è un buon modello.</li>
+<li><b>Breakdown.</b> In inversa E<sub>max</sub> cresce con la tensione. A ≈ 4·10⁵ V/cm un portatore acquista tra due urti un'energia ≈ E<sub>g</sub> e, urtando, rompe un legame creando una coppia; elettroni e lacune ne creano altre: <b>valanga</b>. La corrente sale quasi verticalmente; serve una resistenza esterna che la limiti, altrimenti la giunzione si distrugge per potenza dissipata.</li>
+<li><b>Giunzione con più strati (p-n-n⁺, p-i-n).</b> La ZCS si estende nella zona meno drogata; se questa è più corta di x<sub>d</sub> la ZCS la riempie e raggiunge la zona successiva (completamente svuotata). Nel p-i-n la zona intrinseca ha campo ≈ costante.</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Raddrizzatore (corrente solo in un verso), «valvola» di tensione (V<sub>D</sub> ≈ 0.6–0.7 V quasi fissa in diretta), sensore di temperatura (V<sub>D</sub> a corrente costante ∼ −2 mV/K), varicap (C variabile con V), fotodiodo e cella solare (vedi Cap. 4), isolamento fra regioni di un chip (giunzione in inversa), diodo Zener/valanga come riferimento o protezione.</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<p class="conv"><b>Convenzione:</b> V<sub>D</sub> &gt; 0 = positivo sul lato p (diretta); V<sub>D</sub> &lt; 0 = inversa, con V<sub>R</sub> = −V<sub>D</sub>. Nelle formule con (Φ<sub>bi</sub>−V<sub>D</sub>) basta sostituire V<sub>D</sub> = −V<sub>R</sub> (→ Φ<sub>bi</sub>+V<sub>R</sub>).</p>
+<h4>Equilibrio e zona svuotata</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(\Phi_{bi}=V_{th}\ln\dfrac{N_AN_D}{n_i^2}=\phi_{fn}+\phi_{fp}\)</td><td>tensione di built-in [V]; N<sub>A</sub>, N<sub>D</sub> [cm⁻³] drogaggi <i>delle zone neutre</i></td></tr>
+<tr><td>\(N_A\,x_p=N_D\,x_n\)</td><td>neutralità globale; x<sub>p</sub>, x<sub>n</sub> [cm] estensioni della ZCS nelle due zone</td></tr>
+<tr><td>\(x_d=x_p+x_n=\sqrt{\dfrac{2\epsilon_{Si}(\Phi_{bi}-V_D)}{q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)}\)</td><td>estensione totale; ε<sub>Si</sub> ≈ 10⁻¹² F/cm</td></tr>
+<tr><td>\(x_n=x_d\dfrac{N_A}{N_A+N_D},\qquad x_p=x_d\dfrac{N_D}{N_A+N_D}\)</td><td>ripartizione di x<sub>d</sub></td></tr>
+<tr><td>Giunzione asimmetrica (p⁺n): \(x_d\simeq\sqrt{\dfrac{2\epsilon(\Phi_{bi}-V_D)}{qN_{basso}}}\)</td><td>si trascura la zona molto drogata (N<sub>basso</sub> = il drogaggio minore)</td></tr>
+<tr><td>\(|E_{max}|=\dfrac{qN_Ax_p}{\epsilon}=\dfrac{qN_Dx_n}{\epsilon}=\dfrac{2(\Phi_{bi}-V_D)}{x_d}\)</td><td>campo massimo [V/cm], sulla giunzione metallurgica</td></tr>
+<tr><td>\(|E_{max}|=\sqrt{\dfrac{2q}{\epsilon}\dfrac{N_AN_D}{N_A+N_D}(\Phi_{bi}-V_D)}\)</td><td>forma alternativa</td></tr>
+<tr><td>\(\varphi_{zcs,n}=\dfrac{qN_Dx_n^2}{2\epsilon}=\dfrac{|E_{max}|x_n}{2},\quad \varphi_{zcs,p}=\dfrac{qN_Ax_p^2}{2\epsilon}\)</td><td>cadute di potenziale nelle due metà; somma = Φ<sub>bi</sub>−V<sub>D</sub></td></tr>
+<tr><td>\(n(x_b)=n(x_a)\,e^{\frac{q\Delta V_{ba}}{kT}}\)</td><td>concentrazione in un punto interno alla ZCS partendo da uno noto (E<sub>F</sub> costante)</td></tr>
+</tbody></table></div>
+
+<h4>Corrente in polarizzazione diretta/inversa (modello a diffusione, assenza di G-R in ZCS)</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n(-x_p)=\dfrac{n_i^2}{N_A}e^{V_D/V_{th}},\qquad p(x_n)=\dfrac{n_i^2}{N_D}e^{V_D/V_{th}}\)</td><td>minoritari al bordo ZCS (condizioni al contorno); ai contatti restano ai valori di equilibrio</td></tr>
+<tr><td><b>Base corta:</b> \(J_n=qD_n\dfrac{n_i^2}{N_A\,W_p'}\big(e^{V_D/V_{th}}-1\big)\),&nbsp; \(J_p=qD_p\dfrac{n_i^2}{N_D\,W_n'}\big(e^{V_D/V_{th}}-1\big)\)</td><td>W′ = larghezza <i>neutra</i> = W − x<sub>p</sub> (o W − x<sub>n</sub>) ≈ W se x<sub>d</sub> ≪ W; profilo lineare</td></tr>
+<tr><td>\(I=A\,q\,n_i^2\Big(\dfrac{D_n}{N_AW_p}+\dfrac{D_p}{N_DW_n}\Big)\big(e^{V_D/V_{th}}-1\big)\)</td><td>corrente totale base corta [A]; A area [cm²]</td></tr>
+<tr><td><b>Base lunga:</b> \(I=A\,q\,n_i^2\Big(\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\Big)\big(e^{V_D/V_{th}}-1\big)\)</td><td>\(L_n=\sqrt{D_n\tau_n}\) (elettroni minoritari in p), \(L_p=\sqrt{D_p\tau_p}\) (lacune in n)</td></tr>
+<tr><td>\(I=I_s\big(e^{V_D/V_{th}}-1\big)\)</td><td>equazione del diodo; I<sub>s</sub> = corrente inversa di saturazione [A]. In diretta (V<sub>D</sub> ≳ 4V<sub>th</sub>): \(I\approx I_se^{V_D/V_{th}}\)</td></tr>
+<tr><td>\(V_D=V_{th}\ln\!\Big(\dfrac{I}{I_s}+1\Big)\simeq V_{th}\ln\dfrac{I}{I_s}\)</td><td>tensione a corrente imposta</td></tr>
+<tr><td>\(V_{D2}-V_{D1}=V_{th}\ln\dfrac{I_2}{I_1}\),&nbsp; \(\Delta V=60\ \text{mV/decade}\)</td><td>per raddoppiare I: ΔV = V<sub>th</sub> ln2 ≈ 17 mV</td></tr>
+<tr><td>caso generale: \(\dfrac{D_p}{N_DL_p}\coth\dfrac{W_n}{L_p}\)&nbsp;al posto di \(\dfrac{D_p}{N_DL_p}\) (e analogo in p)</td><td>interpolazione base corta (coth→L/W) / lunga (coth→1): dal profilo con sinh</td></tr>
+<tr><td>\(R_{inj}=\dfrac{J_n}{J_p}=\dfrac{N_D}{N_A}\dfrac{D_n}{D_p}\dfrac{L_p}{L_n}\ \Big(=\dfrac{N_D}{N_A}\sqrt{\tfrac{D_n}{D_p}}\ \text{se }\tau_n=\tau_p\Big)\)</td><td>rapporto tra corrente di elettroni e di lacune iniettate (base lunga). Base corta: \(\dfrac{N_D D_n W_n}{N_A D_p W_p}\)</td></tr>
+<tr><td>\(t_{tr}=\dfrac{W^2}{2D}\)</td><td>tempo di transito nella zona neutra; base corta se \(t_{tr}\ll\tau\) (equivale a W ≪ L)</td></tr>
+<tr><td>\(V_{D2}\approx I\,R_p,\ \ R_p=\dfrac{\rho_pW_p}{A}=\dfrac{W_p}{q\mu_pN_AA}\)</td><td>caduta nelle zone quasi-neutre (da confrontare con V<sub>th</sub>); in bassa iniezione è ≪ V<sub>th</sub>·W<sub>p</sub>/W<sub>n</sub></td></tr>
+<tr><td>\(J_{ric}\approx q\,x_d\dfrac{n_i}{2\tau}\,e^{V_D/2V_{th}}\)</td><td>ricombinazione nella ZCS (diretta): pendenza e<sup>V/2V<sub>th</sub></sup>, trascurabile a V alta</td></tr>
+<tr><td>\(J_{gen}=-q\,x_d\dfrac{n_i}{2\tau}\)</td><td>generazione nella ZCS (inversa), ∝ x<sub>d</sub> ∝ √(Φ<sub>bi</sub>+V<sub>R</sub>); si somma a −J<sub>s</sub></td></tr>
+<tr><td>\(I_s\propto n_i^2\propto T^3e^{-E_g/kT}\)</td><td>forte dipendenza da T</td></tr>
+<tr><td>\(\dfrac{dV_D}{dT}\Big|_{I}\approx-\dfrac{E_g/q-V_D}{T}\approx-2\ \text{mV/K}\)</td><td>a corrente costante la V<sub>D</sub> <i>diminuisce</i> con T: I<sub>s</sub> cresce più in fretta di quanto cresca V<sub>th</sub></td></tr>
+</tbody></table></div>
+
+<h4>Inversa: capacità e breakdown</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(C_j=\dfrac{dQ}{dV}=\epsilon_{Si}\dfrac{A}{x_d}\)</td><td>C<sub>j</sub> [F]; per capacità per unità di area: \(C_j/A=\epsilon/x_d\) [F/cm²]</td></tr>
+<tr><td>\(C_j(V_D)=C_j(0)\sqrt{\dfrac{\Phi_{bi}}{\Phi_{bi}-V_D}}\)</td><td>dipendenza dalla tensione per giunzione brusca (x<sub>d</sub> ∝ √(Φ<sub>bi</sub>−V<sub>D</sub>))</td></tr>
+<tr><td>\(\tau=R\,C_j\)</td><td>costante di tempo di un diodo in inversa con resistenza serie R</td></tr>
+<tr><td>\(V_{BD}+\Phi_{bi}=\dfrac{\epsilon_{Si}E_{BD}^2}{2q}\Big(\dfrac1{N_A}+\dfrac1{N_D}\Big)\)</td><td>tensione di breakdown (V<sub>BD</sub> &gt; 0 inversa). E<sub>BD</sub> ≈ 4·10⁵ V/cm. Esempio: N<sub>A</sub> = 10¹⁶, N<sub>D</sub> = 2·10¹⁶ → ≈ 75 V</td></tr>
+<tr><td>\(x_{d,BD}=\dfrac{\epsilon E_{BD}}{qN_{basso}}\)</td><td>estensione della ZCS a breakdown (lato poco drogato)</td></tr>
+<tr><td>\(v_{drift,max}=\mu E_{max}\) (o \(v_{sat}\)); \(\dfrac{v_{drift}}{v_{th}}\)</td><td>confronto con velocità termica (Esercitazione 3, es. 2c)</td></tr>
+</tbody></table></div>
+
+<h4>Strutture con più strati</h4>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Struttura</th><th>Formule</th></tr></thead><tbody>
+<tr><td>p-<b>i</b>-n (TdE 25-1-2025)</td><td>\(E_{max}\simeq\dfrac{\Phi_{bi}+V_R}{x_2-x_1}\) (campo costante nella zona intrinseca, x<sub>1</sub>, x<sub>2</sub> = suoi estremi); \(C\simeq\epsilon_{Si}\dfrac{A}{x_2-x_1}\); verifica a posteriori che le ZCS in n e p siano trascurabili: \(x_{dn}=\dfrac{\epsilon E_{max}}{qN_D}\ll\)</td></tr>
+<tr><td>p-n-n⁺ con zona n sottile (Esercitazioni 3–4)</td><td>1) calcola x<sub>n</sub> in N<sub>D1</sub> con la formula standard: se x<sub>n</sub> &gt; W<sub>N1</sub> la regione N<sub>D1</sub> è <b>completamente svuotata</b> già all'equilibrio e la ZCS entra in N<sub>D2</sub> (il Φ<sub>bi</sub> «giusto» è quello fra p e N<sub>D2</sub>: Es. della dispensa, 0.731 V); se x<sub>n</sub> &lt; W<sub>N1</sub> non lo è (Esercitazione 3–4: Φ<sub>bi</sub> = 730 mV «insufficiente»). 2) tensione di svuotamento completo di N<sub>D1</sub>: \(\Phi_{bi}+V_R=\dfrac{qN_{D1}W_{N1}^2}{2\epsilon}\Big(1+\dfrac{N_{D1}}{N_A}\Big)\) (impone x<sub>n</sub> = W<sub>N1</sub>); per V<sub>R</sub> maggiori la ZCS prosegue in N<sub>D2</sub> con campo che cala a gradino per N<sub>D1</sub>→N<sub>D2</sub> (trapezio + triangolo)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità e regioni di funzionamento</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Regione</th><th>Condizione</th><th>Cosa vale</th></tr></thead><tbody>
+<tr><td><b>Diretta</b></td><td>0 &lt; V<sub>D</sub> &lt; Φ<sub>bi</sub> (praticamente 0.4–0.8 V per le correnti tipiche)</td><td>I ≈ I<sub>s</sub>e<sup>V/V<sub>th</sub></sup>; ZCS ridotta; C<sub>j</sub> non rappresentativa</td></tr>
+<tr><td><b>Equilibrio</b></td><td>V<sub>D</sub> = 0</td><td>I = 0; ZCS di larghezza x<sub>d0</sub>; Φ<sub>bi</sub> interna</td></tr>
+<tr><td><b>Inversa</b></td><td>−V<sub>BD</sub> &lt; V<sub>D</sub> &lt; −3V<sub>th</sub></td><td>I ≈ −(I<sub>s</sub> + I<sub>gen</sub>); modello capacitivo C<sub>j</sub></td></tr>
+<tr><td><b>Breakdown</b></td><td>E<sub>max</sub> = E<sub>BD</sub></td><td>V<sub>D</sub> ≈ −V<sub>BD</sub> a corrente qualsiasi (limitata da R esterna). Una corrente inversa &gt; I<sub>s</sub> è possibile <u>solo</u> in breakdown</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Giunzione brusca</b>: drogaggio uniforme nelle due zone, salto netto in x = 0.</li>
+<li><b>Approssimazione di svuotamento</b>: nella ZCS le cariche mobili sono trascurabili rispetto agli ioni (n, p ≪ N). Vale bene; a metà ZCS si può avere ancora n, p ≈ 10⁷–10¹³ cm⁻³ contro N ≈ 10¹⁶, ma nel Poisson contano gli ioni.</li>
+<li><b>Bassa iniezione</b>: i minoritari iniettati ≪ maggioritari. Allora le cadute nelle zone neutre sono ≪ V<sub>th</sub> e V<sub>ZCS</sub> ≈ V<sub>D</sub>. Se la corrente è altissima (alta iniezione) l'esponenziale si «appiattisce» in un comportamento resistivo.</li>
+<li><b>Base corta</b> se W′ ≪ L; <b>base lunga</b> se W′ ≫ L; altrimenti formula con coth/sinh. Confronta sempre L<sub>n</sub> = √(D<sub>n</sub>τ<sub>n</sub>) e L<sub>p</sub> con le larghezze delle zone neutre <i>prima</i> di scegliere la formula; le due zone possono essere in regimi diversi (una corta, una lunga): somma allora i due termini corrispondenti.</li>
+<li><b>Contatti ohmici ideali</b>: ai contatti i minoritari sono ai valori di equilibrio (eccesso = 0).</li>
+<li><b>Trascurare G-R in ZCS</b> per J<sub>diretta</sub> (V alte, τ lungo); per la corrente inversa a piccola I<sub>s</sub> la generazione nella ZCS può dominare: va valutata quando il testo dà τ (Esercitazione 3, es. 1f).</li>
+<li><b>Dipendenza da T</b>: n<sub>i</sub> (e quindi I<sub>s</sub>) è esponenziale in T; V<sub>th</sub> varia solo linearmente. Quando cambia T ricalcola V<sub>th</sub>, n<sub>i</sub> e (se dato) μ, D.</li>
+</ul>
+</div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure passo-passo (dai TdE e dalle Esercitazioni)</h3>
+<h4>A) Studio statico di una giunzione all'equilibrio (Esercitazioni 1–2, TdE 11-2-2026 A.1)</h4>
+<ol class="steps">
+<li>Identifica N<sub>A</sub>, N<sub>D</sub> <i>nette</i> delle zone neutre (se ci sono entrambi i droganti, sottrai).</li>
+<li>Φ<sub>bi</sub> = V<sub>th</sub> ln(N<sub>A</sub>N<sub>D</sub>/n<sub>i</sub>²). (Esempi dei TdE: 586 mV, 713.7 mV, 886 mV, 747 mV.)</li>
+<li>x<sub>d</sub> dalla formula; poi x<sub>n</sub>, x<sub>p</sub> dalle frazioni N<sub>A</sub>/(N<sub>A</sub>+N<sub>D</sub>) e N<sub>D</sub>/(N<sub>A</sub>+N<sub>D</sub>). <i>Controllo:</i> N<sub>A</sub>x<sub>p</sub> = N<sub>D</sub>x<sub>n</sub> e x<sub>d</sub> ≪ W<sub>n</sub>, W<sub>p</sub>.</li>
+<li>E<sub>max</sub> = qN<sub>D</sub>x<sub>n</sub>/ε = 2Φ<sub>bi</sub>/x<sub>d</sub> (i due devono coincidere). Disegna E(x): triangolo da −x<sub>p</sub> a x<sub>n</sub>, picco negativo in 0.</li>
+<li>Cadute nelle metà: φ<sub>zcs,n</sub> = E<sub>max</sub>x<sub>n</sub>/2, φ<sub>zcs,p</sub> = Φ<sub>bi</sub> − φ<sub>zcs,n</sub>.</li>
+<li>Diagramma a bande: E<sub>F</sub> costante, E<sub>F</sub>−E<sub>i</sub> in n e E<sub>i</sub>−E<sub>F</sub> in p; salto qΦ<sub>bi</sub>; parabole.</li>
+</ol>
+<h4>B) Corrente in diretta (Esercitazione 2 es. 2, 4 es. 2, TdE 11-2-2026 A.2, 6-7-2026 A.2)</h4>
+<ol class="steps">
+<li>Calcola D = μV<sub>th</sub> e, se c'è τ, L = √(Dτ) per elettroni (in p) e lacune (in n).</li>
+<li><b>Confronta L con W</b> di ciascuna zona neutra (corretta per x<sub>d</sub>): base lunga (W ≫ L), corta (W ≪ L) o intermedia.</li>
+<li>Scrivi I<sub>s</sub> = Aqn<sub>i</sub>²(D<sub>n</sub>/(N<sub>A</sub>·ℓ<sub>n</sub>) + D<sub>p</sub>/(N<sub>D</sub>·ℓ<sub>p</sub>)) con ℓ = W o L (la lunghezza <i>più corta</i> tra le due).</li>
+<li>Poi I = I<sub>s</sub>(e<sup>V<sub>D</sub>/V<sub>th</sub></sup>−1). Se è data I ricava V<sub>D</sub> = V<sub>th</sub> ln(I/I<sub>s</sub>+1). Per il rapporto delle correnti di elettroni/lacune confronta i due termini di I<sub>s</sub>.</li>
+<li>Per raddoppiare I aumenta V<sub>D</sub> di V<sub>th</sub> ln 2 ≈ 17 mV. Per «una decade» servono 60 mV.</li>
+<li>Caduta nelle zone neutre: R = ρW/A, V ≈ I·R; confronta con V<sub>th</sub> per decidere se trascurarla.</li>
+<li>Profili: lineare (base corta) da n<sub>i</sub>²/N·e<sup>V/V<sub>th</sub></sup> al contatto n<sub>i</sub>²/N; esponenziale decrescente con L (base lunga). Nel diagramma delle correnti: J<sub>n</sub> e J<sub>p</sub> di minoritari decadono, la somma è costante.</li>
+</ol>
+<h4>C) Corrente inversa e breakdown (Esercitazione 3 es. 1e–f, TdE 6-7-2026 A.3)</h4>
+<ol class="steps">
+<li>J<sub>s</sub> con le stesse formule (V<sub>D</sub> ≪ −3V<sub>th</sub> ⇒ J = −J<sub>s</sub>).</li>
+<li>Se c'è τ, J<sub>gen</sub> = q·x<sub>d</sub>·n<sub>i</sub>/(2τ) con x<sub>d</sub> calcolata alla V<sub>R</sub> data; confrontala con J<sub>s</sub> (spesso è maggiore di vari ordini di grandezza).</li>
+<li>Per forzare I<sub>inv</sub> &gt; I<sub>s</sub>: la giunzione è in <b>breakdown</b>. Imponi E<sub>max</sub> = E<sub>BD</sub> ⇒ Φ<sub>bi</sub>+V<sub>BD</sub> = εE<sub>BD</sub>²(1/N<sub>A</sub>+1/N<sub>D</sub>)/(2q). Il nodo ha V = −V<sub>BD</sub> fissa, la corrente la decide il circuito.</li>
+</ol>
+<h4>D) Diodi in serie e tensioni sui nodi (TdE 6-7-2026 A.2–A.3)</h4>
+<ol class="steps">
+<li>Il diodo in diretta passa I (tensione ≈ V<sub>th</sub> ln(I/I<sub>s</sub>)); quello in inversa non può passare più di I<sub>s</sub>. La corrente della serie è dunque <b>≈ I<sub>s</sub> del diodo inverso</b>.</li>
+<li>Con due diodi identici, I<sub>s</sub> = I<sub>s</sub>(e<sup>ΔV/V<sub>th</sub></sup>−1) ⇒ ΔV = V<sub>th</sub> ln 2 ≈ 17 mV; l'altro diodo sostiene quasi tutta la tensione (V<sub>x</sub> ≈ 9.983 V su 10 V).</li>
+<li>Se la corrente imposta &gt; I<sub>s</sub>: il diodo inverso va in breakdown (V<sub>x</sub> = V<sub>BD</sub> = 59.3 V) e il diretto ha V ≈ V<sub>th</sub> ln(I/I<sub>s</sub>) (285 mV nel TdE).</li>
+</ol>
+<h4>E) Capacità e RC con diodo in inversa (Esercitazione 3 es. 2d, TdE sulla struttura 3-strati)</h4>
+<ol class="steps">
+<li>Trova x<sub>d</sub> alla tensione data (somma delle ZCS nei vari strati: usa il bilancio di carica N<sub>A</sub>x<sub>dp</sub> = N<sub>D1</sub>x<sub>n1</sub> + N<sub>D2</sub>x<sub>dn2</sub>).</li>
+<li>C<sub>j</sub> = εA/x<sub>d</sub> (per unità di area: ε/x<sub>d</sub>). τ = R·C<sub>j</sub>.</li>
+<li>Se ti danno τ e chiedono V: C<sub>j</sub> = τ/R ⇒ x<sub>d</sub> = εA/C<sub>j</sub> ⇒ da x<sub>d</sub> ricavi E<sub>max</sub> e Φ<sub>bi</sub>+V<sub>inv</sub> = area del campo (triangolo/trapezio).</li>
+</ol>
+<h4>F) Variazione con la temperatura (Esercitazione 4 es. 2)</h4>
+<ol class="steps">
+<li>V<sub>D</sub>(T) = V<sub>th</sub>(T) ln(I/I<sub>s</sub>(T)); ricalcola n<sub>i</sub>(T) e I<sub>s</sub>(T) ∝ n<sub>i</sub>²; per ΔT piccolo usa la derivata ≈ −(E<sub>g</sub>/q − V<sub>D</sub>)/T ≈ −1.7…−2 mV/K ⇒ ΔV ≈ −9 mV per +5 °C.</li>
+<li>Spiegazione: V<sub>th</sub> cresce linearmente (+0.086 mV/K) ma I<sub>s</sub> cresce esponenzialmente (×2 ogni ≈ 5 K); per mantenere la stessa corrente basta una V minore.</li>
+</ol>
+</div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli classici</h3>
+<ul>
+<li><b>Φ<sub>bi</sub> sbagliato per strutture a più strati.</b> Se la zona meno drogata è più corta di x<sub>n</sub> è tutta svuotata: non puoi usare quella N<sub>D</sub> da sola nella formula di x<sub>d</sub>. Verifica sempre x<sub>n</sub> &lt; W<sub>N1</sub> a posteriori. Esempio della dispensa: con N<sub>D1</sub> = 10¹⁴ servirebbero 2.65 µm ma la regione è lunga 0.5 µm ⇒ la ZCS entra in N<sub>D2</sub> e Φ<sub>bi</sub> = 0.731 V.</li>
+<li><b>Dimenticare −1</b> nell'equazione del diodo in inversa (I = −I<sub>s</sub>, non 0) o <b>tenerlo</b> in diretta quando l'esponenziale è enorme (inutile ma innocuo).</li>
+<li><b>Base corta/lunga scelta a occhio.</b> Calcola L = √(Dτ): nell'es. 6 dell'esercitazione W<sub>p</sub> = 3 µm ≪ L<sub>n</sub> = 4 µm è base corta, 120 µm è lunga, 20 µm è intermedia.</li>
+<li><b>Usare W invece di W − x<sub>d</sub></b> (corretto solo se x<sub>d</sub> ≪ W; nelle giunzioni molto stette controlla).</li>
+<li><b>Corrente inversa «maggiore di I<sub>s</sub>»</b>: se il testo (o il generatore di corrente) impone una I inversa &gt; I<sub>s</sub>, sei in breakdown; non esiste soluzione sul tratto piatto.</li>
+<li><b>Segni di V<sub>D</sub></b> in (Φ<sub>bi</sub>−V<sub>D</sub>): in inversa x<sub>d</sub> <i>aumenta</i>, in diretta diminuisce. E la capacità C<sub>j</sub> <i>diminuisce</i> in inversa.</li>
+<li><b>Dimenticare che V<sub>th</sub> dipende da T</b> quando il testo cambia temperatura (25 mV è solo a 300 K).</li>
+<li><b>Trascurare la caduta resistiva</b> senza controllare: è lecito (ΔV ≪ V<sub>th</sub> in bassa iniezione) ma alcuni testi chiedono di <i>stimarla</i> e commentare.</li>
+<li><b>Il campo nella regione intrinseca</b> (p-i-n): è costante e pari a (Φ<sub>bi</sub>+V<sub>R</sub>)/lunghezza; la regione di carica nelle zone doppie è trascurabile (nm). Si ottiene breakdown a tensioni di kV perché il campo è «spalmato» su una zona lunga.</li>
+<li><b>Il potenziale di built-in non si misura</b> con un voltmetro: ai capi di una giunzione all'equilibrio V = 0.</li>
+</ul></div>
+</section>

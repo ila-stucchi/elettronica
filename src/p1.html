@@ -1,0 +1,70 @@
+<section class="topic" id="t-semi">
+<header class="thead"><span class="tnum">Cap. 2</span><h2>Fisica dei semiconduttori</h2>
+<p class="lead">Quanti portatori ci sono (n, p), dove sta il livello di Fermi e come si muovono (deriva e diffusione). È il vocabolario di tutto il resto del corso.</p></header>
+
+<div class="blk b-c"><h3><span class="tag">2</span> Concetti: l'idea fisica</h3>
+<ul>
+<li><b>Bande = livelli permessi.</b> Quando N atomi di Si formano un cristallo, i livelli esterni si allargano in due bande: <b>valenza</b> (quasi piena, 4N elettroni) e <b>conduzione</b> (quasi vuota), separate dal gap E<sub>g</sub> = 1.12 eV. Un elettrone in banda di conduzione è «libero»; un posto vuoto in banda di valenza è una <b>lacuna</b>, che si comporta come una carica +q che si muove al contrario degli elettroni di valenza.</li>
+<li><b>Perché il Si conduce poco ma controllabilmente.</b> A 300 K la sola agitazione termica rompe pochi legami: n<sub>i</sub> ≈ 1.4·10¹⁰ cm⁻³ contro 5·10²² atomi/cm³ (uno su 10¹²). Non puoi «aggiungere» portatori dall'esterno (violeresti la neutralità), ma puoi <b>drogare</b>: sostituire atomi di Si con atomi neutri che regalano un elettrone (donori, V gruppo: P, As) o ne rubano uno creando una lacuna (accettori, III gruppo: B). A temperatura ambiente tutti i droganti sono ionizzati (energie di ionizzazione ≈ 45 meV).</li>
+<li><b>Legge di azione di massa n·p = n<sub>i</sub>².</b> Il drogaggio sposta l'equilibrio: se triplichi gli elettroni, le lacune calano di un fattore 3 (più ricombinazione). Con N<sub>D</sub> = 10¹⁶ le lacune sono solo ≈ 2·10⁴ cm⁻³, 12 ordini di grandezza meno degli elettroni. Eppure questi <i>minoritari</i> comandano la corrente di tutti i diodi e BJT.</li>
+<li><b>Livello di Fermi E<sub>F</sub> = «contatore» di n e p.</b> È l'energia con probabilità 1/2 di occupazione. Più E<sub>F</sub> è vicino a E<sub>c</sub>, più elettroni ci sono (tipo n); più è vicino a E<sub>v</sub>, più lacune (tipo p). Basta una differenza di energia E<sub>F</sub>−E<sub>i</sub> (esponenziale!) per dire quante cariche hai. All'<b>equilibrio E<sub>F</sub> è costante in tutto il dispositivo</b>: è la regola per disegnare ogni diagramma a bande.</li>
+<li><b>Due modi di far scorrere corrente.</b> <i>Deriva</i>: il campo elettrico spinge i portatori con velocità v = μE (urti col reticolo → velocità media costante, mobilità μ). <i>Diffusione</i>: dove la concentrazione non è uniforme i portatori si spargono dal denso al rado per puro moto casuale termico; il flusso è proporzionale al gradiente. Sono legate dalla relazione di Einstein D = μV<sub>th</sub>.</li>
+<li><b>Bande e campo.</b> Nel diagramma a bande la pendenza di E<sub>c</sub> (o E<sub>v</sub>, o E<sub>i</sub>) è il campo elettrico: \(E=\tfrac1q\,dE_c/dx\). Gli elettroni «rotolano» verso il basso, le lacune «galleggiano» verso l'alto.</li>
+<li><b>Generazione/ricombinazione.</b> Fuori equilibrio (np ≠ n<sub>i</sub>²) il materiale cerca di tornare a np = n<sub>i</sub>²: np &gt; n<sub>i</sub>² ⇒ ricombinazione netta, np &lt; n<sub>i</sub>² ⇒ generazione netta. A bassa iniezione conta solo il minoritario in eccesso p′ che decade con costante τ (tempo di vita).</li>
+</ul>
+<div class="prac"><b>A cosa serve nella pratica.</b> Il drogaggio fissa la resistività (da ≈ 100 Ω·cm a 10¹⁴ cm⁻³ a ≈ 0.03 Ω·cm a 10¹⁸), quindi progetta resistori integrati, source/drain dei MOSFET e le regioni dei diodi. La forte dipendenza di n<sub>i</sub> da T è alla base dei sensori di temperatura e del limite di funzionamento termico dei chip (oltre ≈ 550 K il Si drogato 10¹⁵ torna «intrinseco» e smette di funzionare come progettato).</div>
+</div>
+
+<div class="blk b-f"><h3><span class="tag">1</span> Formule chiave</h3>
+<div class="tablewrap"><table class="ft"><thead><tr><th>Formula</th><th>Simboli e unità</th></tr></thead><tbody>
+<tr><td>\(n=n_i\,e^{\frac{E_F-E_i}{kT}},\qquad p=n_i\,e^{\frac{E_i-E_F}{kT}}\)</td><td>n, p [cm⁻³]; E<sub>F</sub> livello di Fermi, E<sub>i</sub> livello intrinseco (≈ metà gap) [eV]; kT ≈ 25 meV</td></tr>
+<tr><td>\(n=N_c\,e^{-\frac{E_c-E_F}{kT}},\qquad p=N_v\,e^{-\frac{E_F-E_v}{kT}}\)</td><td>forma equivalente con N<sub>c</sub> = 2.8·10¹⁹, N<sub>v</sub> = 1.04·10¹⁹ cm⁻³</td></tr>
+<tr><td>\(n\,p=n_i^2\), &nbsp;\(n_i=\sqrt{N_cN_v}\,e^{-E_g/2kT}\)</td><td>azione di massa (all'equilibrio, non degenere). n<sub>i</sub> cresce esponenzialmente con T</td></tr>
+<tr><td>\(E_F-E_i=kT\ln\dfrac{n}{n_i}=-kT\ln\dfrac{p}{n_i}\)</td><td>posizione di E<sub>F</sub>; &gt;0 nel tipo n, &lt;0 nel tipo p</td></tr>
+<tr><td>\(\phi_{fn}=V_{th}\ln\dfrac{N_D}{n_i},\quad \phi_{fp}=V_{th}\ln\dfrac{N_A}{n_i}\)</td><td>potenziali di Fermi [V] (distanza E<sub>F</sub>–E<sub>i</sub> divisa per q). Ricorrono in Φ<sub>bi</sub> e in V<sub>T</sub> del MOS</td></tr>
+<tr><td>\(p-n=N_A-N_D\) &nbsp;(neutralità)</td><td>con droganti tutti ionizzati</td></tr>
+<tr><td>\(n=\dfrac{N_D-N_A}{2}+\sqrt{\Big(\dfrac{N_D-N_A}{2}\Big)^2+n_i^2}\)</td><td>formula completa; p si ottiene con N<sub>A</sub>↔N<sub>D</sub> oppure da n·p = n<sub>i</sub>²</td></tr>
+<tr><td>tipo n: \(n\simeq N_D-N_A,\ p\simeq n_i^2/n\)<br>tipo p: \(p\simeq N_A-N_D,\ n\simeq n_i^2/p\)</td><td>approssimazione per |N<sub>A</sub>−N<sub>D</sub>| ≫ n<sub>i</sub> (sempre vera nei dispositivi)</td></tr>
+<tr><td>\(v=\mu E,\qquad J=q\,(n\mu_n+p\mu_p)\,E=\sigma E\)</td><td>v [cm/s], μ [cm²/Vs], E [V/cm], σ [S/cm]</td></tr>
+<tr><td>\(\rho=\dfrac{1}{q(n\mu_n+p\mu_p)}\simeq\dfrac{1}{qN\mu},\qquad R=\rho\dfrac{L}{S}\)</td><td>ρ [Ω·cm]; si usano solo i maggioritari</td></tr>
+<tr><td>\(J_n=q\mu_nnE+qD_n\dfrac{\partial n}{\partial x},\qquad J_p=q\mu_ppE-qD_p\dfrac{\partial p}{\partial x}\)</td><td>equazioni del trasporto (deriva + diffusione), J [A/cm²]</td></tr>
+<tr><td>\(\dfrac{D_n}{\mu_n}=\dfrac{D_p}{\mu_p}=V_{th}=\dfrac{kT}{q}\)</td><td>Einstein; D [cm²/s]</td></tr>
+<tr><td>\(E(x)=\dfrac{1}{q}\dfrac{dE_c}{dx}=-\dfrac{dV}{dx}\)</td><td>la pendenza delle bande è il campo; V(x) è il potenziale elettrostatico</td></tr>
+<tr><td>\(\dfrac{\partial p}{\partial t}=-\dfrac1q\dfrac{\partial J_p}{\partial x}+(G-R),\quad \dfrac{\partial n}{\partial t}=\dfrac1q\dfrac{\partial J_n}{\partial x}+(G-R)\)</td><td>equazioni di continuità</td></tr>
+<tr><td>\(R-G=\dfrac{pn-n_i^2}{(p+n+2n_i)\,\tau}\ \xrightarrow{\text{bassa iniez.}}\ \dfrac{p'}{\tau}\)</td><td>Shockley-Read-Hall; τ tempo di vita dei minoritari (da ns a ms). Eccesso: \(p'(t)=p'(0)\,e^{-t/\tau}\)</td></tr>
+<tr><td>\(L=\sqrt{D\,\tau}\)</td><td>lunghezza di diffusione: distanza media percorsa dal minoritario prima di ricombinare [cm]</td></tr>
+<tr><td>\(v_{th}=\sqrt{3kT/m^*}\approx10^7\) cm/s</td><td>velocità termica (sempre ≫ della velocità di deriva \(\mu E\))</td></tr>
+<tr><td>\(\dfrac{n_i(T)}{n_i(300)}=\Big(\dfrac{T}{300}\Big)^{3/2}\!e^{-\frac{E_g}{2k}\left(\frac1T-\frac1{300}\right)}\)</td><td>dipendenza di n<sub>i</sub> da T (serve per «a che temperatura il Si diventa intrinseco»)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="blk b-v"><h3><span class="tag">3</span> Condizioni di validità</h3>
+<ul>
+<li><b>Boltzmann al posto di Fermi-Dirac</b> se E<sub>F</sub> dista almeno ≈ 3kT (≈ 75–100 meV) dai bordi E<sub>c</sub>, E<sub>v</sub>. Oltre ≈ 10¹⁹ cm⁻³ il semiconduttore è <i>degenere</i> (si comporta da metallo) e le formule esponenziali non valgono più.</li>
+<li><b>n·p = n<sub>i</sub>²</b> vale solo <b>all'equilibrio</b> termodinamico (niente tensioni, luce, correnti). Fuori equilibrio si usano i quasi-livelli di Fermi E<sub>qfn</sub>, E<sub>qfp</sub> (uno per portatore).</li>
+<li><b>Droganti tutti ionizzati</b>: vero per T ≳ 100 K e fino a ≈ 550 K per N<sub>D</sub> = 10¹⁵. Sotto ≈ 90 K si «congelano»; sopra, n<sub>i</sub> diventa confrontabile con N<sub>D</sub> e il materiale torna intrinseco.</li>
+<li><b>μ costante</b> (v ∝ E) fino a qualche decina di kV/cm; oltre la velocità <b>satura</b> a ≈ 10⁷ cm/s. La mobilità diminuisce con il drogaggio (&gt; 10¹⁵), con la temperatura e vicino alla superficie (canale MOS: 800/300).</li>
+<li>R−G ≈ p′/τ richiede <b>bassa iniezione</b>: n′, p′ ≪ maggioritari.</li>
+</ul></div>
+
+<div class="blk b-p"><h3><span class="tag">4</span> Procedure (dalle Esercitazioni 1–2)</h3>
+<ol class="steps">
+<li><b>Tipo e concentrazioni.</b> Calcola N<sub>D</sub>−N<sub>A</sub>. Se positivo → n ≈ N<sub>D</sub>−N<sub>A</sub>, p = n<sub>i</sub>²/n; se negativo → p ≈ N<sub>A</sub>−N<sub>D</sub>, n = n<sub>i</sub>²/p. (Es. 1/Esercitazione 1: Si con B 10¹⁶ e As 6·10¹⁶ nella metà sinistra ⇒ zona n con N<sub>D</sub>−N<sub>A</sub> = 5·10¹⁶; l'altra metà resta p con 10¹⁶.)</li>
+<li><b>Posizione del livello di Fermi.</b> E<sub>F</sub>−E<sub>i</sub> = kT ln(n/n<sub>i</sub>) (tipo n) o E<sub>i</sub>−E<sub>F</sub> = kT ln(p/n<sub>i</sub>) (tipo p). Poi disegna la riga di E<sub>F</sub> e appendi le bande con E<sub>i</sub> a metà gap. (Esempio: 5·10¹⁶ → 376 meV sopra E<sub>i</sub>; 10¹⁶ → 336 meV sotto E<sub>i</sub>.)</li>
+<li><b>«n = 10 p».</b> Da np = n<sub>i</sub>² segue n = √10·n<sub>i</sub> e p = n<sub>i</sub>/√10. Qui <i>non</i> si può usare N<sub>D</sub> ≈ n perché n è dello stesso ordine di n<sub>i</sub>: N<sub>D</sub> = n − p ≈ 2.85·n<sub>i</sub> (≈ 4·10¹⁰ cm⁻³) e E<sub>F</sub>−E<sub>i</sub> = kT ln√10 ≈ 29 meV.</li>
+<li><b>«E<sub>F</sub> al bordo della banda di conduzione».</b> Significa n ≈ N<sub>c</sub> = 2.8·10¹⁹ (o, con la formula n<sub>i</sub>e<sup>E<sub>g</sub>/2kT</sup>, ≈ 7.5·10¹⁹): è già al limite della validità di Boltzmann.</li>
+<li><b>Temperatura a cui il Si intrinseco eguaglia un drogaggio.</b> Imponi n<sub>i</sub>(T) = N<sub>D1</sub> con la formula in T (include il fattore T<sup>3/2</sup>) e risolvi iterando; il risultato è molto più alto di 300 K.</li>
+<li><b>Corrente di deriva in una barretta.</b> J = σE, E = V/L, I = J·S, R = ρL/S. Con n ≫ p usa solo il termine dei maggioritari.</li>
+<li><b>Ritorno all'equilibrio dopo illuminazione.</b> p′(t) = p′(0)e<sup>−t/τ</sup>; la variazione assoluta di n′ e p′ è uguale (coppie), ma in percentuale cambia solo il minoritario.</li>
+</ol></div>
+
+<div class="blk b-t"><h3><span class="tag">5</span> Tranelli</h3>
+<ul>
+<li><b>Usare n ≈ N<sub>D</sub> quando N<sub>D</sub> è confrontabile con n<sub>i</sub></b> (caso «elettroni 10 volte le lacune»). Vale solo se N<sub>D</sub> ≫ n<sub>i</sub>.</li>
+<li><b>Segno di E<sub>F</sub>−E<sub>i</sub></b>: tipo n sopra E<sub>i</sub>, tipo p sotto. E la distanza <i>da E<sub>v</sub></i> o <i>da E<sub>c</sub></i> la ottieni sommando/sottraendo E<sub>g</sub>/2 = 0.56 eV, non 1.12.</li>
+<li>Drogaggio <b>compensato</b> (N<sub>A</sub> ≈ N<sub>D</sub>): conta la differenza; il materiale si comporta da intrinseco. Aggiungere un tipo di drogante a una zona già drogata dell'altro tipo può invertirne la polarità (è così che si fa la giunzione per impiantazione).</li>
+<li>I <b>minoritari</b> non sono «pochi e irrilevanti»: in una giunzione sono loro il collo di bottiglia della corrente. E sono quelli per cui la ricombinazione decide la lunghezza di diffusione L.</li>
+<li>Il potenziale di Fermi φ<sub>f</sub> <b>non è una caduta di tensione</b> nel dispositivo, è solo la distanza di E<sub>F</sub> da E<sub>i</sub> in volt (la caduta di tensione è Φ<sub>bi</sub>, che ne è la somma lungo la giunzione).</li>
+<li>La velocità di deriva (10⁴–10⁶ cm/s) è molto minore di quella termica (10⁷ cm/s): la deriva è una piccola correzione al moto casuale, ma, con 10¹⁶ portatori per cm³, dà correnti enormi.</li>
+</ul></div>
+</section>
